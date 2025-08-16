@@ -57,11 +57,6 @@ app.get('/leaderboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
 });
 
-// Страница аналитики
-app.get('/analytics', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'analytics.html'));
-});
-
 // Страница рефералов
 app.get('/referral', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'referral.html'));
