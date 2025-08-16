@@ -1,9 +1,10 @@
-// Оптимизированный анимированный фон с MP4 видео
-class OptimizedAnimatedBackground {
+// Надежный анимированный фон с fallback
+class ReliableAnimatedBackground {
     constructor() {
         this.backgroundElement = null;
         this.videoElement = null;
         this.isLoaded = false;
+        this.fallbackUsed = false;
         this.init();
     }
 
@@ -12,21 +13,7 @@ class OptimizedAnimatedBackground {
         this.backgroundElement = document.createElement('div');
         this.backgroundElement.className = 'animated-background';
 
-        // Создаем видео элемент
-        this.videoElement = document.createElement('video');
-        this.videoElement.className = 'background-video';
-        
-        // Настройки видео для оптимизации
-        this.videoElement.autoplay = true;
-        this.videoElement.muted = true;
-        this.videoElement.loop = true;
-        this.videoElement.playsInline = true; // Важно для мобильных устройств
-        this.videoElement.preload = 'metadata'; // Загружаем только метаданные для экономии трафика
-        
-        // Устанавливаем качество видео в зависимости от устройства
-        this.setVideoQuality();
-        
-        // Добавляем стили для оптимизации
+        // Добавляем стили для контейнера
         this.backgroundElement.style.cssText = `
             position: fixed;
             top: 0;
@@ -40,6 +27,25 @@ class OptimizedAnimatedBackground {
             overflow: hidden;
         `;
 
+        document.body.appendChild(this.backgroundElement);
+
+        // Пробуем загрузить MP4 видео
+        this.tryLoadVideo();
+    }
+
+    tryLoadVideo() {
+        // Создаем видео элемент
+        this.videoElement = document.createElement('video');
+        this.videoElement.className = 'background-video';
+        
+        // Настройки видео
+        this.videoElement.autoplay = true;
+        this.videoElement.muted = true;
+        this.videoElement.loop = true;
+        this.videoElement.playsInline = true;
+        this.videoElement.preload = 'metadata';
+        
+        // Стили для видео
         this.videoElement.style.cssText = `
             position: absolute;
             top: 50%;
@@ -55,12 +61,11 @@ class OptimizedAnimatedBackground {
 
         // Добавляем видео в контейнер
         this.backgroundElement.appendChild(this.videoElement);
-        document.body.appendChild(this.backgroundElement);
 
         // Устанавливаем источник видео
         this.videoElement.src = 'https://i.imgur.com/buHbiEr.mp4';
 
-        // Обработчики событий видео
+        // Обработчики событий
         this.videoElement.addEventListener('loadedmetadata', () => {
             console.log('MP4 background video metadata loaded');
         });
@@ -69,59 +74,61 @@ class OptimizedAnimatedBackground {
             this.isLoaded = true;
             this.backgroundElement.style.opacity = 1;
             console.log('MP4 background video ready to play');
+            
+            // Пытаемся воспроизвести видео
+            this.videoElement.play().catch(e => {
+                console.log('Auto-play prevented, trying fallback:', e);
+                this.useGifFallback();
+            });
         });
 
         this.videoElement.addEventListener('error', (e) => {
             console.error('Failed to load MP4 background video:', e);
-            this.setFallbackBackground();
+            this.useGifFallback();
         });
 
-        // Оптимизация для мобильных устройств
-        this.optimizeForMobile();
-    }
-
-    setVideoQuality() {
-        // Определяем качество видео в зависимости от устройства и соединения
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        
-        if (isMobile) {
-            // Для мобильных устройств используем более низкое качество
-            this.videoElement.style.filter = 'brightness(0.7) contrast(1.2) blur(0.5px)';
-        }
-        
-        // Если медленное соединение, уменьшаем качество
-        if (connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')) {
-            this.videoElement.style.filter = 'brightness(0.6) contrast(1.3) blur(1px)';
-        }
-    }
-
-    optimizeForMobile() {
-        // Останавливаем видео когда страница не видна
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.videoElement.pause();
-            } else {
-                this.videoElement.play().catch(e => console.log('Auto-play prevented:', e));
+        // Таймаут для загрузки видео
+        setTimeout(() => {
+            if (!this.isLoaded && !this.fallbackUsed) {
+                console.log('Video loading timeout, using fallback');
+                this.useGifFallback();
             }
-        });
-
-        // Останавливаем видео при низком заряде батареи
-        if ('getBattery' in navigator) {
-            navigator.getBattery().then(battery => {
-                battery.addEventListener('levelchange', () => {
-                    if (battery.level < 0.2) {
-                        this.videoElement.pause();
-                    } else if (!document.hidden) {
-                        this.videoElement.play().catch(e => console.log('Auto-play prevented:', e));
-                    }
-                });
-            });
-        }
+        }, 5000);
     }
 
-    setFallbackBackground() {
-        // Устанавливаем градиентный фон как запасной вариант
+    useGifFallback() {
+        if (this.fallbackUsed) return;
+        this.fallbackUsed = true;
+        
+        console.log('Using GIF fallback background');
+        
+        // Удаляем видео элемент
+        if (this.videoElement) {
+            this.videoElement.remove();
+            this.videoElement = null;
+        }
+        
+        // Устанавливаем GIF фон
+        this.backgroundElement.style.background = `
+            url('https://i.imgur.com/pm7ZuQo.gif') center center/cover no-repeat
+        `;
+        this.backgroundElement.style.opacity = 1;
+        this.isLoaded = true;
+    }
+
+    useGradientFallback() {
+        if (this.fallbackUsed) return;
+        this.fallbackUsed = true;
+        
+        console.log('Using gradient fallback background');
+        
+        // Удаляем видео элемент
+        if (this.videoElement) {
+            this.videoElement.remove();
+            this.videoElement = null;
+        }
+        
+        // Устанавливаем градиентный фон
         this.backgroundElement.style.background = `
             linear-gradient(135deg, 
                 #1a0033 0%, 
@@ -132,6 +139,7 @@ class OptimizedAnimatedBackground {
             )
         `;
         this.backgroundElement.style.opacity = 1;
+        this.isLoaded = true;
     }
 
     destroy() {
@@ -149,9 +157,27 @@ class OptimizedAnimatedBackground {
 
 // Инициализация фона при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing animated background...');
+    
     // Небольшая задержка для оптимизации загрузки
     setTimeout(() => {
-        window.animatedBackground = new OptimizedAnimatedBackground();
+        try {
+            window.animatedBackground = new ReliableAnimatedBackground();
+        } catch (error) {
+            console.error('Failed to initialize animated background:', error);
+            // Создаем простой градиентный фон как последний fallback
+            const fallbackDiv = document.createElement('div');
+            fallbackDiv.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
+            `;
+            document.body.appendChild(fallbackDiv);
+        }
     }, 100);
 });
 
@@ -162,7 +188,7 @@ window.addEventListener('beforeunload', function() {
     }
 });
 
-// Очистка при переходе между страницами (если используется SPA)
+// Очистка при переходе между страницами
 window.addEventListener('pagehide', function() {
     if (window.animatedBackground) {
         window.animatedBackground.destroy();
