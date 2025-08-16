@@ -275,11 +275,49 @@ function autoClicker() {
     }
 }
 
-// Прокрутка к разделу
-function scrollToSection(sectionId) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// Переключение между разделами
+function showSection(sectionName) {
+    // Скрываем все секции
+    const sections = ['click-section', 'upgrades-section', 'achievements-section'];
+    sections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) {
+            element.style.display = 'none';
+        }
+    });
+    
+    // Убираем активный класс со всех кнопок
+    const buttons = document.querySelectorAll('.nav-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // Показываем нужную секцию
+    let targetSection = '';
+    let targetButton = '';
+    
+    switch (sectionName) {
+        case 'click':
+            targetSection = 'click-section';
+            targetButton = document.querySelector('.nav-btn[onclick="showSection(\'click\')"]');
+            break;
+        case 'upgrades':
+            targetSection = 'upgrades-section';
+            targetButton = document.querySelector('.nav-btn[onclick="showSection(\'upgrades\')"]');
+            break;
+        case 'achievements':
+            targetSection = 'achievements-section';
+            targetButton = document.querySelector('.nav-btn[onclick="showSection(\'achievements\')"]');
+            break;
+    }
+    
+    if (targetSection) {
+        const element = document.getElementById(targetSection);
+        if (element) {
+            element.style.display = 'block';
+        }
+    }
+    
+    if (targetButton) {
+        targetButton.classList.add('active');
     }
 }
 
@@ -313,23 +351,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Автосохранение каждые 10 секунд
     setInterval(saveGameData, 10000);
     
-    // Проверяем якорь в URL для навигации
-    const hash = window.location.hash;
-    if (hash) {
-        setTimeout(() => {
-            const sectionId = hash.substring(1);
-            scrollToSection(sectionId);
-        }, 500);
-    }
-    
-    // НЕ показываем кнопку в Telegram - убираем её
-    // if (tg && tg.MainButton) {
-    //     try {
-    //         tg.MainButton.setText('🏠 Главная');
-    //         tg.MainButton.onClick(() => window.location.href = '/');
-    //         tg.MainButton.show();
-    //     } catch (error) {
-    //         console.log('Ошибка настройки кнопки:', error);
-    //     }
-    // }
+    // Показываем секцию кликера по умолчанию
+    showSection('click');
 });

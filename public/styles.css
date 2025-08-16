@@ -82,7 +82,7 @@ header p {
     color: white;
 }
 
-.welcome-card, .stats-card, .features-card, .navigation-card {
+.welcome-card, .stats-card, .features-card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 25px;
@@ -96,7 +96,7 @@ header p {
     overflow: hidden;
 }
 
-.welcome-card::before, .stats-card::before, .features-card::before, .navigation-card::before {
+.welcome-card::before, .stats-card::before, .features-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -107,11 +107,11 @@ header p {
     transition: left 0.5s;
 }
 
-.welcome-card:hover::before, .stats-card:hover::before, .features-card:hover::before, .navigation-card:hover::before {
+.welcome-card:hover::before, .stats-card:hover::before, .features-card:hover::before {
     left: 100%;
 }
 
-.welcome-card:hover, .stats-card:hover, .features-card:hover, .navigation-card:hover {
+.welcome-card:hover, .stats-card:hover, .features-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 
         0 30px 60px rgba(0,0,0,0.15),
@@ -242,7 +242,7 @@ header p {
     font-weight: 500;
 }
 
-.features-card h3, .navigation-card h3 {
+.features-card h3 {
     color: #4c51bf;
     margin-bottom: 25px;
     font-size: 1.8rem;
@@ -294,25 +294,6 @@ header p {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
-.nav-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.nav-buttons .btn-secondary {
-    margin: 0;
-    padding: 15px 20px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: center;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 /* Адаптивность */
 @media (max-width: 768px) {
     .container {
@@ -327,7 +308,7 @@ header p {
         font-size: 1.2rem;
     }
     
-    .welcome-card, .stats-card, .features-card, .navigation-card {
+    .welcome-card, .stats-card, .features-card {
         padding: 25px;
     }
     
@@ -337,10 +318,6 @@ header p {
     }
     
     .features-card ul {
-        grid-template-columns: 1fr;
-    }
-    
-    .nav-buttons {
         grid-template-columns: 1fr;
     }
     
@@ -359,8 +336,7 @@ header p {
 
 .tg-app .welcome-card,
 .tg-app .stats-card,
-.tg-app .features-card,
-.tg-app .navigation-card {
+.tg-app .features-card {
     background: var(--tg-theme-secondary-bg-color, rgba(255, 255, 255, 0.95));
     color: var(--tg-theme-text-color, #2d3748);
 }
@@ -382,7 +358,7 @@ header p {
     }
 }
 
-.welcome-card, .stats-card, .features-card, .navigation-card {
+.welcome-card, .stats-card, .features-card {
     animation: fadeInUp 0.8s ease-out;
 }
 
@@ -392,9 +368,5 @@ header p {
 
 .features-card {
     animation-delay: 0.4s;
-}
-
-.navigation-card {
-    animation-delay: 0.6s;
 }
 

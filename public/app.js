@@ -42,42 +42,6 @@ function startGame() {
     window.location.href = '/game';
 }
 
-// Переход к улучшениям
-function goToUpgrades() {
-    if (tg && tg.showAlert) {
-        try {
-            tg.showAlert('🛠️ Переходим к улучшениям!');
-        } catch (error) {
-            console.log('Ошибка показа уведомления:', error);
-        }
-    }
-    window.location.href = '/game#upgrades';
-}
-
-// Переход к достижениям
-function goToAchievements() {
-    if (tg && tg.showAlert) {
-        try {
-            tg.showAlert('🏆 Переходим к достижениям!');
-        } catch (error) {
-            console.log('Ошибка показа уведомления:', error);
-        }
-    }
-    window.location.href = '/game#achievements';
-}
-
-// Переход к статистике
-function goToStats() {
-    if (tg && tg.showAlert) {
-        try {
-            tg.showAlert('📊 Переходим к статистике!');
-        } catch (error) {
-            console.log('Ошибка показа уведомления:', error);
-        }
-    }
-    window.location.href = '/game#stats';
-}
-
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     // Загружаем статистику
@@ -100,17 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
             startGame();
         });
     }
-    
-    // НЕ показываем кнопку в Telegram - убираем её
-    // if (tg && tg.MainButton) {
-    //     try {
-    //         tg.MainButton.setText('🎮 Играть');
-    //         tg.MainButton.onClick(startGame);
-    //         tg.MainButton.show();
-    //     } catch (error) {
-    //         console.log('Ошибка настройки кнопки:', error);
-    //     }
-    // }
 });
 
 // Обновляем статистику каждые 30 секунд
