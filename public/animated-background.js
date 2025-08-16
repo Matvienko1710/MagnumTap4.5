@@ -42,15 +42,15 @@ class AnimatedBackground {
     }
 
     initParticles() {
-        const particleCount = Math.min(100, Math.floor((window.innerWidth * window.innerHeight) / 10000));
+        const particleCount = Math.min(50, Math.floor((window.innerWidth * window.innerHeight) / 20000));
         
         for (let i = 0; i < particleCount; i++) {
             this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5,
-                size: Math.random() * 3 + 1,
+                vx: (Math.random() - 0.5) * 0.2, // Уменьшил скорость
+                vy: (Math.random() - 0.5) * 0.2, // Уменьшил скорость
+                size: Math.random() * 2 + 1, // Уменьшил размер
                 life: Math.random() * 0.5 + 0.5,
                 maxLife: Math.random() * 0.5 + 0.5,
                 color: this.getRandomFireColor()
@@ -59,25 +59,25 @@ class AnimatedBackground {
     }
 
     initLavaStreams() {
-        const streamCount = 3;
+        const streamCount = 2; // Уменьшил количество потоков
         
         for (let i = 0; i < streamCount; i++) {
             this.lavaStreams.push({
                 x: Math.random() * this.canvas.width,
                 y: 0,
-                width: Math.random() * 50 + 20,
-                speed: Math.random() * 0.5 + 0.3,
+                width: Math.random() * 30 + 15, // Уменьшил ширину
+                speed: Math.random() * 0.2 + 0.1, // Значительно замедлил
                 segments: [],
                 time: Math.random() * Math.PI * 2
             });
             
             // Инициализируем сегменты потока
-            const segmentCount = 20;
+            const segmentCount = 15; // Уменьшил количество сегментов
             for (let j = 0; j < segmentCount; j++) {
                 this.lavaStreams[i].segments.push({
-                    x: this.lavaStreams[i].x + (Math.random() - 0.5) * 30,
+                    x: this.lavaStreams[i].x + (Math.random() - 0.5) * 20,
                     y: j * (this.canvas.height / segmentCount),
-                    size: Math.random() * 20 + 10,
+                    size: Math.random() * 15 + 8, // Уменьшил размер
                     life: Math.random() * 0.5 + 0.5
                 });
             }
@@ -99,12 +99,12 @@ class AnimatedBackground {
 
     updateParticles(deltaTime) {
         this.particles.forEach(particle => {
-            // Обновляем позицию
-            particle.x += particle.vx * deltaTime;
-            particle.y += particle.vy * deltaTime;
+            // Обновляем позицию с замедлением
+            particle.x += particle.vx * deltaTime * 0.5; // Замедлил в 2 раза
+            particle.y += particle.vy * deltaTime * 0.5; // Замедлил в 2 раза
             
-            // Обновляем жизнь
-            particle.life -= deltaTime * 0.001;
+            // Обновляем жизнь медленнее
+            particle.life -= deltaTime * 0.0005; // Замедлил в 2 раза
             
             // Пересоздаем частицу если она умерла или вышла за границы
             if (particle.life <= 0 || 
@@ -113,8 +113,8 @@ class AnimatedBackground {
                 
                 particle.x = Math.random() * this.canvas.width;
                 particle.y = Math.random() * this.canvas.height;
-                particle.vx = (Math.random() - 0.5) * 0.5;
-                particle.vy = (Math.random() - 0.5) * 0.5;
+                particle.vx = (Math.random() - 0.5) * 0.2;
+                particle.vy = (Math.random() - 0.5) * 0.2;
                 particle.life = particle.maxLife;
                 particle.color = this.getRandomFireColor();
             }
@@ -123,19 +123,19 @@ class AnimatedBackground {
 
     updateLavaStreams(deltaTime) {
         this.lavaStreams.forEach(stream => {
-            stream.time += deltaTime * 0.001;
+            stream.time += deltaTime * 0.0005; // Замедлил в 2 раза
             
             // Обновляем сегменты
             stream.segments.forEach((segment, index) => {
-                segment.y += stream.speed * deltaTime;
-                segment.x = stream.x + Math.sin(stream.time + index * 0.5) * 20;
-                segment.life -= deltaTime * 0.0005;
+                segment.y += stream.speed * deltaTime * 0.3; // Замедлил в 3 раза
+                segment.x = stream.x + Math.sin(stream.time + index * 0.3) * 15; // Уменьшил амплитуду
+                segment.life -= deltaTime * 0.0002; // Замедлил в 2.5 раза
                 
                 // Пересоздаем сегмент если он вышел за границы
                 if (segment.y > this.canvas.height + 50) {
                     segment.y = -50;
                     segment.life = 1;
-                    segment.x = stream.x + (Math.random() - 0.5) * 30;
+                    segment.x = stream.x + (Math.random() - 0.5) * 20;
                 }
             });
         });
@@ -146,7 +146,7 @@ class AnimatedBackground {
             const alpha = particle.life / particle.maxLife;
             
             this.ctx.save();
-            this.ctx.globalAlpha = alpha;
+            this.ctx.globalAlpha = alpha * 0.7; // Уменьшил прозрачность
             
             // Создаем градиент для частицы
             const gradient = this.ctx.createRadialGradient(
@@ -175,7 +175,7 @@ class AnimatedBackground {
                 const alpha = segment.life;
                 
                 this.ctx.save();
-                this.ctx.globalAlpha = alpha * 0.7;
+                this.ctx.globalAlpha = alpha * 0.5; // Уменьшил прозрачность
                 
                 // Создаем градиент для сегмента
                 const gradient = this.ctx.createLinearGradient(
@@ -201,7 +201,7 @@ class AnimatedBackground {
                     this.ctx.moveTo(prevSegment.x, prevSegment.y);
                     this.ctx.lineTo(segment.x, segment.y);
                     this.ctx.strokeStyle = gradient;
-                    this.ctx.lineWidth = segment.size * 0.6;
+                    this.ctx.lineWidth = segment.size * 0.4; // Уменьшил толщину
                     this.ctx.stroke();
                 }
                 
@@ -226,6 +226,9 @@ class AnimatedBackground {
         const deltaTime = currentTime - this.lastTime;
         this.lastTime = currentTime;
         
+        // Ограничиваем deltaTime для стабильности
+        const limitedDeltaTime = Math.min(deltaTime, 50);
+        
         // Очищаем canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
@@ -233,11 +236,11 @@ class AnimatedBackground {
         this.drawBackground();
         
         // Обновляем и рисуем частицы
-        this.updateParticles(deltaTime);
+        this.updateParticles(limitedDeltaTime);
         this.drawParticles();
         
         // Обновляем и рисуем потоки лавы
-        this.updateLavaStreams(deltaTime);
+        this.updateLavaStreams(limitedDeltaTime);
         this.drawLavaStreams();
         
         // Добавляем свечение
@@ -250,7 +253,7 @@ class AnimatedBackground {
         // Добавляем общее свечение
         this.ctx.save();
         this.ctx.globalCompositeOperation = 'screen';
-        this.ctx.globalAlpha = 0.1;
+        this.ctx.globalAlpha = 0.05; // Уменьшил интенсивность свечения
         
         const gradient = this.ctx.createRadialGradient(
             this.canvas.width / 2, this.canvas.height / 2, 0,
