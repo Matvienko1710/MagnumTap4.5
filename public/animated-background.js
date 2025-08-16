@@ -1,196 +1,85 @@
-// Надежный анимированный фон с fallback
-class ReliableAnimatedBackground {
-    constructor() {
-        this.backgroundElement = null;
-        this.videoElement = null;
-        this.isLoaded = false;
-        this.fallbackUsed = false;
-        this.init();
-    }
+// Максимально простой анимированный фон
+console.log('Animated background script loaded');
 
-    init() {
-        // Создаем элемент для анимированного фона
-        this.backgroundElement = document.createElement('div');
-        this.backgroundElement.className = 'animated-background';
-
-        // Добавляем стили для контейнера
-        this.backgroundElement.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 1.5s ease;
-            overflow: hidden;
-        `;
-
-        document.body.appendChild(this.backgroundElement);
-
-        // Пробуем загрузить MP4 видео
-        this.tryLoadVideo();
-    }
-
-    tryLoadVideo() {
-        // Создаем видео элемент
-        this.videoElement = document.createElement('video');
-        this.videoElement.className = 'background-video';
-        
-        // Настройки видео
-        this.videoElement.autoplay = true;
-        this.videoElement.muted = true;
-        this.videoElement.loop = true;
-        this.videoElement.playsInline = true;
-        this.videoElement.preload = 'metadata';
-        
-        // Стили для видео
-        this.videoElement.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
-            object-fit: cover;
-            filter: brightness(0.8) contrast(1.1);
-        `;
-
-        // Добавляем видео в контейнер
-        this.backgroundElement.appendChild(this.videoElement);
-
-        // Устанавливаем источник видео
-        this.videoElement.src = 'https://i.imgur.com/buHbiEr.mp4';
-
-        // Обработчики событий
-        this.videoElement.addEventListener('loadedmetadata', () => {
-            console.log('MP4 background video metadata loaded');
-        });
-
-        this.videoElement.addEventListener('canplay', () => {
-            this.isLoaded = true;
-            this.backgroundElement.style.opacity = 1;
-            console.log('MP4 background video ready to play');
-            
-            // Пытаемся воспроизвести видео
-            this.videoElement.play().catch(e => {
-                console.log('Auto-play prevented, trying fallback:', e);
-                this.useGifFallback();
-            });
-        });
-
-        this.videoElement.addEventListener('error', (e) => {
-            console.error('Failed to load MP4 background video:', e);
-            this.useGifFallback();
-        });
-
-        // Таймаут для загрузки видео
-        setTimeout(() => {
-            if (!this.isLoaded && !this.fallbackUsed) {
-                console.log('Video loading timeout, using fallback');
-                this.useGifFallback();
-            }
-        }, 5000);
-    }
-
-    useGifFallback() {
-        if (this.fallbackUsed) return;
-        this.fallbackUsed = true;
-        
-        console.log('Using GIF fallback background');
-        
-        // Удаляем видео элемент
-        if (this.videoElement) {
-            this.videoElement.remove();
-            this.videoElement = null;
-        }
-        
-        // Устанавливаем GIF фон
-        this.backgroundElement.style.background = `
-            url('https://i.imgur.com/pm7ZuQo.gif') center center/cover no-repeat
-        `;
-        this.backgroundElement.style.opacity = 1;
-        this.isLoaded = true;
-    }
-
-    useGradientFallback() {
-        if (this.fallbackUsed) return;
-        this.fallbackUsed = true;
-        
-        console.log('Using gradient fallback background');
-        
-        // Удаляем видео элемент
-        if (this.videoElement) {
-            this.videoElement.remove();
-            this.videoElement = null;
-        }
-        
-        // Устанавливаем градиентный фон
-        this.backgroundElement.style.background = `
-            linear-gradient(135deg, 
-                #1a0033 0%, 
-                #330066 25%, 
-                #660033 50%, 
-                #330000 75%, 
-                #1a0033 100%
-            )
-        `;
-        this.backgroundElement.style.opacity = 1;
-        this.isLoaded = true;
-    }
-
-    destroy() {
-        if (this.videoElement) {
-            this.videoElement.pause();
-            this.videoElement.src = '';
-            this.videoElement.load();
-        }
-        
-        if (this.backgroundElement && this.backgroundElement.parentNode) {
-            this.backgroundElement.parentNode.removeChild(this.backgroundElement);
-        }
-    }
-}
-
-// Инициализация фона при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing animated background...');
+// Создаем элемент фона сразу
+function createAnimatedBackground() {
+    console.log('Creating animated background...');
     
-    // Небольшая задержка для оптимизации загрузки
+    // Проверяем, не создан ли уже фон
+    if (document.getElementById('animatedBackground')) {
+        console.log('Background already exists');
+        return;
+    }
+    
+    // Создаем элемент
+    const backgroundDiv = document.createElement('div');
+    backgroundDiv.id = 'animatedBackground';
+    backgroundDiv.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
+        animation: gradientShift 10s ease infinite;
+    `;
+    
+    // Добавляем CSS анимацию
+    if (!document.getElementById('animatedBackgroundStyle')) {
+        const style = document.createElement('style');
+        style.id = 'animatedBackgroundStyle';
+        style.textContent = `
+            @keyframes gradientShift {
+                0%, 100% { 
+                    background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
+                }
+                25% { 
+                    background: linear-gradient(135deg, #330066, #660033, #330000, #1a0033);
+                }
+                50% { 
+                    background: linear-gradient(135deg, #660033, #330000, #1a0033, #330066);
+                }
+                75% { 
+                    background: linear-gradient(135deg, #330000, #1a0033, #330066, #660033);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Добавляем в body
+    document.body.appendChild(backgroundDiv);
+    console.log('Animated background created successfully');
+    
+    // Пытаемся загрузить GIF поверх градиента
     setTimeout(() => {
         try {
-            window.animatedBackground = new ReliableAnimatedBackground();
+            const img = new Image();
+            img.onload = () => {
+                console.log('GIF loaded, applying to background');
+                backgroundDiv.style.background = `url('https://i.imgur.com/pm7ZuQo.gif') center center/cover no-repeat`;
+                backgroundDiv.style.animation = 'none';
+            };
+            img.onerror = () => {
+                console.log('GIF failed to load, keeping gradient');
+            };
+            img.src = 'https://i.imgur.com/pm7ZuQo.gif';
         } catch (error) {
-            console.error('Failed to initialize animated background:', error);
-            // Создаем простой градиентный фон как последний fallback
-            const fallbackDiv = document.createElement('div');
-            fallbackDiv.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -1;
-                background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
-            `;
-            document.body.appendChild(fallbackDiv);
+            console.log('Error loading GIF:', error);
         }
-    }, 100);
-});
+    }, 1000);
+}
 
-// Очистка при выгрузке страницы
-window.addEventListener('beforeunload', function() {
-    if (window.animatedBackground) {
-        window.animatedBackground.destroy();
-    }
-});
+// Инициализация при загрузке DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createAnimatedBackground);
+} else {
+    createAnimatedBackground();
+}
 
-// Очистка при переходе между страницами
-window.addEventListener('pagehide', function() {
-    if (window.animatedBackground) {
-        window.animatedBackground.destroy();
-    }
-});
+// Дополнительная инициализация через небольшую задержку
+setTimeout(createAnimatedBackground, 100);
+
+console.log('Animated background script initialized');
