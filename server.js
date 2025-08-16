@@ -4,11 +4,15 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const path = require('path');
+const morgan = require('morgan');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-// Middleware
+// Логирование запросов
+app.use(morgan('combined'));
+
+// Безопасность
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -17,7 +21,7 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://telegram.org", "https://web.telegram.org"],
       connectSrc: ["'self'", "https://api.telegram.org", "https://web.telegram.org"],
-      imgSrc: ["'self'", "data:", "https:"],
+      imgSrc: ["'self'", "data:", "https:", "https://i.imgur.com"],
       frameSrc: ["'self'", "https://telegram.org"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
@@ -29,13 +33,34 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
+
+// Сжатие
 app.use(compression());
+
+// CORS
 app.use(cors({
   origin: ['https://web.telegram.org', 'https://telegram.org', 'https://t.me'],
   credentials: true
 }));
+
+// Парсинг JSON
 app.use(express.json());
-app.use(express.static('public'));
+
+// Статические файлы с улучшенной обработкой
+app.use(express.static('public', {
+  maxAge: '1h',
+  etag: true,
+  lastModified: true,
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js')) {
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+    } else if (path.endsWith('.css')) {
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+    } else if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));
 
 // Главная страница
 app.get('/', (req, res) => {
@@ -92,11 +117,25 @@ app.get('/api/leaderboard', (req, res) => {
   res.json(leaderboard);
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
 // Обработка 404
 app.use((req, res) => {
   res.status(404).json({
     success: false,
     error: 'Страница не найдена'
+  });
+});
+
+// Обработка ошибок
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    error: 'Внутренняя ошибка сервера'
   });
 });
 
@@ -116,5 +155,6 @@ app.listen(PORT, () => {
   }
   
   console.log(`📊 API: /api/stats`);
+  console.log(`🏥 Health check: /health`);
 });
 
