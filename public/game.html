@@ -28,69 +28,55 @@
                 <div class="click-text">Нажмите!</div>
             </div>
 
-            <div class="game-navigation">
-                <button class="nav-btn active" onclick="showSection('click')">🎯 Игра</button>
-                <button class="nav-btn" onclick="showSection('upgrades')">🛠️ Улучшения</button>
-                <button class="nav-btn" onclick="showSection('achievements')">🏆 Достижения</button>
-            </div>
-
-            <div class="game-section" id="click-section">
-                <!-- Секция кликера остается видимой по умолчанию -->
-            </div>
-
-            <div class="game-section" id="upgrades-section" style="display: none;">
-                <div class="upgrades-section" id="upgrades">
-                    <h3>🛠️ Улучшения</h3>
-                    <div class="upgrades-grid">
-                        <div class="upgrade-item" data-upgrade="clicker">
-                            <div class="upgrade-icon">👆</div>
-                            <div class="upgrade-info">
-                                <div class="upgrade-name">Улучшенный клик</div>
-                                <div class="upgrade-cost">Стоимость: <span id="clickerCost">10</span> 🪙</div>
-                                <div class="upgrade-level">Уровень: <span id="clickerLevel">0</span></div>
-                            </div>
-                            <button class="upgrade-btn" onclick="buyUpgrade('clicker')">Купить</button>
+            <div class="upgrades-section" id="upgrades">
+                <h3>🛠️ Улучшения</h3>
+                <div class="upgrades-grid">
+                    <div class="upgrade-item" data-upgrade="clicker">
+                        <div class="upgrade-icon">👆</div>
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">Улучшенный клик</div>
+                            <div class="upgrade-cost">Стоимость: <span id="clickerCost">10</span> 🪙</div>
+                            <div class="upgrade-level">Уровень: <span id="clickerLevel">0</span></div>
                         </div>
+                        <button class="upgrade-btn" onclick="buyUpgrade('clicker')">Купить</button>
+                    </div>
 
-                        <div class="upgrade-item" data-upgrade="auto">
-                            <div class="upgrade-icon">🤖</div>
-                            <div class="upgrade-info">
-                                <div class="upgrade-name">Автокликер</div>
-                                <div class="upgrade-cost">Стоимость: <span id="autoCost">50</span> 🪙</div>
-                                <div class="upgrade-level">Уровень: <span id="autoLevel">0</span></div>
-                            </div>
-                            <button class="upgrade-btn" onclick="buyUpgrade('auto')">Купить</button>
+                    <div class="upgrade-item" data-upgrade="auto">
+                        <div class="upgrade-icon">🤖</div>
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">Автокликер</div>
+                            <div class="upgrade-cost">Стоимость: <span id="autoCost">50</span> 🪙</div>
+                            <div class="upgrade-level">Уровень: <span id="autoLevel">0</span></div>
                         </div>
+                        <button class="upgrade-btn" onclick="buyUpgrade('auto')">Купить</button>
+                    </div>
 
-                        <div class="upgrade-item" data-upgrade="multiplier">
-                            <div class="upgrade-icon">💎</div>
-                            <div class="upgrade-info">
-                                <div class="upgrade-name">Множитель</div>
-                                <div class="upgrade-cost">Стоимость: <span id="multiplierCost">200</span> 🪙</div>
-                                <div class="upgrade-level">Уровень: <span id="multiplierLevel">0</span></div>
-                            </div>
-                            <button class="upgrade-btn" onclick="buyUpgrade('multiplier')">Купить</button>
+                    <div class="upgrade-item" data-upgrade="multiplier">
+                        <div class="upgrade-icon">💎</div>
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">Множитель</div>
+                            <div class="upgrade-cost">Стоимость: <span id="multiplierCost">200</span> 🪙</div>
+                            <div class="upgrade-level">Уровень: <span id="multiplierLevel">0</span></div>
                         </div>
+                        <button class="upgrade-btn" onclick="buyUpgrade('multiplier')">Купить</button>
+                    </div>
 
-                        <div class="upgrade-item" data-upgrade="lucky">
-                            <div class="upgrade-icon">🍀</div>
-                            <div class="upgrade-info">
-                                <div class="upgrade-name">Удача</div>
-                                <div class="upgrade-cost">Стоимость: <span id="luckyCost">500</span> 🪙</div>
-                                <div class="upgrade-level">Уровень: <span id="luckyLevel">0</span></div>
-                            </div>
-                            <button class="upgrade-btn" onclick="buyUpgrade('lucky')">Купить</button>
+                    <div class="upgrade-item" data-upgrade="lucky">
+                        <div class="upgrade-icon">🍀</div>
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">Удача</div>
+                            <div class="upgrade-cost">Стоимость: <span id="luckyCost">500</span> 🪙</div>
+                            <div class="upgrade-level">Уровень: <span id="luckyLevel">0</span></div>
                         </div>
+                        <button class="upgrade-btn" onclick="buyUpgrade('lucky')">Купить</button>
                     </div>
                 </div>
             </div>
 
-            <div class="game-section" id="achievements-section" style="display: none;">
-                <div class="achievements-section" id="achievements">
-                    <h3>🏆 Достижения</h3>
-                    <div class="achievements-grid" id="achievementsGrid">
-                        <!-- Достижения будут добавлены динамически -->
-                    </div>
+            <div class="achievements-section" id="achievements">
+                <h3>🏆 Достижения</h3>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Достижения будут добавлены динамически -->
                 </div>
             </div>
         </main>

@@ -279,55 +279,8 @@ function autoClicker() {
     }
 }
 
-// Переключение между разделами
-function showSection(sectionName) {
-    console.log('Переключение на секцию:', sectionName);
-    
-    // Скрываем все секции
-    const sections = ['click-section', 'upgrades-section', 'achievements-section'];
-    sections.forEach(section => {
-        const element = document.getElementById(section);
-        if (element) {
-            element.style.display = 'none';
-        }
-    });
-    
-    // Убираем активный класс со всех кнопок
-    const buttons = document.querySelectorAll('.nav-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    
-    // Показываем нужную секцию и активируем кнопку
-    let targetSection = '';
-    let targetButton = null;
-    
-    switch (sectionName) {
-        case 'click':
-            targetSection = 'click-section';
-            targetButton = document.querySelector('.nav-btn[onclick*="click"]');
-            break;
-        case 'upgrades':
-            targetSection = 'upgrades-section';
-            targetButton = document.querySelector('.nav-btn[onclick*="upgrades"]');
-            break;
-        case 'achievements':
-            targetSection = 'achievements-section';
-            targetButton = document.querySelector('.nav-btn[onclick*="achievements"]');
-            break;
-    }
-    
-    if (targetSection) {
-        const element = document.getElementById(targetSection);
-        if (element) {
-            element.style.display = 'block';
-            console.log('Показана секция:', targetSection);
-        }
-    }
-    
-    if (targetButton) {
-        targetButton.classList.add('active');
-        console.log('Активирована кнопка:', targetButton.textContent);
-    }
-}
+// Переключение между разделами - УДАЛЕНО
+// Больше не используется, так как убрали кнопки навигации
 
 // Отслеживание игровой сессии
 let sessionStartTime = Date.now();
@@ -399,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(saveGameData, 10000);
     
     // Показываем секцию кликера по умолчанию
-    showSection('click');
+    // showSection('click'); // Удалено
     
     // Интеграция с аналитикой
     startSessionTracking();
