@@ -58,7 +58,18 @@ app.use((req, res) => {
 // Запуск сервера
 app.listen(PORT, () => {
   console.log(`🚀 WebApp сервер запущен на порту ${PORT}`);
-  console.log(`🌐 Доступен по адресу: http://localhost:${PORT}`);
-  console.log(`🎮 Игра: http://localhost:${PORT}/game`);
+  
+  // Определяем окружение
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.RAILWAY_ENVIRONMENT;
+  
+  if (isProduction) {
+    console.log(`🌐 Production URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'your-app.railway.app'}`);
+    console.log(`🎮 Игра: https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'your-app.railway.app'}/game`);
+  } else {
+    console.log(`🌐 Доступен по адресу: http://localhost:${PORT}`);
+    console.log(`🎮 Игра: http://localhost:${PORT}/game`);
+  }
+  
+  console.log(`📊 API: /api/stats`);
 });
 
