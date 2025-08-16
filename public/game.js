@@ -1,3 +1,10 @@
+// Тестовая функция для проверки кликов
+function testClick() {
+    console.log('=== ТЕСТОВЫЙ КЛИК ===');
+    alert('Тестовая кнопка работает! Монеты: ' + gameData.coins);
+    clickCoin();
+}
+
 // Инициализация Telegram WebApp
 let tg = null;
 try {
@@ -29,9 +36,12 @@ function loadGameData() {
         try {
             const parsed = JSON.parse(saved);
             gameData = { ...gameData, ...parsed };
+            console.log('Данные загружены:', gameData);
         } catch (error) {
             console.error('Ошибка загрузки данных:', error);
         }
+    } else {
+        console.log('Сохраненных данных нет, используем начальные значения');
     }
 }
 
@@ -39,6 +49,7 @@ function loadGameData() {
 function saveGameData() {
     try {
         localStorage.setItem('magnumCoinsGame', JSON.stringify(gameData));
+        console.log('Данные сохранены:', gameData);
     } catch (error) {
         console.error('Ошибка сохранения данных:', error);
     }
@@ -46,17 +57,31 @@ function saveGameData() {
 
 // Обновление интерфейса
 function updateUI() {
-    document.getElementById('coins').textContent = Math.floor(gameData.coins).toLocaleString();
-    document.getElementById('cps').textContent = gameData.clickPower.toFixed(1);
+    const coinsElement = document.getElementById('coins');
+    const cpsElement = document.getElementById('cps');
+    
+    if (coinsElement) {
+        coinsElement.textContent = Math.floor(gameData.coins).toLocaleString();
+    }
+    
+    if (cpsElement) {
+        cpsElement.textContent = gameData.clickPower.toFixed(1);
+    }
+    
+    console.log('UI обновлен - Монеты:', gameData.coins, 'CPS:', gameData.clickPower);
 }
 
 // Клик по монете
 function clickCoin() {
+    console.log('Клик по монете!');
+    
     const earnedCoins = gameData.clickPower;
     
     gameData.coins += earnedCoins;
     gameData.totalClicks += 1;
     gameData.totalCoinsEarned += earnedCoins;
+    
+    console.log('Заработано монет:', earnedCoins, 'Всего монет:', gameData.coins);
     
     // Показываем плавающую монету
     showFloatingCoin(`+${Math.floor(earnedCoins)}`, 'normal');
@@ -64,6 +89,15 @@ function clickCoin() {
     // Обновляем интерфейс
     updateUI();
     saveGameData();
+    
+    // Показываем уведомление в Telegram
+    if (tg && tg.showAlert) {
+        try {
+            tg.showAlert(`+${Math.floor(earnedCoins)} монет!`);
+        } catch (error) {
+            console.log('Ошибка показа уведомления:', error);
+        }
+    }
 }
 
 // Показ плавающей монеты
@@ -80,6 +114,7 @@ function showFloatingCoin(text, type = 'normal') {
     coin.style.top = y + 'px';
     
     document.body.appendChild(coin);
+    console.log('Плавающая монета показана:', text);
     
     // Удаляем через 1 секунду
     setTimeout(() => {
@@ -98,6 +133,7 @@ function startSessionTracking() {
     sessionStartTime = Date.now();
     sessionClicks = 0;
     sessionCoins = 0;
+    console.log('Отслеживание сессии начато');
 }
 
 function endSessionTracking() {
@@ -108,6 +144,8 @@ function endSessionTracking() {
         duration: sessionDuration,
         cps: gameData.clickPower
     };
+    
+    console.log('Сессия завершена:', sessionData);
     
     // Добавляем сессию в аналитику
     if (window.addSession) {
@@ -124,28 +162,50 @@ function updateUserActivity() {
     const activityData = JSON.parse(localStorage.getItem('magnumActivityData') || '{}');
     activityData[today] = true;
     localStorage.setItem('magnumActivityData', JSON.stringify(activityData));
+    console.log('Активность обновлена для:', today);
 }
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Инициализация игры...');
+    console.log('=== ИНИЦИАЛИЗАЦИЯ ИГРЫ ===');
     
     // Загружаем данные
     loadGameData();
     
     // Настраиваем клик по монете
     const clickArea = document.getElementById('clickArea');
+    console.log('Найден элемент clickArea:', clickArea);
+    
     if (clickArea) {
-        clickArea.addEventListener('click', clickCoin);
+        // Обычный клик
+        clickArea.addEventListener('click', function(e) {
+            console.log('Клик по clickArea (click)');
+            e.preventDefault();
+            clickCoin();
+        });
+        
+        // Touch события для мобильных
         clickArea.addEventListener('touchstart', function(e) {
+            console.log('Touch start по clickArea');
             e.preventDefault();
             e.stopPropagation();
         });
+        
         clickArea.addEventListener('touchend', function(e) {
+            console.log('Touch end по clickArea');
             e.preventDefault();
             e.stopPropagation();
             clickCoin();
         });
+        
+        // Добавляем стили для лучшей отзывчивости
+        clickArea.style.cursor = 'pointer';
+        clickArea.style.userSelect = 'none';
+        clickArea.style.webkitUserSelect = 'none';
+        
+        console.log('Обработчики событий добавлены к clickArea');
+    } else {
+        console.error('Элемент clickArea не найден!');
     }
     
     // Обновляем интерфейс
@@ -160,5 +220,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Отслеживаем уход со страницы
     window.addEventListener('beforeunload', endSessionTracking);
     
-    console.log('Игра инициализирована');
+    console.log('=== ИГРА ИНИЦИАЛИЗИРОВАНА ===');
 });
+
+// Дополнительная инициализация для случаев, когда DOMContentLoaded уже сработал
+if (document.readyState === 'loading') {
+    console.log('DOM еще загружается...');
+} else {
+    console.log('DOM уже загружен, инициализируем сразу...');
+    
+    // Загружаем данные
+    loadGameData();
+    
+    // Настраиваем клик по монете
+    const clickArea = document.getElementById('clickArea');
+    if (clickArea) {
+        clickArea.addEventListener('click', function(e) {
+            console.log('Клик по clickArea (immediate)');
+            e.preventDefault();
+            clickCoin();
+        });
+        
+        clickArea.style.cursor = 'pointer';
+        clickArea.style.userSelect = 'none';
+        clickArea.style.webkitUserSelect = 'none';
+    }
+    
+    // Обновляем интерфейс
+    updateUI();
+}
