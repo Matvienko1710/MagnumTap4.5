@@ -134,166 +134,15 @@
     transition: all 0.3s ease;
 }
 
-.upgrades-section {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.upgrades-section h3 {
-    color: white;
-    margin-bottom: 20px;
-    font-size: 1.4rem;
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.upgrades-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 15px;
-}
-
-.upgrade-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.upgrade-item:hover {
-    border-color: #ff4500;
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-
-.upgrade-icon {
-    font-size: 1.8rem;
-    min-width: 40px;
-    text-align: center;
-}
-
-.upgrade-info {
-    flex: 1;
-}
-
-.upgrade-name {
-    font-weight: bold;
-    color: white;
-    margin-bottom: 3px;
-    font-size: 0.95rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-.upgrade-cost, .upgrade-level {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
-
-.upgrade-btn {
-    background: #ff4500;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(255, 69, 0, 0.3);
-}
-
-.upgrade-btn:hover {
-    background: #ff6347;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(255, 69, 0, 0.4);
-}
-
-.upgrade-btn:disabled {
-    background: rgba(255, 255, 255, 0.3);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.achievements-section {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.achievements-section h3 {
-    color: white;
-    margin-bottom: 20px;
-    font-size: 1.4rem;
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-}
-
-.achievement {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.achievement.unlocked {
-    border-color: #32cd32;
-    background: rgba(50, 205, 50, 0.2);
-}
-
-.achievement-icon {
-    font-size: 1.3rem;
-}
-
-.achievement-info {
-    flex: 1;
-}
-
-.achievement-name {
-    font-weight: bold;
-    color: white;
-    font-size: 0.85rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-.achievement-desc {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
+/* Стили улучшений и достижений - УДАЛЕНЫ */
 
 /* Плавающие монеты */
 .floating-coin {
     position: absolute;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     pointer-events: none;
     animation: floatUp 1s ease-out forwards;
-    z-index: 1000;
+    z-index: 10;
 }
 
 @keyframes floatUp {
@@ -305,6 +154,12 @@
         opacity: 0;
         transform: translateY(-100px) scale(1.2);
     }
+}
+
+.floating-coin.lucky {
+    color: #ffd700;
+    font-size: 1.5rem;
+    animation-duration: 1.5s;
 }
 
 /* Адаптивность */

@@ -18,23 +18,6 @@ try {
 let gameData = {
     coins: 0,
     clickPower: 1,
-    autoClicker: 0,
-    multiplier: 1,
-    lucky: 0,
-    upgrades: {
-        clicker: { level: 0, cost: 10, baseCost: 10 },
-        auto: { level: 0, cost: 50, baseCost: 50 },
-        multiplier: { level: 0, cost: 200, baseCost: 200 },
-        lucky: { level: 0, cost: 500, baseCost: 500 }
-    },
-    achievements: {
-        firstClick: false,
-        tenCoins: false,
-        hundredCoins: false,
-        thousandCoins: false,
-        firstUpgrade: false,
-        tenUpgrades: false
-    },
     totalClicks: 0,
     totalCoinsEarned: 0
 };
@@ -64,127 +47,37 @@ function saveGameData() {
 // Обновление интерфейса
 function updateUI() {
     document.getElementById('coins').textContent = Math.floor(gameData.coins).toLocaleString();
-    document.getElementById('cps').textContent = (gameData.autoClicker * gameData.multiplier).toFixed(1);
-    
-    // Обновляем улучшения
-    Object.keys(gameData.upgrades).forEach(upgrade => {
-        const data = gameData.upgrades[upgrade];
-        document.getElementById(`${upgrade}Cost`).textContent = data.cost.toLocaleString();
-        document.getElementById(`${upgrade}Level`).textContent = data.level;
-        
-        const button = document.querySelector(`[data-upgrade="${upgrade}"] .upgrade-btn`);
-        if (button) {
-            button.disabled = gameData.coins < data.cost;
-        }
-    });
-}
-
-// Покупка улучшения
-function buyUpgrade(type) {
-    const upgrade = gameData.upgrades[type];
-    
-    if (gameData.coins >= upgrade.cost) {
-        gameData.coins -= upgrade.cost;
-        
-        switch (type) {
-            case 'clicker':
-                gameData.clickPower += 1;
-                break;
-            case 'auto':
-                gameData.autoClicker += 1;
-                break;
-            case 'multiplier':
-                gameData.multiplier += 0.5;
-                break;
-            case 'lucky':
-                gameData.lucky += 0.1;
-                break;
-        }
-        
-        upgrade.level += 1;
-        upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.level));
-        
-        // Проверяем достижения
-        checkAchievements();
-        
-        // Обновляем интерфейс
-        updateUI();
-        saveGameData();
-        
-        // Показываем уведомление
-        if (tg && tg.showAlert) {
-            try {
-                tg.showAlert(`✅ Улучшение "${getUpgradeName(type)}" куплено!`);
-            } catch (error) {
-                console.log('Ошибка показа уведомления:', error);
-            }
-        }
-    }
-}
-
-// Получение названия улучшения
-function getUpgradeName(type) {
-    const names = {
-        clicker: 'Улучшенный клик',
-        auto: 'Автокликер',
-        multiplier: 'Множитель',
-        lucky: 'Удача'
-    };
-    return names[type] || type;
+    document.getElementById('cps').textContent = gameData.clickPower.toFixed(1);
 }
 
 // Клик по монете
 function clickCoin() {
-    const baseCoins = gameData.clickPower;
-    let earnedCoins = baseCoins;
-    
-    // Применяем множитель
-    earnedCoins *= gameData.multiplier;
-    
-    // Проверяем удачу
-    if (Math.random() < gameData.lucky) {
-        earnedCoins *= 2;
-        showFloatingCoin('🪙 x2!', 'lucky');
-    }
+    const earnedCoins = gameData.clickPower;
     
     gameData.coins += earnedCoins;
     gameData.totalClicks += 1;
     gameData.totalCoinsEarned += earnedCoins;
     
-    // Обновляем статистику сессии
-    sessionClicks++;
-    sessionCoins += earnedCoins;
-    
     // Показываем плавающую монету
     showFloatingCoin(`+${Math.floor(earnedCoins)}`, 'normal');
-    
-    // Проверяем достижения
-    checkAchievements();
     
     // Обновляем интерфейс
     updateUI();
     saveGameData();
 }
 
-// Показ плавающих монет
+// Показ плавающей монеты
 function showFloatingCoin(text, type = 'normal') {
     const coin = document.createElement('div');
-    coin.className = 'floating-coin';
+    coin.className = `floating-coin ${type}`;
     coin.textContent = text;
     
-    if (type === 'lucky') {
-        coin.style.color = '#f39c12';
-        coin.style.fontWeight = 'bold';
-    }
-    
     // Случайная позиция
-    const clickArea = document.getElementById('clickArea');
-    const rect = clickArea.getBoundingClientRect();
-    const x = Math.random() * (rect.width - 50);
-    const y = Math.random() * (rect.height - 50);
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 100);
     
-    coin.style.left = (rect.left + x) + 'px';
-    coin.style.top = (rect.top + y) + 'px';
+    coin.style.left = x + 'px';
+    coin.style.top = y + 'px';
     
     document.body.appendChild(coin);
     
@@ -195,92 +88,6 @@ function showFloatingCoin(text, type = 'normal') {
         }
     }, 1000);
 }
-
-// Проверка достижений
-function checkAchievements() {
-    const achievements = [
-        { id: 'firstClick', condition: () => gameData.totalClicks >= 1, name: 'Первый клик', desc: 'Сделайте первый клик' },
-        { id: 'tenCoins', condition: () => gameData.coins >= 10, name: 'Начинающий', desc: 'Накопите 10 монет' },
-        { id: 'hundredCoins', condition: () => gameData.coins >= 100, name: 'Богач', desc: 'Накопите 100 монет' },
-        { id: 'thousandCoins', condition: () => gameData.coins >= 1000, name: 'Миллионер', desc: 'Накопите 1000 монет' },
-        { id: 'firstUpgrade', condition: () => Object.values(gameData.upgrades).some(u => u.level > 0), name: 'Улучшатель', desc: 'Купите первое улучшение' },
-        { id: 'tenUpgrades', condition: () => Object.values(gameData.upgrades).reduce((sum, u) => sum + u.level, 0) >= 10, name: 'Мастер', desc: 'Купите 10 улучшений' }
-    ];
-    
-    achievements.forEach(achievement => {
-        if (!gameData.achievements[achievement.id] && achievement.condition()) {
-            gameData.achievements[achievement.id] = true;
-            showAchievement(achievement.name, achievement.desc);
-        }
-    });
-    
-    updateAchievementsUI();
-}
-
-// Показ достижения
-function showAchievement(name, desc) {
-    if (tg && tg.showAlert) {
-        try {
-            tg.showAlert(`🏆 Достижение: ${name}\n${desc}`);
-        } catch (error) {
-            console.log('Ошибка показа достижения:', error);
-        }
-    }
-}
-
-// Обновление UI достижений
-function updateAchievementsUI() {
-    const grid = document.getElementById('achievementsGrid');
-    if (!grid) return;
-    
-    grid.innerHTML = '';
-    
-    const achievements = [
-        { id: 'firstClick', icon: '👆', name: 'Первый клик', desc: 'Сделайте первый клик' },
-        { id: 'tenCoins', icon: '🪙', name: 'Начинающий', desc: 'Накопите 10 монет' },
-        { id: 'hundredCoins', icon: '💰', name: 'Богач', desc: 'Накопите 100 монет' },
-        { id: 'thousandCoins', icon: '💎', name: 'Миллионер', desc: 'Накопите 1000 монет' },
-        { id: 'firstUpgrade', icon: '🔧', name: 'Улучшатель', desc: 'Купите первое улучшение' },
-        { id: 'tenUpgrades', icon: '🏆', name: 'Мастер', desc: 'Купите 10 улучшений' }
-    ];
-    
-    achievements.forEach(achievement => {
-        const div = document.createElement('div');
-        div.className = `achievement ${gameData.achievements[achievement.id] ? 'unlocked' : ''}`;
-        
-        div.innerHTML = `
-            <div class="achievement-icon">${achievement.icon}</div>
-            <div class="achievement-info">
-                <div class="achievement-name">${achievement.name}</div>
-                <div class="achievement-desc">${achievement.desc}</div>
-            </div>
-        `;
-        
-        grid.appendChild(div);
-    });
-}
-
-// Сброс игры
-function resetGame() {
-    if (confirm('Вы уверены, что хотите сбросить прогресс? Это действие нельзя отменить.')) {
-        localStorage.removeItem('magnumCoinsGame');
-        location.reload();
-    }
-}
-
-// Автокликер
-function autoClicker() {
-    if (gameData.autoClicker > 0) {
-        const earned = gameData.autoClicker * gameData.multiplier;
-        gameData.coins += earned;
-        gameData.totalCoinsEarned += earned;
-        updateUI();
-        saveGameData();
-    }
-}
-
-// Переключение между разделами - УДАЛЕНО
-// Больше не используется, так как убрали кнопки навигации
 
 // Отслеживание игровой сессии
 let sessionStartTime = Date.now();
@@ -299,7 +106,7 @@ function endSessionTracking() {
         coins: sessionCoins,
         clicks: sessionClicks,
         duration: sessionDuration,
-        cps: gameData.cps
+        cps: gameData.clickPower
     };
     
     // Добавляем сессию в аналитику
@@ -343,16 +150,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Обновляем интерфейс
     updateUI();
-    updateAchievementsUI();
-    
-    // Запускаем автокликер
-    setInterval(autoClicker, 1000);
     
     // Автосохранение каждые 10 секунд
     setInterval(saveGameData, 10000);
-    
-    // Показываем секцию кликера по умолчанию
-    // showSection('click'); // Удалено
     
     // Интеграция с аналитикой
     startSessionTracking();
