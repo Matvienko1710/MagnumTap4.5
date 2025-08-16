@@ -169,6 +169,13 @@ function updateUserActivity() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('=== ИНИЦИАЛИЗАЦИЯ ИГРЫ ===');
     
+    // Инициализируем менеджер медиафайлов
+    if (window.mediaManager) {
+        console.log('Media manager доступен');
+        // Можно загрузить дополнительные медиафайлы здесь
+        // window.mediaManager.loadImage('/media/coin-button.svg');
+    }
+    
     // Загружаем данные
     loadGameData();
     

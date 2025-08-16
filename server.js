@@ -21,7 +21,7 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://telegram.org", "https://web.telegram.org"],
       connectSrc: ["'self'", "https://api.telegram.org", "https://web.telegram.org"],
-      imgSrc: ["'self'", "data:", "https:", "https://i.imgur.com"],
+                        imgSrc: ["'self'", "data:", "https:", "https://i.imgur.com", "/media/"],
       frameSrc: ["'self'", "https://telegram.org"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
@@ -58,6 +58,8 @@ app.use(express.static('public', {
       res.setHeader('Cache-Control', 'public, max-age=3600');
     } else if (path.endsWith('.html')) {
       res.setHeader('Cache-Control', 'no-cache');
+    } else if (path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png') || path.endsWith('.gif') || path.endsWith('.mp4') || path.endsWith('.webm')) {
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 часа для медиафайлов
     }
   }
 }));

@@ -1,0 +1,60 @@
+/* Градиентный фон для игры */
+.game-background {
+    background: linear-gradient(135deg, 
+        #1a0033 0%, 
+        #330066 25%, 
+        #660033 50%, 
+        #330000 75%, 
+        #1a0033 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { 
+        background-position: 0% 50%;
+    }
+    25% { 
+        background-position: 100% 50%;
+    }
+    50% { 
+        background-position: 100% 100%;
+    }
+    75% { 
+        background-position: 0% 100%;
+    }
+}
+
+/* Альтернативный градиент для разных настроений */
+.game-background-fire {
+    background: linear-gradient(135deg, 
+        #330000 0%, 
+        #660033 25%, 
+        #cc0066 50%, 
+        #ff4500 75%, 
+        #330000 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 10s ease infinite;
+}
+
+.game-background-ice {
+    background: linear-gradient(135deg, 
+        #003366 0%, 
+        #0066cc 25%, 
+        #00ccff 50%, 
+        #66ccff 75%, 
+        #003366 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+}
+
+.game-background-gold {
+    background: linear-gradient(135deg, 
+        #332200 0%, 
+        #664400 25%, 
+        #cc8800 50%, 
+        #ffcc00 75%, 
+        #332200 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+}
