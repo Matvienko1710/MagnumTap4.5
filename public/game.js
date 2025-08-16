@@ -275,6 +275,14 @@ function autoClicker() {
     }
 }
 
+// Прокрутка к разделу
+function scrollToSection(sectionId) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     // Загружаем данные
@@ -305,14 +313,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Автосохранение каждые 10 секунд
     setInterval(saveGameData, 10000);
     
-    // Настройка Telegram WebApp
-    if (tg && tg.MainButton) {
-        try {
-            tg.MainButton.setText('🏠 Главная');
-            tg.MainButton.onClick(() => window.location.href = '/');
-            tg.MainButton.show();
-        } catch (error) {
-            console.log('Ошибка настройки кнопки:', error);
-        }
+    // Проверяем якорь в URL для навигации
+    const hash = window.location.hash;
+    if (hash) {
+        setTimeout(() => {
+            const sectionId = hash.substring(1);
+            scrollToSection(sectionId);
+        }, 500);
     }
+    
+    // НЕ показываем кнопку в Telegram - убираем её
+    // if (tg && tg.MainButton) {
+    //     try {
+    //         tg.MainButton.setText('🏠 Главная');
+    //         tg.MainButton.onClick(() => window.location.href = '/');
+    //         tg.MainButton.show();
+    //     } catch (error) {
+    //         console.log('Ошибка настройки кнопки:', error);
+    //     }
+    // }
 });
