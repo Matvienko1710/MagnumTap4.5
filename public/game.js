@@ -2,10 +2,13 @@
 let tg = null;
 try {
     tg = window.Telegram.WebApp;
-    if (tg) {
+    if (tg && tg.initData) {
         tg.ready();
         tg.expand();
         document.body.classList.add('tg-app');
+        console.log('Telegram WebApp инициализирован в игре');
+    } else {
+        console.log('Telegram WebApp не доступен, запускаем в браузере');
     }
 } catch (error) {
     console.log('Telegram WebApp не доступен:', error);
@@ -109,7 +112,7 @@ function buyUpgrade(type) {
         saveGameData();
         
         // Показываем уведомление
-        if (tg) {
+        if (tg && tg.showAlert) {
             try {
                 tg.showAlert(`✅ Улучшение "${getUpgradeName(type)}" куплено!`);
             } catch (error) {
@@ -212,7 +215,7 @@ function checkAchievements() {
 
 // Показ достижения
 function showAchievement(name, desc) {
-    if (tg) {
+    if (tg && tg.showAlert) {
         try {
             tg.showAlert(`🏆 Достижение: ${name}\n${desc}`);
         } catch (error) {
@@ -303,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(saveGameData, 10000);
     
     // Настройка Telegram WebApp
-    if (tg) {
+    if (tg && tg.MainButton) {
         try {
             tg.MainButton.setText('🏠 Главная');
             tg.MainButton.onClick(() => window.location.href = '/');

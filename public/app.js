@@ -2,10 +2,13 @@
 let tg = null;
 try {
     tg = window.Telegram.WebApp;
-    if (tg) {
+    if (tg && tg.initData) {
         tg.ready();
         tg.expand();
         document.body.classList.add('tg-app');
+        console.log('Telegram WebApp инициализирован');
+    } else {
+        console.log('Telegram WebApp не доступен, запускаем в браузере');
     }
 } catch (error) {
     console.log('Telegram WebApp не доступен:', error);
@@ -29,7 +32,7 @@ async function loadStats() {
 
 // Переход к игре
 function startGame() {
-    if (tg) {
+    if (tg && tg.showAlert) {
         try {
             tg.showAlert('🎮 Переходим к игре!');
         } catch (error) {
@@ -63,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Показываем приветствие в Telegram
-    if (tg) {
+    if (tg && tg.MainButton) {
         try {
             tg.MainButton.setText('🎮 Играть');
             tg.MainButton.onClick(startGame);

@@ -15,13 +15,25 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      scriptSrc: ["'self'", "https://telegram.org"],
-      connectSrc: ["'self'", "https://api.telegram.org"]
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://telegram.org", "https://web.telegram.org"],
+      connectSrc: ["'self'", "https://api.telegram.org", "https://web.telegram.org"],
+      imgSrc: ["'self'", "data:", "https:"],
+      frameSrc: ["'self'", "https://telegram.org"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+      frameAncestors: ["'self'"],
+      upgradeInsecureRequests: []
     }
-  }
+  },
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(compression());
-app.use(cors());
+app.use(cors({
+  origin: ['https://web.telegram.org', 'https://telegram.org', 'https://t.me'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.static('public'));
 
