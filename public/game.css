@@ -124,16 +124,9 @@
         inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
+/* Убираем старую монету - она теперь только в псевдоэлементе */
 .coin-target {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3rem;
-    margin: 0;
-    z-index: 2;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    pointer-events: none;
+    display: none;
 }
 
 .click-text {
@@ -148,50 +141,60 @@
     pointer-events: none;
 }
 
-@keyframes pulse {
-    0% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.05); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-}
-
-.coin-target {
-    animation: pulse 2s infinite;
-}
-
-/* Навигация по разделам */
+/* Навигация по разделам - новый формат */
 .game-navigation {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    padding: 8px;
+    margin: 20px auto;
+    max-width: 400px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .nav-btn {
-    background: rgba(255, 255, 255, 0.8);
+    background: transparent;
     color: #667eea;
-    border: 2px solid #667eea;
-    padding: 10px 16px;
+    border: none;
+    padding: 12px 20px;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    min-width: 100px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.nav-btn:hover {
+.nav-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: #667eea;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    border-radius: 20px;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    z-index: -1;
 }
 
+.nav-btn:hover::before,
+.nav-btn.active::before {
+    transform: scaleX(1);
+}
+
+.nav-btn:hover,
 .nav-btn.active {
-    background: #667eea;
     color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transform: translateY(-1px);
 }
 
 .game-section {
@@ -341,11 +344,9 @@
     color: #6c757d;
 }
 
+/* Убираем footer с ненужными кнопками */
 .game-footer {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+    display: none;
 }
 
 /* Плавающие монеты */
@@ -382,22 +383,21 @@
     }
     
     .game-navigation {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        justify-content: space-around;
+        max-width: 100%;
+        margin: 15px auto;
     }
     
     .nav-btn {
-        width: 100%;
-        max-width: 180px;
+        min-width: 70px;
+        padding: 10px 15px;
+        font-size: 0.8rem;
     }
     
     .click-area {
         width: 150px;
         height: 150px;
-    }
-    
-    .coin-target {
-        font-size: 2.5rem;
     }
     
     .click-text {
@@ -417,11 +417,6 @@
     .upgrade-icon {
         margin-bottom: 8px;
     }
-    
-    .game-footer {
-        flex-direction: column;
-        align-items: center;
-    }
 }
 
 /* Telegram WebApp стили */
@@ -430,6 +425,10 @@
 .tg-app .achievements-section {
     background: var(--tg-theme-bg-color, rgba(255, 255, 255, 0.9));
     color: var(--tg-theme-text-color, #333);
+}
+
+.tg-app .game-navigation {
+    background: var(--tg-theme-secondary-bg-color, rgba(255, 255, 255, 0.8));
 }
 
 .tg-app .upgrade-item {
@@ -443,13 +442,14 @@
 }
 
 .tg-app .nav-btn {
-    background: var(--tg-theme-secondary-bg-color, rgba(255, 255, 255, 0.8));
     color: var(--tg-theme-text-color, #667eea);
-    border-color: var(--tg-theme-button-color, #667eea);
 }
 
-.tg-app .nav-btn.active,
-.tg-app .nav-btn:hover {
+.tg-app .nav-btn::before {
     background: var(--tg-theme-button-color, #667eea);
+}
+
+.tg-app .nav-btn:hover,
+.tg-app .nav-btn.active {
     color: var(--tg-theme-button-text-color, white);
 }
