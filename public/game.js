@@ -151,6 +151,10 @@ function clickCoin() {
     gameData.totalClicks += 1;
     gameData.totalCoinsEarned += earnedCoins;
     
+    // Обновляем статистику сессии
+    sessionClicks++;
+    sessionCoins += earnedCoins;
+    
     // Показываем плавающую монету
     showFloatingCoin(`+${Math.floor(earnedCoins)}`, 'normal');
     
@@ -325,6 +329,43 @@ function showSection(sectionName) {
     }
 }
 
+// Отслеживание игровой сессии
+let sessionStartTime = Date.now();
+let sessionClicks = 0;
+let sessionCoins = 0;
+
+function startSessionTracking() {
+    sessionStartTime = Date.now();
+    sessionClicks = 0;
+    sessionCoins = 0;
+}
+
+function endSessionTracking() {
+    const sessionDuration = Math.floor((Date.now() - sessionStartTime) / 1000);
+    const sessionData = {
+        coins: sessionCoins,
+        clicks: sessionClicks,
+        duration: sessionDuration,
+        cps: gameData.cps
+    };
+    
+    // Добавляем сессию в аналитику
+    if (window.addSession) {
+        window.addSession(sessionData);
+    }
+    
+    // Обновляем активность пользователя
+    updateUserActivity();
+}
+
+// Обновление активности пользователя
+function updateUserActivity() {
+    const today = new Date().toDateString();
+    const activityData = JSON.parse(localStorage.getItem('magnumActivityData') || '{}');
+    activityData[today] = true;
+    localStorage.setItem('magnumActivityData', JSON.stringify(activityData));
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Инициализация игры...');
@@ -359,6 +400,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Показываем секцию кликера по умолчанию
     showSection('click');
+    
+    // Интеграция с аналитикой
+    startSessionTracking();
+    
+    // Отслеживаем уход со страницы
+    window.addEventListener('beforeunload', endSessionTracking);
     
     console.log('Игра инициализирована');
 });

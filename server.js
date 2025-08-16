@@ -47,6 +47,26 @@ app.get('/game', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'game.html'));
 });
 
+// Страница бонусов
+app.get('/bonuses', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'bonuses.html'));
+});
+
+// Страница рейтинга
+app.get('/leaderboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
+});
+
+// Страница аналитики
+app.get('/analytics', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'analytics.html'));
+});
+
+// Страница рефералов
+app.get('/referral', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'referral.html'));
+});
+
 // API для статистики
 app.get('/api/stats', (req, res) => {
   res.json({
@@ -57,6 +77,24 @@ app.get('/api/stats', (req, res) => {
       totalCoins: 1542000
     }
   });
+});
+
+// API для рейтинга
+app.get('/api/leaderboard', (req, res) => {
+  // Моковые данные лидеров
+  const leaderboard = [
+    { id: 1, name: "Игрок_1", coins: 15420, level: 15, activity: 95, quests: 8 },
+    { id: 2, name: "Игрок_2", coins: 12850, level: 12, activity: 87, quests: 6 },
+    { id: 3, name: "Игрок_3", coins: 11230, level: 11, activity: 92, quests: 7 },
+    { id: 4, name: "Игрок_4", coins: 9870, level: 10, activity: 78, quests: 5 },
+    { id: 5, name: "Игрок_5", coins: 8540, level: 9, activity: 85, quests: 4 },
+    { id: 6, name: "Игрок_6", coins: 7230, level: 8, activity: 73, quests: 3 },
+    { id: 7, name: "Игрок_7", coins: 6540, level: 7, activity: 69, quests: 3 },
+    { id: 8, name: "Игрок_8", coins: 5870, level: 6, activity: 82, quests: 2 },
+    { id: 9, name: "Игрок_9", coins: 5230, level: 5, activity: 76, quests: 2 },
+    { id: 10, name: "Игрок_10", coins: 4780, level: 4, activity: 71, quests: 1 }
+  ];
+  res.json(leaderboard);
 });
 
 // Обработка 404
