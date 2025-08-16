@@ -18,11 +18,11 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     min-height: 100vh;
-    color: #2d3748;
+    color: #ffffff;
     line-height: 1.6;
     overflow-x: hidden;
+    background: transparent;
 }
 
 .container {
@@ -30,6 +30,7 @@ body {
     margin: 0 auto;
     padding: 20px;
     position: relative;
+    z-index: 1;
 }
 
 /* Анимированный фон */
@@ -64,7 +65,7 @@ header {
 header h1 {
     font-size: 3.5rem;
     margin-bottom: 15px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     color: white;
     animation: glow 2s ease-in-out infinite alternate;
 }
@@ -78,22 +79,23 @@ header p {
     font-size: 1.4rem;
     opacity: 0.9;
     font-weight: 300;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     color: white;
 }
 
 .welcome-card, .stats-card, .features-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
     border-radius: 25px;
     padding: 40px;
     margin-bottom: 30px;
     box-shadow: 
-        0 20px 40px rgba(0,0,0,0.1),
-        0 0 0 1px rgba(255,255,255,0.2);
+        0 20px 40px rgba(0,0,0,0.3),
+        0 0 0 1px rgba(255,255,255,0.1);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .welcome-card::before, .stats-card::before, .features-card::before {
@@ -103,7 +105,7 @@ header p {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
     transition: left 0.5s;
 }
 
@@ -114,26 +116,89 @@ header p {
 .welcome-card:hover, .stats-card:hover, .features-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 
-        0 30px 60px rgba(0,0,0,0.15),
+        0 30px 60px rgba(0,0,0,0.4),
         0 0 0 1px rgba(255,255,255,0.3);
 }
 
 .welcome-card h2 {
-    color: #4c51bf;
+    color: #ffffff;
     margin-bottom: 20px;
     font-size: 2.2rem;
     font-weight: 700;
-    background: linear-gradient(45deg, #4c51bf, #667eea);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .welcome-card p {
     font-size: 1.2rem;
-    color: #4a5568;
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 30px;
     line-height: 1.8;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Новая кнопка с изображением */
+.start-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-button {
+    position: relative;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-image {
+    width: 100%;
+    height: 100%;
+    background: url('https://i.imgur.com/7SndJG2.png') center center/cover no-repeat;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.5),
+        0 0 0 4px rgba(255, 255, 255, 0.2),
+        inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.button-text {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.start-button:hover .button-image {
+    transform: scale(1.05);
+    box-shadow: 
+        0 15px 40px rgba(0,0,0,0.6),
+        0 0 0 6px rgba(255, 255, 255, 0.3),
+        inset 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.start-button:active .button-image {
+    transform: scale(0.95);
+    box-shadow: 
+        0 5px 15px rgba(0,0,0,0.7),
+        0 0 0 2px rgba(255, 255, 255, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .btn-primary {
@@ -201,9 +266,10 @@ header p {
 .stat {
     text-align: center;
     padding: 25px;
-    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     border-radius: 20px;
-    border: 1px solid rgba(226, 232, 240, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -216,42 +282,38 @@ header p {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    background: linear-gradient(90deg, #ff4500, #ff8c00, #ff4500);
 }
 
 .stat:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .stat-number {
     display: block;
     font-size: 2.5rem;
     font-weight: 800;
-    color: #4c51bf;
+    color: #ffffff;
     margin-bottom: 8px;
-    background: linear-gradient(45deg, #4c51bf, #667eea);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .stat-label {
-    color: #718096;
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1rem;
     font-weight: 500;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .features-card h3 {
-    color: #4c51bf;
+    color: #ffffff;
     margin-bottom: 25px;
     font-size: 1.8rem;
     font-weight: 700;
     text-align: center;
-    background: linear-gradient(45deg, #4c51bf, #667eea);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .features-card ul {
@@ -263,14 +325,16 @@ header p {
 
 .features-card li {
     padding: 15px 20px;
-    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     border-radius: 15px;
     font-size: 1.1rem;
-    color: #4a5568;
-    border-left: 4px solid #667eea;
+    color: rgba(255, 255, 255, 0.9);
+    border-left: 4px solid #ff4500;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .features-card li::before {
@@ -280,7 +344,7 @@ header p {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
     transition: left 0.5s;
 }
 
@@ -290,8 +354,8 @@ header p {
 
 .features-card li:hover {
     transform: translateX(5px);
-    background: linear-gradient(135deg, #edf2f7, #e2e8f0);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 /* Адаптивность */
@@ -312,6 +376,16 @@ header p {
         padding: 25px;
     }
     
+    .start-button {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .button-text {
+        font-size: 1rem;
+        bottom: -40px;
+    }
+    
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 15px;
@@ -320,25 +394,19 @@ header p {
     .features-card ul {
         grid-template-columns: 1fr;
     }
-    
-    .btn-primary {
-        width: 100%;
-        padding: 20px;
-        font-size: 1.1rem;
-    }
 }
 
 /* Telegram WebApp стили */
 .tg-app {
-    background: var(--tg-theme-bg-color, #667eea);
+    background: transparent;
     color: var(--tg-theme-text-color, #ffffff);
 }
 
 .tg-app .welcome-card,
 .tg-app .stats-card,
 .tg-app .features-card {
-    background: var(--tg-theme-secondary-bg-color, rgba(255, 255, 255, 0.95));
-    color: var(--tg-theme-text-color, #2d3748);
+    background: var(--tg-theme-secondary-bg-color, rgba(255, 255, 255, 0.1));
+    color: var(--tg-theme-text-color, #ffffff);
 }
 
 .tg-app .btn-primary {

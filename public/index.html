@@ -7,6 +7,7 @@
     <title>Magnum Coins Farm</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="animated-background.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,7 +20,12 @@
             <div class="welcome-card">
                 <h2>🌟 Добро пожаловать в мир Magnum Coins!</h2>
                 <p>Откройте для себя захватывающий мир кликеров! Собирайте монеты, покупайте улучшения и станьте самым богатым игроком. Начните свой путь к богатству прямо сейчас!</p>
-                <button id="startGame" class="btn-primary">🚀 Начать приключение</button>
+                <div class="start-button-container">
+                    <button id="startGame" class="start-button">
+                        <div class="button-image"></div>
+                        <span class="button-text">🚀 Начать приключение</span>
+                    </button>
+                </div>
             </div>
 
             <div class="stats-card">
