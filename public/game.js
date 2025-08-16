@@ -277,6 +277,8 @@ function autoClicker() {
 
 // Переключение между разделами
 function showSection(sectionName) {
+    console.log('Переключение на секцию:', sectionName);
+    
     // Скрываем все секции
     const sections = ['click-section', 'upgrades-section', 'achievements-section'];
     sections.forEach(section => {
@@ -290,22 +292,22 @@ function showSection(sectionName) {
     const buttons = document.querySelectorAll('.nav-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    // Показываем нужную секцию
+    // Показываем нужную секцию и активируем кнопку
     let targetSection = '';
-    let targetButton = '';
+    let targetButton = null;
     
     switch (sectionName) {
         case 'click':
             targetSection = 'click-section';
-            targetButton = document.querySelector('.nav-btn[onclick="showSection(\'click\')"]');
+            targetButton = document.querySelector('.nav-btn[onclick*="click"]');
             break;
         case 'upgrades':
             targetSection = 'upgrades-section';
-            targetButton = document.querySelector('.nav-btn[onclick="showSection(\'upgrades\')"]');
+            targetButton = document.querySelector('.nav-btn[onclick*="upgrades"]');
             break;
         case 'achievements':
             targetSection = 'achievements-section';
-            targetButton = document.querySelector('.nav-btn[onclick="showSection(\'achievements\')"]');
+            targetButton = document.querySelector('.nav-btn[onclick*="achievements"]');
             break;
     }
     
@@ -313,16 +315,20 @@ function showSection(sectionName) {
         const element = document.getElementById(targetSection);
         if (element) {
             element.style.display = 'block';
+            console.log('Показана секция:', targetSection);
         }
     }
     
     if (targetButton) {
         targetButton.classList.add('active');
+        console.log('Активирована кнопка:', targetButton.textContent);
     }
 }
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Инициализация игры...');
+    
     // Загружаем данные
     loadGameData();
     
@@ -353,4 +359,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Показываем секцию кликера по умолчанию
     showSection('click');
+    
+    console.log('Игра инициализирована');
 });
