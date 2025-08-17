@@ -624,14 +624,12 @@
             const savedSettings = localStorage.getItem('magnumSettings');
             if (savedSettings) {
                 gameSettings = JSON.parse(savedSettings);
-                updateSettingsDisplay();
             }
             
             // Загружаем улучшения
             const savedUpgrades = localStorage.getItem('magnumUpgrades');
             if (savedUpgrades) {
                 upgrades = JSON.parse(savedUpgrades);
-                updateShopDisplay();
                 applyUpgrades();
             }
         }
@@ -652,6 +650,7 @@
 
         // Обработчик клика
         function handleClick() {
+            console.log('Клик обработан!');
             gameData.coins += gameSettings.coinsPerClick;
             gameData.clicks++;
             
@@ -676,6 +675,7 @@
 
         // Обработчик кнопки настроек
         function handleSettings() {
+            console.log('Настройки нажаты!');
             // Вибрация (если включена и поддерживается)
             if (gameSettings.vibration && navigator.vibrate) {
                 navigator.vibrate(30);
@@ -755,6 +755,7 @@
 
         // Обработчики кнопок панели
         function handleShop() {
+            console.log('Магазин нажат!');
             openShop();
         }
 
@@ -780,6 +781,8 @@
 
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM загружен, инициализация...');
+            
             // Запускаем загрузку
             showLoading();
             
@@ -787,20 +790,68 @@
             loadGameData();
             
             // Привязываем обработчик клика
-            document.getElementById('clickButton').addEventListener('click', handleClick);
+            const clickButton = document.getElementById('clickButton');
+            if (clickButton) {
+                clickButton.addEventListener('click', handleClick);
+                console.log('Кнопка клика привязана');
+            } else {
+                console.error('Кнопка клика не найдена!');
+            }
             
             // Привязываем обработчик настроек
-            document.getElementById('settingsBtn').addEventListener('click', handleSettings);
+            const settingsBtn = document.getElementById('settingsBtn');
+            if (settingsBtn) {
+                settingsBtn.addEventListener('click', handleSettings);
+                console.log('Кнопка настроек привязана');
+            } else {
+                console.error('Кнопка настроек не найдена!');
+            }
             
             // Обработчики кнопок панели
-            document.getElementById('shopBtn').addEventListener('click', handleShop);
-            document.getElementById('statsBtn').addEventListener('click', handleStats);
-            document.getElementById('achievementsBtn').addEventListener('click', handleAchievements);
-            document.getElementById('leaderboardBtn').addEventListener('click', handleLeaderboard);
-            document.getElementById('helpBtn').addEventListener('click', handleHelp);
+            const shopBtn = document.getElementById('shopBtn');
+            if (shopBtn) {
+                shopBtn.addEventListener('click', handleShop);
+                console.log('Кнопка магазина привязана');
+            } else {
+                console.error('Кнопка магазина не найдена!');
+            }
+            
+            const statsBtn = document.getElementById('statsBtn');
+            if (statsBtn) {
+                statsBtn.addEventListener('click', handleStats);
+                console.log('Кнопка статистики привязана');
+            } else {
+                console.error('Кнопка статистики не найдена!');
+            }
+            
+            const achievementsBtn = document.getElementById('achievementsBtn');
+            if (achievementsBtn) {
+                achievementsBtn.addEventListener('click', handleAchievements);
+                console.log('Кнопка достижений привязана');
+            } else {
+                console.error('Кнопка достижений не найдена!');
+            }
+            
+            const leaderboardBtn = document.getElementById('leaderboardBtn');
+            if (leaderboardBtn) {
+                leaderboardBtn.addEventListener('click', handleLeaderboard);
+                console.log('Кнопка лидеров привязана');
+            } else {
+                console.error('Кнопка лидеров не найдена!');
+            }
+            
+            const helpBtn = document.getElementById('helpBtn');
+            if (helpBtn) {
+                helpBtn.addEventListener('click', handleHelp);
+                console.log('Кнопка помощи привязана');
+            } else {
+                console.error('Кнопка помощи не найдена!');
+            }
             
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
+            
+            console.log('Инициализация завершена');
         });
     </script>
 </body>
