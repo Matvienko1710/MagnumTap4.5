@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Простой тест видео</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            color: white;
+            background: #000;
+        }
+        .test-video {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: block;
+        }
+        .status {
+            background: #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #2d5a2d; }
+        .error { background: #5a2d2d; }
+        .info { background: #2d2d5a; }
+    </style>
+</head>
+<body>
+    <h1>🎬 Простой тест видео</h1>
+    
+    <div class="status info">
+        <h3>Тест 1: Прямое воспроизведение видео</h3>
+        <p>Если видео ниже воспроизводится, значит файл доступен и работает.</p>
+    </div>
+    
+    <video class="test-video" controls autoplay muted loop>
+        <source src="/media/magnumback.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
+    
+    <div class="status info">
+        <h3>Тест 2: Проверка доступности файла</h3>
+        <p>Попробуйте открыть: <a href="/media/magnumback.mp4" target="_blank">/media/magnumback.mp4</a></p>
+    </div>
+    
+    <div class="status info">
+        <h3>Тест 3: Консоль браузера</h3>
+        <p>Откройте консоль (F12) и посмотрите на сообщения ниже:</p>
+    </div>
+    
+    <div id="console-output" class="status" style="height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;">
+        <div>Ожидание сообщений...</div>
+    </div>
+    
+    <div class="status info">
+        <h3>Инструкции:</h3>
+        <ul>
+            <li>Если видео выше воспроизводится - файл работает</li>
+            <li>Если видео не воспроизводится - проблема с файлом или сервером</li>
+            <li>Проверьте консоль браузера на ошибки</li>
+            <li>Попробуйте открыть ссылку на файл напрямую</li>
+        </ul>
+    </div>
+
+    <script>
+        const consoleOutput = document.getElementById('console-output');
+        
+        function addMessage(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        // Перехватываем console.log
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addMessage('LOG: ' + args.join(' '), 'success');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addMessage('ERROR: ' + args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addMessage('WARN: ' + args.join(' '), 'info');
+        };
+        
+        addMessage('Страница загружена');
+        
+        // Проверяем видео элемент
+        const video = document.querySelector('.test-video');
+        
+        video.addEventListener('loadstart', () => {
+            addMessage('Видео: loadstart', 'info');
+        });
+        
+        video.addEventListener('loadedmetadata', () => {
+            addMessage('Видео: loadedmetadata', 'success');
+        });
+        
+        video.addEventListener('loadeddata', () => {
+            addMessage('Видео: loadeddata', 'success');
+        });
+        
+        video.addEventListener('canplay', () => {
+            addMessage('Видео: canplay', 'success');
+        });
+        
+        video.addEventListener('play', () => {
+            addMessage('Видео: play', 'success');
+        });
+        
+        video.addEventListener('playing', () => {
+            addMessage('Видео: playing', 'success');
+        });
+        
+        video.addEventListener('error', (e) => {
+            addMessage('Видео: error - ' + (video.error ? video.error.message : 'Unknown error'), 'error');
+        });
+        
+        // Проверяем доступность файла
+        fetch('/media/magnumback.mp4', { method: 'HEAD' })
+            .then(response => {
+                if (response.ok) {
+                    addMessage('Файл доступен: ' + response.status + ' ' + response.statusText, 'success');
+                } else {
+                    addMessage('Файл недоступен: ' + response.status + ' ' + response.statusText, 'error');
+                }
+            })
+            .catch(error => {
+                addMessage('Ошибка при проверке файла: ' + error.message, 'error');
+            });
+    </script>
+</body>
+</html>

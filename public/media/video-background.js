@@ -1,115 +1,109 @@
-// Видеофон для Magnum Coins Farm
-console.log('Video background script loaded');
+// Упрощенный видеофон для Magnum Coins Farm
+console.log('Simple video background script loaded');
 
-class VideoBackground {
+class SimpleVideoBackground {
     constructor() {
         this.video = null;
-        this.container = null;
         this.isLoaded = false;
-        this.fallbackBackground = null;
         this.init();
     }
 
     init() {
-        console.log('Initializing video background...');
+        console.log('Initializing simple video background...');
         
-        // Проверяем поддержку видео
-        if (!this.isVideoSupported()) {
-            console.log('Video not supported, using fallback');
-            this.initFallback();
-            return;
-        }
-        
-        this.createVideoBackground();
-        this.isLoaded = true;
-        
-        console.log('Video background initialized');
-    }
-
-    isVideoSupported() {
-        const video = document.createElement('video');
-        return !!(video.canPlayType && video.canPlayType('video/mp4').replace(/no/, ''));
-    }
-
-    createVideoBackground() {
-        // Создаем контейнер для видео
-        this.container = document.createElement('div');
-        this.container.id = 'videoBackgroundContainer';
-        this.container.style.cssText = `
+        // Создаем видео элемент
+        this.video = document.createElement('video');
+        this.video.style.cssText = `
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            pointer-events: none;
-            overflow: hidden;
-        `;
-
-        // Создаем видео элемент
-        this.video = document.createElement('video');
-        this.video.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
             object-fit: cover;
-            opacity: 0.8;
+            z-index: -10;
+            opacity: 0.7;
+            pointer-events: none;
         `;
         
+        // Настройки видео
         this.video.autoplay = true;
         this.video.muted = true;
         this.video.loop = true;
         this.video.playsInline = true;
-        this.video.preload = 'auto';
+        this.video.preload = 'metadata';
         
         // Добавляем обработчики событий
-        this.video.addEventListener('loadeddata', () => {
-            console.log('Video loaded successfully');
-            this.video.style.opacity = '0.8';
-        });
-        
         this.video.addEventListener('loadstart', () => {
-            console.log('Video loading started');
+            console.log('Video loadstart');
         });
         
-        this.video.addEventListener('canplaythrough', () => {
-            console.log('Video can play through');
+        this.video.addEventListener('loadedmetadata', () => {
+            console.log('Video loadedmetadata');
         });
         
-        this.video.addEventListener('error', (e) => {
-            console.error('Video loading error:', e);
-            console.error('Video error details:', this.video.error);
-            this.initFallback();
+        this.video.addEventListener('loadeddata', () => {
+            console.log('Video loadeddata - SUCCESS!');
+            this.isLoaded = true;
+            this.video.style.opacity = '0.7';
         });
         
         this.video.addEventListener('canplay', () => {
-            this.video.play().catch(e => {
-                console.warn('Autoplay failed:', e);
-                // Пытаемся воспроизвести при взаимодействии пользователя
-                document.addEventListener('click', () => {
-                    this.video.play().catch(console.warn);
-                }, { once: true });
-            });
+            console.log('Video canplay');
+            this.forcePlay();
         });
-
+        
+        this.video.addEventListener('canplaythrough', () => {
+            console.log('Video canplaythrough');
+            this.forcePlay();
+        });
+        
+        this.video.addEventListener('play', () => {
+            console.log('Video play event - SUCCESS!');
+        });
+        
+        this.video.addEventListener('playing', () => {
+            console.log('Video playing event - SUCCESS!');
+        });
+        
+        this.video.addEventListener('error', (e) => {
+            console.error('Video error:', e);
+            console.error('Video error details:', this.video.error);
+            this.showFallback();
+        });
+        
         // Устанавливаем источник видео
         this.video.src = '/media/magnumback.mp4';
         
-        // Добавляем видео в контейнер
-        this.container.appendChild(this.video);
+        // Добавляем видео на страницу
+        document.body.appendChild(this.video);
         
-        // Добавляем контейнер в body
-        document.body.appendChild(this.container);
-        
-        // Добавляем оверлей для лучшей читаемости текста
+        // Добавляем оверлей
         this.addOverlay();
+        
+        // Пытаемся запустить видео через небольшую задержку
+        setTimeout(() => {
+            this.forcePlay();
+        }, 1000);
+        
+        // Добавляем обработчик клика для запуска видео
+        document.addEventListener('click', () => {
+            this.forcePlay();
+        }, { once: true });
+        
+        console.log('Simple video background initialized');
     }
-
+    
+    forcePlay() {
+        if (this.video && !this.video.playing) {
+            console.log('Forcing video play...');
+            this.video.play().then(() => {
+                console.log('Video play successful!');
+            }).catch(e => {
+                console.warn('Video play failed:', e);
+            });
+        }
+    }
+    
     addOverlay() {
         const overlay = document.createElement('div');
         overlay.id = 'videoOverlay';
@@ -119,37 +113,28 @@ class VideoBackground {
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -5;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
             pointer-events: none;
         `;
-        
         document.body.appendChild(overlay);
     }
-
-    initFallback() {
-        console.log('Initializing fallback animated background...');
-        
-        // Создаем простой анимированный фон как fallback
-        const fallbackContainer = document.createElement('div');
-        fallbackContainer.id = 'fallbackBackground';
-        fallbackContainer.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
-            animation: gradientShift 20s ease-in-out infinite;
+    
+    showFallback() {
+        console.log('Showing fallback background');
+        document.body.style.background = `
+            linear-gradient(135deg, #1a0033, #330066, #660033, #330000)
         `;
         
-        // Добавляем CSS анимацию
+        // Добавляем анимацию для fallback
         const style = document.createElement('style');
         style.textContent = `
+            body {
+                animation: gradientShift 20s ease-in-out infinite;
+            }
             @keyframes gradientShift {
                 0%, 100% { 
                     background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
@@ -165,42 +150,21 @@ class VideoBackground {
                 }
             }
         `;
-        
         document.head.appendChild(style);
-        document.body.appendChild(fallbackContainer);
-        
-        // Добавляем оверлей
-        this.addOverlay();
-    }
-
-    // Метод для остановки видео (например, при переходе на другую страницу)
-    stop() {
-        if (this.video) {
-            this.video.pause();
-            this.video.currentTime = 0;
-        }
-    }
-
-    // Метод для возобновления видео
-    play() {
-        if (this.video) {
-            this.video.play().catch(console.warn);
-        }
     }
 }
 
-// Инициализация видеофона при загрузке страницы
+// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    window.videoBackground = new VideoBackground();
+    console.log('DOM loaded, creating video background...');
+    window.videoBackground = new SimpleVideoBackground();
 });
 
-// Обработка видимости страницы для оптимизации производительности
-document.addEventListener('visibilitychange', () => {
-    if (window.videoBackground) {
-        if (document.hidden) {
-            window.videoBackground.stop();
-        } else {
-            window.videoBackground.play();
-        }
-    }
-});
+// Альтернативная инициализация если DOM уже загружен
+if (document.readyState === 'loading') {
+    // DOM еще загружается
+} else {
+    // DOM уже загружен
+    console.log('DOM already loaded, creating video background immediately...');
+    window.videoBackground = new SimpleVideoBackground();
+}

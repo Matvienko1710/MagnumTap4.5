@@ -94,6 +94,11 @@ app.get('/test-video', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'test-video.html'));
 });
 
+// Простая тестовая страница видео
+app.get('/video-test-simple', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'video-test-simple.html'));
+});
+
 // API для статистики
 app.get('/api/stats', (req, res) => {
   res.json({
