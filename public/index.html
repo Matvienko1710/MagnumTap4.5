@@ -576,9 +576,9 @@
         .button {
             outline: 0 !important;
             border: 0 !important;
-            width: 50px;
+            width: 60px;
             height: 50px;
-            border-radius: 50%;
+            border-radius: 15px;
             background-color: transparent;
             display: flex;
             align-items: center;
@@ -586,7 +586,16 @@
             color: #fff;
             transition: all ease-in-out 0.3s;
             cursor: pointer;
-            font-size: 22px;
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .button-text {
+            font-size: 9px;
+            line-height: 1.2;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .button:hover {
@@ -603,6 +612,158 @@
             font-size: 20px;
         }
 
+        /* Модальное окно магазина */
+        .shop-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .shop-modal.active {
+            display: flex;
+        }
+
+        .shop-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            animation: slideIn 0.3s ease-out;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 15px;
+        }
+
+        .shop-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .shop-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .shop-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .shop-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .shop-item.purchased {
+            opacity: 0.6;
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .item-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            font-size: 0.9rem;
+            color: #ffcb13;
+            font-weight: bold;
+        }
+
+        .buy-btn {
+            background: linear-gradient(45deg, #ffcb13, #ff8605);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 203, 19, 0.4);
+        }
+
+        .buy-btn:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .shop-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-coins {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffcb13;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
         /* Адаптивность для мобильных */
         @media (max-width: 480px) {
             .button-container {
@@ -612,9 +773,29 @@
             }
             
             .button {
-                width: 42px;
+                width: 50px;
                 height: 42px;
-                font-size: 18px;
+                font-size: 8px;
+            }
+            
+            .button-text {
+                font-size: 7px;
+            }
+            
+            .shop-content {
+                padding: 20px;
+                max-width: 95%;
+            }
+            
+            .shop-item {
+                padding: 15px;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .buy-btn {
+                width: 100%;
             }
         }
     </style>
@@ -730,20 +911,64 @@
     <!-- Панель кнопок внизу -->
     <div class="button-container">
         <button class="button" id="shopBtn" title="Магазин">
-            <span class="icon">🛒</span>
+            <span class="button-text">Магазин</span>
         </button>
         <button class="button" id="statsBtn" title="Статистика">
-            <span class="icon">📊</span>
+            <span class="button-text">Статистика</span>
         </button>
         <button class="button" id="achievementsBtn" title="Достижения">
-            <span class="icon">🏆</span>
+            <span class="button-text">Достижения</span>
         </button>
         <button class="button" id="leaderboardBtn" title="Таблица лидеров">
-            <span class="icon">👑</span>
+            <span class="button-text">Лидеры</span>
         </button>
         <button class="button" id="helpBtn" title="Помощь">
-            <span class="icon">❓</span>
+            <span class="button-text">Помощь</span>
         </button>
+    </div>
+
+    <!-- Модальное окно магазина -->
+    <div class="shop-modal" id="shopModal">
+        <div class="shop-content">
+            <div class="shop-header">
+                <div class="shop-title">🛒 Магазин улучшений</div>
+                <button class="close-btn" id="closeShop">✕</button>
+            </div>
+            
+            <div class="shop-items">
+                <div class="shop-item" id="upgrade1">
+                    <div class="item-info">
+                        <div class="item-name">⚡ Ускорение клика</div>
+                        <div class="item-description">Увеличивает скорость кликов</div>
+                        <div class="item-price">Цена: 100 монет</div>
+                    </div>
+                    <button class="buy-btn" id="buyUpgrade1">Купить</button>
+                </div>
+                
+                <div class="shop-item" id="upgrade2">
+                    <div class="item-info">
+                        <div class="item-name">💰 Множитель монет</div>
+                        <div class="item-description">Удваивает доход за клик</div>
+                        <div class="item-price">Цена: 500 монет</div>
+                    </div>
+                    <button class="buy-btn" id="buyUpgrade2">Купить</button>
+                </div>
+                
+                <div class="shop-item" id="upgrade3">
+                    <div class="item-info">
+                        <div class="item-name">🎯 Автокликер</div>
+                        <div class="item-description">Автоматически кликает каждые 5 сек</div>
+                        <div class="item-price">Цена: 1000 монет</div>
+                    </div>
+                    <button class="buy-btn" id="buyUpgrade3">Купить</button>
+                </div>
+            </div>
+            
+            <div class="shop-footer">
+                <div class="player-coins">Ваши монеты: <span id="shopCoins">0</span></div>
+                <button class="back-btn" id="backToMain">🏠 Главное меню</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -795,6 +1020,16 @@
             coinsPerClick: 1
         };
 
+        // Данные улучшений
+        let upgrades = {
+            speedUpgrade: { purchased: false, price: 100, effect: 'Ускоряет анимацию клика' },
+            coinMultiplier: { purchased: false, price: 500, effect: 'Удваивает доход за клик' },
+            autoClicker: { purchased: false, price: 1000, effect: 'Автоматически кликает каждые 5 сек' }
+        };
+
+        // Автокликер
+        let autoClickerInterval = null;
+
         // Настройки игры
         let gameSettings = {
             sound: true,
@@ -818,12 +1053,21 @@
                 gameSettings = JSON.parse(savedSettings);
                 updateSettingsDisplay();
             }
+            
+            // Загружаем улучшения
+            const savedUpgrades = localStorage.getItem('magnumUpgrades');
+            if (savedUpgrades) {
+                upgrades = JSON.parse(savedUpgrades);
+                updateShopDisplay();
+                applyUpgrades();
+            }
         }
 
         // Сохраняем данные
         function saveGameData() {
             localStorage.setItem('magnumCoinsData', JSON.stringify(gameData));
             localStorage.setItem('magnumSettings', JSON.stringify(gameSettings));
+            localStorage.setItem('magnumUpgrades', JSON.stringify(upgrades));
         }
 
         // Обновляем отображение
@@ -921,10 +1165,114 @@
             }
         }
 
+        // Функции магазина
+        function openShop() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            document.getElementById('shopModal').classList.add('active');
+            updateShopDisplay();
+        }
+
+        function closeShop() {
+            document.getElementById('shopModal').classList.remove('active');
+        }
+
+        function updateShopDisplay() {
+            document.getElementById('shopCoins').textContent = gameData.coins.toLocaleString();
+            
+            // Обновляем состояние кнопок покупки
+            const upgrade1 = document.getElementById('upgrade1');
+            const upgrade2 = document.getElementById('upgrade2');
+            const upgrade3 = document.getElementById('upgrade3');
+            
+            if (upgrades.speedUpgrade.purchased) {
+                upgrade1.classList.add('purchased');
+                document.getElementById('buyUpgrade1').textContent = 'Куплено';
+                document.getElementById('buyUpgrade1').disabled = true;
+            }
+            
+            if (upgrades.coinMultiplier.purchased) {
+                upgrade2.classList.add('purchased');
+                document.getElementById('buyUpgrade2').textContent = 'Куплено';
+                document.getElementById('buyUpgrade2').disabled = true;
+            }
+            
+            if (upgrades.autoClicker.purchased) {
+                upgrade3.classList.add('purchased');
+                document.getElementById('buyUpgrade3').textContent = 'Куплено';
+                document.getElementById('buyUpgrade3').disabled = true;
+            }
+        }
+
+        function buyUpgrade(upgradeType) {
+            const upgrade = upgrades[upgradeType];
+            
+            if (gameData.coins >= upgrade.price && !upgrade.purchased) {
+                gameData.coins -= upgrade.price;
+                upgrade.purchased = true;
+                
+                // Применяем эффект улучшения
+                applyUpgrade(upgradeType);
+                
+                // Обновляем отображение
+                updateDisplay();
+                updateShopDisplay();
+                saveGameData();
+                
+                // Вибрация и уведомление
+                if (gameSettings.vibration && navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+                
+                alert(`✅ Улучшение куплено!\n\n${upgrade.effect}`);
+            } else if (upgrade.purchased) {
+                alert('❌ Это улучшение уже куплено!');
+            } else {
+                alert('❌ Недостаточно монет!');
+            }
+        }
+
+        function applyUpgrade(upgradeType) {
+            switch(upgradeType) {
+                case 'speedUpgrade':
+                    // Ускоряем анимацию
+                    break;
+                case 'coinMultiplier':
+                    // Удваиваем доход
+                    gameSettings.coinsPerClick *= 2;
+                    updateSettingsDisplay();
+                    break;
+                case 'autoClicker':
+                    // Запускаем автокликер
+                    startAutoClicker();
+                    break;
+            }
+        }
+
+        function applyUpgrades() {
+            if (upgrades.coinMultiplier.purchased) {
+                gameSettings.coinsPerClick *= 2;
+            }
+            if (upgrades.autoClicker.purchased) {
+                startAutoClicker();
+            }
+        }
+
+        function startAutoClicker() {
+            if (autoClickerInterval) {
+                clearInterval(autoClickerInterval);
+            }
+            autoClickerInterval = setInterval(() => {
+                handleClick();
+            }, 5000);
+        }
+
+        function backToMain() {
+            closeShop();
+        }
+
         // Обработчики кнопок панели
         function handleShop() {
-            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            alert('🛒 Магазин\n\nСкоро здесь будут доступны улучшения!');
+            openShop();
         }
 
         function handleStats() {
@@ -1013,6 +1361,20 @@
             document.getElementById('achievementsBtn').addEventListener('click', handleAchievements);
             document.getElementById('leaderboardBtn').addEventListener('click', handleLeaderboard);
             document.getElementById('helpBtn').addEventListener('click', handleHelp);
+            
+            // Обработчики магазина
+            document.getElementById('closeShop').addEventListener('click', closeShop);
+            document.getElementById('backToMain').addEventListener('click', backToMain);
+            document.getElementById('buyUpgrade1').addEventListener('click', () => buyUpgrade('speedUpgrade'));
+            document.getElementById('buyUpgrade2').addEventListener('click', () => buyUpgrade('coinMultiplier'));
+            document.getElementById('buyUpgrade3').addEventListener('click', () => buyUpgrade('autoClicker'));
+            
+            // Закрытие магазина по клику вне модального окна
+            document.getElementById('shopModal').addEventListener('click', (e) => {
+                if (e.target.id === 'shopModal') {
+                    closeShop();
+                }
+            });
             
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
