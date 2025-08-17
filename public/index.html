@@ -6,6 +6,8 @@
     <meta name="format-detection" content="telephone=no">
     <title>Magnum Coins Farm</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Monetag SDK -->
+    <script src='//libtl.com/sdk.js' data-zone='9731351' data-sdk='show_9731351'></script>
     <style>
         * {
             margin: 0;
@@ -446,6 +448,141 @@
 
 
 
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ad-modal {
+            max-width: 600px;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 18px 18px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Задания */
+        .task-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .task-info h3 {
+            margin: 0 0 10px 0;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .task-info p {
+            margin: 0 0 10px 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .reward {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .task-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .task-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .task-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         /* Адаптивность для мобильных */
         @media (max-width: 480px) {
             .button-container {
@@ -462,6 +599,21 @@
             
             .button-text {
                 font-size: 7px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .task-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .task-button {
+                width: 100%;
             }
         }
     </style>
@@ -530,6 +682,9 @@
         <button class="button" id="shopBtn" title="Магазин">
             <span class="button-text">Магазин</span>
         </button>
+        <button class="button" id="tasksBtn" title="Задания">
+            <span class="button-text">Задания</span>
+        </button>
         <button class="button" id="statsBtn" title="Статистика">
             <span class="button-text">Статистика</span>
         </button>
@@ -539,9 +694,66 @@
         <button class="button" id="leaderboardBtn" title="Таблица лидеров">
             <span class="button-text">Лидеры</span>
         </button>
-        <button class="button" id="helpBtn" title="Помощь">
-            <span class="button-text">Помощь</span>
-        </button>
+    </div>
+
+    <!-- Модальное окно заданий -->
+    <div id="tasksModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎯 Задания</h2>
+                <span class="close" id="closeTasksModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="task-item">
+                    <div class="task-info">
+                        <h3>📺 Смотреть рекламу</h3>
+                        <p>Посмотрите рекламу и получите 50 монет!</p>
+                        <div class="reward">💰 Награда: 50 монет</div>
+                    </div>
+                    <button class="task-button" id="watchAdBtn">Смотреть рекламу</button>
+                </div>
+                
+                <div class="task-item">
+                    <div class="task-info">
+                        <h3>🎮 Играть в игру</h3>
+                        <p>Завершите мини-игру и получите 100 монет!</p>
+                        <div class="reward">💰 Награда: 100 монет</div>
+                    </div>
+                    <button class="task-button" id="playGameBtn">Играть</button>
+                </div>
+                
+                <div class="task-item">
+                    <div class="task-info">
+                        <h3>📱 Установить приложение</h3>
+                        <p>Установите приложение и получите 200 монет!</p>
+                        <div class="reward">💰 Награда: 200 монет</div>
+                    </div>
+                    <button class="task-button" id="installAppBtn">Установить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно рекламы -->
+    <div id="adModal" class="modal" style="display: none;">
+        <div class="modal-content ad-modal">
+            <div class="modal-header">
+                <h2>📺 Реклама</h2>
+                <span class="close" id="closeAdModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="adContainer" style="width: 100%; height: 300px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin: 10px 0;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📺</div>
+                        <div>Загрузка рекламы...</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <div id="adTimer" style="font-size: 18px; font-weight: bold; color: #ff6b6b;">Ожидание: 30 сек</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 5px;">Не закрывайте это окно до завершения рекламы</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -590,7 +802,10 @@
         let gameData = {
             coins: 0,
             clicks: 0,
-            coinsPerClick: 1
+            coinsPerClick: 1,
+            tasksCompleted: 0,
+            adsWatched: 0,
+            lastAdWatch: 0
         };
 
         // Данные улучшений
@@ -611,6 +826,19 @@
             animationSpeed: 5,
             coinsPerClick: 1
         };
+
+        // Настройки рекламы Monetag
+        const AD_CONFIG = {
+            zoneId: '9731351', // Zone ID от Monetag
+            rewardAmount: 50,
+            cooldownMinutes: 5, // Кулдаун между просмотрами рекламы в минутах
+            adDuration: 30 // Длительность рекламы в секундах
+        };
+
+        // Переменные для рекламы
+        let adTimer = null;
+        let adStartTime = null;
+        let isAdPlaying = false;
 
         // Загружаем сохраненные данные
         function loadGameData() {
@@ -766,7 +994,10 @@
 
         function handleStats() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            alert(`📊 Статистика\n\n💰 Монет: ${gameData.coins.toLocaleString()}\n👆 Кликов: ${gameData.clicks.toLocaleString()}\n⚡ Монет за клик: ${gameSettings.coinsPerClick}\n🎯 Средний доход: ${(gameData.coins / Math.max(gameData.clicks, 1)).toFixed(1)} монет/клик`);
+            const avgIncome = (gameData.coins / Math.max(gameData.clicks, 1)).toFixed(1);
+            const timeSinceLastAd = gameData.lastAdWatch ? Math.floor((Date.now() - gameData.lastAdWatch) / 1000 / 60) : 0;
+            
+            alert(`📊 Статистика\n\n💰 Монет: ${gameData.coins.toLocaleString()}\n👆 Кликов: ${gameData.clicks.toLocaleString()}\n⚡ Монет за клик: ${gameSettings.coinsPerClick}\n🎯 Средний доход: ${avgIncome} монет/клик\n📺 Реклам просмотрено: ${gameData.adsWatched}\n✅ Заданий выполнено: ${gameData.tasksCompleted}\n⏰ Последняя реклама: ${timeSinceLastAd} мин назад`);
         }
 
         function handleAchievements() {
@@ -782,6 +1013,175 @@
         function handleHelp() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
             alert('❓ Помощь\n\n🎮 Нажимайте на кнопку для заработка монет\n⚙️ Настройки в левом верхнем углу\n🎯 Измените количество монет за клик в настройках\n📱 Игра автоматически сохраняет прогресс');
+        }
+
+        // Функции для заданий
+        function openTasksModal() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            document.getElementById('tasksModal').style.display = 'block';
+        }
+
+        function closeTasksModal() {
+            document.getElementById('tasksModal').style.display = 'none';
+        }
+
+        function openAdModal() {
+            document.getElementById('adModal').style.display = 'block';
+            startAdTimer();
+        }
+
+        function closeAdModal() {
+            document.getElementById('adModal').style.display = 'none';
+            if (adTimer) {
+                clearInterval(adTimer);
+                adTimer = null;
+            }
+            isAdPlaying = false;
+        }
+
+        function startAdTimer() {
+            isAdPlaying = true;
+            adStartTime = Date.now();
+            
+            const timerElement = document.getElementById('adTimer');
+            const adContainer = document.getElementById('adContainer');
+            
+            // Показываем загрузку рекламы
+            adContainer.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">📺</div>
+                    <div>Загрузка рекламы...</div>
+                </div>
+            `;
+            
+            // Обновляем таймер
+            timerElement.textContent = 'Загрузка рекламы...';
+            
+            // Запускаем рекламу через небольшую задержку
+            setTimeout(() => {
+                loadMonetagAd();
+            }, 1000);
+        }
+
+        function loadMonetagAd() {
+            const adContainer = document.getElementById('adContainer');
+            
+            // Интеграция с Monetag (PropellerAds)
+            if (typeof window.show_9731351 !== 'undefined') {
+                // Если Monetag SDK загружен
+                try {
+                    window.show_9731351().then(() => {
+                        console.log('Реклама завершена');
+                        completeAdWatch();
+                    }).catch((error) => {
+                        console.error('Ошибка рекламы:', error);
+                        showAdError();
+                    });
+                } catch (error) {
+                    console.error('Ошибка при показе рекламы:', error);
+                    showAdError();
+                }
+            } else {
+                // Демо-реклама для тестирования
+                showDemoAd();
+            }
+        }
+
+        function showDemoAd() {
+            const adContainer = document.getElementById('adContainer');
+            adContainer.innerHTML = `
+                <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #ff6b6b, #ee5a24); display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+                    <div style="text-align: center; color: white;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📺</div>
+                        <div style="font-size: 18px; margin-bottom: 10px;">Демо-реклама</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Это демонстрационная реклама</div>
+                        <div style="font-size: 12px; opacity: 0.6; margin-top: 10px;">В реальном приложении здесь будет реклама от Monetag</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showAdError() {
+            const adContainer = document.getElementById('adContainer');
+            adContainer.innerHTML = `
+                <div style="text-align: center; color: #ff6b6b;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">❌</div>
+                    <div>Ошибка загрузки рекламы</div>
+                    <div style="font-size: 12px; margin-top: 10px;">Попробуйте позже</div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                closeAdModal();
+            }, 3000);
+        }
+
+        function completeAdWatch() {
+            if (!isAdPlaying) return;
+            
+            isAdPlaying = false;
+            
+            // Начисляем награду
+            gameData.coins += AD_CONFIG.rewardAmount;
+            gameData.adsWatched++;
+            gameData.tasksCompleted++;
+            gameData.lastAdWatch = Date.now();
+            
+            // Обновляем отображение
+            updateDisplay();
+            saveGameData();
+            
+            // Показываем уведомление о награде
+            const adContainer = document.getElementById('adContainer');
+            const timerElement = document.getElementById('adTimer');
+            
+            adContainer.innerHTML = `
+                <div style="text-align: center; color: #4CAF50;">
+                    <div style="font-size: 48px; margin-bottom: 10px;">🎉</div>
+                    <div style="font-size: 18px; margin-bottom: 10px;">Реклама завершена!</div>
+                    <div style="font-size: 16px; color: #ffd700;">+${AD_CONFIG.rewardAmount} монет</div>
+                </div>
+            `;
+            
+            timerElement.textContent = 'Награда получена!';
+            timerElement.style.color = '#4CAF50';
+            
+            // Вибрация
+            if (gameSettings.vibration && navigator.vibrate) {
+                navigator.vibrate([100, 50, 100, 50, 100]);
+            }
+            
+            // Закрываем модальное окно через 3 секунды
+            setTimeout(() => {
+                closeAdModal();
+                closeTasksModal();
+            }, 3000);
+        }
+
+        function canWatchAd() {
+            const now = Date.now();
+            const cooldownMs = AD_CONFIG.cooldownMinutes * 60 * 1000;
+            return (now - gameData.lastAdWatch) >= cooldownMs;
+        }
+
+        function handleWatchAd() {
+            if (!canWatchAd()) {
+                const remainingTime = Math.ceil((AD_CONFIG.cooldownMinutes * 60 * 1000 - (Date.now() - gameData.lastAdWatch)) / 1000 / 60);
+                alert(`⏰ Подождите еще ${remainingTime} минут перед следующим просмотром рекламы`);
+                return;
+            }
+            
+            openAdModal();
+        }
+
+        function handlePlayGame() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            alert('🎮 Мини-игра\n\nСкоро здесь будет мини-игра для заработка монет!');
+        }
+
+        function handleInstallApp() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            alert('📱 Установка приложения\n\nСкоро здесь будут предложения по установке приложений!');
         }
 
         // Инициализация
@@ -858,13 +1258,54 @@
                 console.error('Кнопка лидеров не найдена!');
             }
             
-            const helpBtn = document.getElementById('helpBtn');
-            if (helpBtn) {
-                helpBtn.addEventListener('click', handleHelp);
-                console.log('Кнопка помощи привязана');
+            // Обработчики для заданий
+            const tasksBtn = document.getElementById('tasksBtn');
+            if (tasksBtn) {
+                tasksBtn.addEventListener('click', openTasksModal);
+                console.log('Кнопка заданий привязана');
             } else {
-                console.error('Кнопка помощи не найдена!');
+                console.error('Кнопка заданий не найдена!');
             }
+
+            // Обработчики модальных окон
+            const closeTasksModal = document.getElementById('closeTasksModal');
+            if (closeTasksModal) {
+                closeTasksModal.addEventListener('click', closeTasksModal);
+            }
+
+            const closeAdModal = document.getElementById('closeAdModal');
+            if (closeAdModal) {
+                closeAdModal.addEventListener('click', closeAdModal);
+            }
+
+            // Обработчики кнопок заданий
+            const watchAdBtn = document.getElementById('watchAdBtn');
+            if (watchAdBtn) {
+                watchAdBtn.addEventListener('click', handleWatchAd);
+            }
+
+            const playGameBtn = document.getElementById('playGameBtn');
+            if (playGameBtn) {
+                playGameBtn.addEventListener('click', handlePlayGame);
+            }
+
+            const installAppBtn = document.getElementById('installAppBtn');
+            if (installAppBtn) {
+                installAppBtn.addEventListener('click', handleInstallApp);
+            }
+
+            // Закрытие модальных окон при клике вне их
+            window.addEventListener('click', (event) => {
+                const tasksModal = document.getElementById('tasksModal');
+                const adModal = document.getElementById('adModal');
+                
+                if (event.target === tasksModal) {
+                    closeTasksModal();
+                }
+                if (event.target === adModal) {
+                    closeAdModal();
+                }
+            });
             
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);

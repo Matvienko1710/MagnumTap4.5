@@ -23,6 +23,11 @@ app.get('/shop.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'shop.html'));
 });
 
+// Тестовая страница рекламы
+app.get('/test-ad.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'test-ad.html'));
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
