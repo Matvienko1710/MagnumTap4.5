@@ -340,6 +340,8 @@
 
         // Возврат в главное меню
         function backToMain() {
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
             window.location.href = '/';
         }
 

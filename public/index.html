@@ -681,6 +681,9 @@
                 navigator.vibrate(30);
             }
             
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
+            
             // Переходим на страницу настроек
             window.location.href = '/settings.html';
         }
@@ -688,6 +691,8 @@
         // Функции магазина
         function openShop() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
             // Переходим на страницу магазина
             window.location.href = '/shop.html';
         }
@@ -783,8 +788,21 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM загружен, инициализация...');
             
-            // Запускаем загрузку
-            showLoading();
+            // Проверяем, возвращаемся ли мы с другой страницы
+            const isReturning = sessionStorage.getItem('returningFromPage');
+            
+            if (!isReturning) {
+                // Запускаем загрузку только при первом входе
+                showLoading();
+            } else {
+                // Скрываем экран загрузки сразу при возврате
+                const loadingScreen = document.getElementById('loadingScreen');
+                if (loadingScreen) {
+                    loadingScreen.style.display = 'none';
+                }
+                // Очищаем флаг возврата
+                sessionStorage.removeItem('returningFromPage');
+            }
             
             // Загружаем данные игры
             loadGameData();
