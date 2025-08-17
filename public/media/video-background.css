@@ -1,121 +1,38 @@
-/* Дополнительные стили для видеофона */
-
-/* Оптимизация для мобильных устройств */
-@media (max-width: 768px) {
-    #videoBackgroundContainer video {
-        opacity: 0.7; /* Немного уменьшаем прозрачность на мобильных */
-    }
+/* Простой градиентный фон для Magnum Coins Farm */
+body {
+    background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
 }
 
-/* Оптимизация для планшетов */
-@media (min-width: 769px) and (max-width: 1024px) {
-    #videoBackgroundContainer video {
-        opacity: 0.75;
-    }
+/* Убираем старые стили видеофона */
+#animatedBackground {
+    display: none;
 }
 
-/* Оптимизация для десктопов */
-@media (min-width: 1025px) {
-    #videoBackgroundContainer video {
-        opacity: 0.8;
-    }
-}
-
-/* Стили для fallback фона */
+/* Убираем старые стили fallback */
 #fallbackBackground {
-    background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
-    animation: gradientShift 20s ease-in-out infinite;
+    display: none;
 }
 
-@keyframes gradientShift {
-    0%, 100% { 
-        background: linear-gradient(135deg, #1a0033, #330066, #660033, #330000);
-    }
-    25% { 
-        background: linear-gradient(135deg, #330066, #660033, #330000, #1a0033);
-    }
-    50% { 
-        background: linear-gradient(135deg, #660033, #330000, #1a0033, #330066);
-    }
-    75% { 
-        background: linear-gradient(135deg, #330000, #1a0033, #330066, #660033);
-    }
-}
-
-/* Улучшенный оверлей для лучшей читаемости */
+/* Убираем старые стили overlay */
 #videoOverlay {
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.2) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
-        linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%);
+    display: none;
 }
 
-/* Анимация загрузки видеофона */
-.video-loading {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.video-loaded {
-    opacity: 1;
-}
-
-/* Оптимизация производительности */
-#videoBackgroundContainer {
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
-
-#videoBackgroundContainer video {
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-}
-
-/* Стили для состояний загрузки */
-.video-background-loading::after {
-    content: '';
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 40px;
-    height: 40px;
-    margin: -20px 0 0 -20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    z-index: -1;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Адаптация для темной темы */
-@media (prefers-color-scheme: dark) {
-    #videoOverlay {
-        background: 
-            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.08) 0%, transparent 50%),
-            linear-gradient(135deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.08) 100%);
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    body {
+        background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
     }
 }
 
-/* Оптимизация для устройств с низкой производительностью */
-@media (max-device-width: 480px) and (max-resolution: 2dppx) {
-    #videoBackgroundContainer video {
-        opacity: 0.6;
-    }
-    
-    #videoOverlay {
-        background: 
-            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.25) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.25) 0%, transparent 50%),
-            linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+@media (max-width: 480px) {
+    body {
+        background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
     }
 }
