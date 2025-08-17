@@ -73,8 +73,17 @@ class VideoBackground {
             this.video.style.opacity = '0.8';
         });
         
+        this.video.addEventListener('loadstart', () => {
+            console.log('Video loading started');
+        });
+        
+        this.video.addEventListener('canplaythrough', () => {
+            console.log('Video can play through');
+        });
+        
         this.video.addEventListener('error', (e) => {
             console.error('Video loading error:', e);
+            console.error('Video error details:', this.video.error);
             this.initFallback();
         });
         
@@ -89,7 +98,7 @@ class VideoBackground {
         });
 
         // Устанавливаем источник видео
-        this.video.src = 'media/magnumback.mp4';
+        this.video.src = '/media/magnumback.mp4';
         
         // Добавляем видео в контейнер
         this.container.appendChild(this.video);

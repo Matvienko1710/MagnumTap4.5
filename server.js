@@ -89,6 +89,11 @@ app.get('/referral', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'referral.html'));
 });
 
+// Тестовая страница видеофона
+app.get('/test-video', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'test-video.html'));
+});
+
 // API для статистики
 app.get('/api/stats', (req, res) => {
   res.json({
