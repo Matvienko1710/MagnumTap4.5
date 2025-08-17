@@ -316,6 +316,71 @@
                 font-size: 2.5rem;
             }
         }
+
+        /* Кнопка настроек */
+        .setting-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background-color: rgb(129, 110, 216);
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0px 0px 0px 2px rgb(212, 209, 255);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .setting-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 0px 3px rgb(212, 209, 255);
+        }
+
+        .bar {
+            width: 50%;
+            height: 2px;
+            background-color: rgb(229, 229, 229);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-radius: 2px;
+        }
+
+        .bar::before {
+            content: "";
+            width: 2px;
+            height: 2px;
+            background-color: rgb(126, 117, 255);
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid white;
+            transition: all 0.3s;
+            box-shadow: 0px 0px 5px white;
+        }
+
+        .bar1::before {
+            transform: translateX(-4px);
+        }
+
+        .bar2::before {
+            transform: translateX(4px);
+        }
+
+        .setting-btn:hover .bar1::before {
+            transform: translateX(4px);
+        }
+
+        .setting-btn:hover .bar2::before {
+            transform: translateX(-4px);
+        }
     </style>
 </head>
 <body>
@@ -345,6 +410,13 @@
         
         <div class="loading-text" id="loadingText">Загрузка...</div>
     </div>
+
+    <!-- Кнопка настроек -->
+    <button class="setting-btn" id="settingsBtn">
+        <span class="bar bar1"></span>
+        <span class="bar bar2"></span>
+        <span class="bar bar1"></span>
+    </button>
 
     <div class="container">
         <h1>🎮 Magnum Coins</h1>
@@ -461,6 +533,17 @@
             }
         }
 
+        // Обработчик кнопки настроек
+        function handleSettings() {
+            // Вибрация (если поддерживается)
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+            
+            // Здесь можно добавить логику настроек
+            alert('⚙️ Настройки\n\nФункция в разработке!');
+        }
+
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             // Запускаем загрузку
@@ -471,6 +554,9 @@
             
             // Привязываем обработчик клика
             document.getElementById('clickButton').addEventListener('click', handleClick);
+            
+            // Привязываем обработчик настроек
+            document.getElementById('settingsBtn').addEventListener('click', handleSettings);
             
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
