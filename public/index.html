@@ -551,6 +551,71 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
         }
+
+        /* Панель кнопок внизу */
+        .button-container {
+            display: flex;
+            background-color: rgba(245, 73, 144, 0.9);
+            width: 280px;
+            height: 50px;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 15px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px,
+                  rgba(245, 73, 144, 0.5) 5px 10px 15px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .button {
+            outline: 0 !important;
+            border: 0 !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all ease-in-out 0.3s;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(-1px);
+        }
+
+        .icon {
+            font-size: 20px;
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 480px) {
+            .button-container {
+                width: 250px;
+                height: 45px;
+                bottom: 20px;
+            }
+            
+            .button {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -659,6 +724,25 @@
             
             <button class="reset-btn" id="resetBtn">🔄 Сбросить прогресс</button>
         </div>
+    </div>
+
+    <!-- Панель кнопок внизу -->
+    <div class="button-container">
+        <button class="button" id="shopBtn" title="Магазин">
+            <span class="icon">🛒</span>
+        </button>
+        <button class="button" id="statsBtn" title="Статистика">
+            <span class="icon">📊</span>
+        </button>
+        <button class="button" id="achievementsBtn" title="Достижения">
+            <span class="icon">🏆</span>
+        </button>
+        <button class="button" id="leaderboardBtn" title="Таблица лидеров">
+            <span class="icon">👑</span>
+        </button>
+        <button class="button" id="helpBtn" title="Помощь">
+            <span class="icon">❓</span>
+        </button>
     </div>
 
     <script>
@@ -836,6 +920,32 @@
             }
         }
 
+        // Обработчики кнопок панели
+        function handleShop() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            alert('🛒 Магазин\n\nСкоро здесь будут доступны улучшения!');
+        }
+
+        function handleStats() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            alert(`📊 Статистика\n\n💰 Монет: ${gameData.coins.toLocaleString()}\n👆 Кликов: ${gameData.clicks.toLocaleString()}\n⚡ Монет за клик: ${gameSettings.coinsPerClick}\n🎯 Средний доход: ${(gameData.coins / Math.max(gameData.clicks, 1)).toFixed(1)} монет/клик`);
+        }
+
+        function handleAchievements() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            alert('🏆 Достижения\n\nСкоро здесь появятся достижения!');
+        }
+
+        function handleLeaderboard() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            alert('👑 Таблица лидеров\n\nСкоро здесь будет таблица лидеров!');
+        }
+
+        function handleHelp() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            alert('❓ Помощь\n\n🎮 Нажимайте на кнопку для заработка монет\n⚙️ Настройки в левом верхнем углу\n🎯 Измените количество монет за клик в настройках\n📱 Игра автоматически сохраняет прогресс');
+        }
+
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             // Запускаем загрузку
@@ -895,6 +1005,13 @@
                     closeSettings();
                 }
             });
+            
+            // Обработчики кнопок панели
+            document.getElementById('shopBtn').addEventListener('click', handleShop);
+            document.getElementById('statsBtn').addEventListener('click', handleStats);
+            document.getElementById('achievementsBtn').addEventListener('click', handleAchievements);
+            document.getElementById('leaderboardBtn').addEventListener('click', handleLeaderboard);
+            document.getElementById('helpBtn').addEventListener('click', handleHelp);
             
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
