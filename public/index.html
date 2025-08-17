@@ -382,175 +382,7 @@
             transform: translateX(-4px);
         }
 
-        /* Модальное окно настроек */
-        .settings-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
 
-        .settings-modal.active {
-            display: flex;
-        }
-
-        .settings-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 15px;
-        }
-
-        .settings-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .setting-item {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .setting-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .toggle-switch.active {
-            background: rgb(129, 110, 216);
-        }
-
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 21px;
-            height: 21px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-        }
-
-        .toggle-switch.active::after {
-            transform: translateX(25px);
-        }
-
-        .slider {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: rgb(129, 110, 216);
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: rgb(129, 110, 216);
-            border-radius: 50%;
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .setting-value {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        .reset-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .reset-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-        }
 
         /* Панель кнопок внизу */
         .button-container {
@@ -612,157 +444,7 @@
             font-size: 20px;
         }
 
-        /* Модальное окно магазина */
-        .shop-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
 
-        .shop-modal.active {
-            display: flex;
-        }
-
-        .shop-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 450px;
-            width: 90%;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            animation: slideIn 0.3s ease-out;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .shop-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 15px;
-        }
-
-        .shop-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .shop-items {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .shop-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .shop-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .shop-item.purchased {
-            opacity: 0.6;
-            background: rgba(0, 255, 0, 0.1);
-        }
-
-        .item-info {
-            flex: 1;
-        }
-
-        .item-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .item-description {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .item-price {
-            font-size: 0.9rem;
-            color: #ffcb13;
-            font-weight: bold;
-        }
-
-        .buy-btn {
-            background: linear-gradient(45deg, #ffcb13, #ff8605);
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .buy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 203, 19, 0.4);
-        }
-
-        .buy-btn:disabled {
-            background: rgba(255, 255, 255, 0.2);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .shop-footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .player-coins {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #ffcb13;
-        }
-
-        .back-btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
-        }
 
         /* Адаптивность для мобильных */
         @media (max-width: 480px) {
@@ -780,22 +462,6 @@
             
             .button-text {
                 font-size: 7px;
-            }
-            
-            .shop-content {
-                padding: 20px;
-                max-width: 95%;
-            }
-            
-            .shop-item {
-                padding: 15px;
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-            
-            .buy-btn {
-                width: 100%;
             }
         }
     </style>
@@ -859,55 +525,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно настроек -->
-    <div class="settings-modal" id="settingsModal">
-        <div class="settings-content">
-            <div class="settings-header">
-                <div class="settings-title">⚙️ Настройки</div>
-                <button class="close-btn" id="closeSettings">✕</button>
-            </div>
-            
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>🔊 Звуки</span>
-                    <div class="toggle-switch" id="soundToggle"></div>
-                </div>
-            </div>
-            
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>📳 Вибрация</span>
-                    <div class="toggle-switch" id="vibrationToggle"></div>
-                </div>
-            </div>
-            
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>🎨 Анимации</span>
-                    <div class="toggle-switch" id="animationToggle"></div>
-                </div>
-            </div>
-            
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>⚡ Скорость анимации</span>
-                </div>
-                <input type="range" class="slider" id="animationSpeed" min="1" max="10" value="5">
-                <div class="setting-value" id="speedValue">Средняя</div>
-            </div>
-            
-            <div class="setting-item">
-                <div class="setting-label">
-                    <span>🎯 Монет за клик</span>
-                </div>
-                <input type="range" class="slider" id="coinsPerClickSlider" min="1" max="10" value="1">
-                <div class="setting-value" id="coinsValue">1 монета</div>
-            </div>
-            
-            <button class="reset-btn" id="resetBtn">🔄 Сбросить прогресс</button>
-        </div>
-    </div>
-
     <!-- Панель кнопок внизу -->
     <div class="button-container">
         <button class="button" id="shopBtn" title="Магазин">
@@ -925,50 +542,6 @@
         <button class="button" id="helpBtn" title="Помощь">
             <span class="button-text">Помощь</span>
         </button>
-    </div>
-
-    <!-- Модальное окно магазина -->
-    <div class="shop-modal" id="shopModal">
-        <div class="shop-content">
-            <div class="shop-header">
-                <div class="shop-title">🛒 Магазин улучшений</div>
-                <button class="close-btn" id="closeShop">✕</button>
-            </div>
-            
-            <div class="shop-items">
-                <div class="shop-item" id="upgrade1">
-                    <div class="item-info">
-                        <div class="item-name">⚡ Ускорение клика</div>
-                        <div class="item-description">Увеличивает скорость кликов</div>
-                        <div class="item-price">Цена: 100 монет</div>
-                    </div>
-                    <button class="buy-btn" id="buyUpgrade1">Купить</button>
-                </div>
-                
-                <div class="shop-item" id="upgrade2">
-                    <div class="item-info">
-                        <div class="item-name">💰 Множитель монет</div>
-                        <div class="item-description">Удваивает доход за клик</div>
-                        <div class="item-price">Цена: 500 монет</div>
-                    </div>
-                    <button class="buy-btn" id="buyUpgrade2">Купить</button>
-                </div>
-                
-                <div class="shop-item" id="upgrade3">
-                    <div class="item-info">
-                        <div class="item-name">🎯 Автокликер</div>
-                        <div class="item-description">Автоматически кликает каждые 5 сек</div>
-                        <div class="item-price">Цена: 1000 монет</div>
-                    </div>
-                    <button class="buy-btn" id="buyUpgrade3">Купить</button>
-                </div>
-            </div>
-            
-            <div class="shop-footer">
-                <div class="player-coins">Ваши монеты: <span id="shopCoins">0</span></div>
-                <button class="back-btn" id="backToMain">🏠 Главное меню</button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -1108,99 +681,15 @@
                 navigator.vibrate(30);
             }
             
-            // Показываем модальное окно
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        // Закрытие настроек
-        function closeSettings() {
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        // Обновление отображения настроек
-        function updateSettingsDisplay() {
-            // Переключатели
-            document.getElementById('soundToggle').classList.toggle('active', gameSettings.sound);
-            document.getElementById('vibrationToggle').classList.toggle('active', gameSettings.vibration);
-            document.getElementById('animationToggle').classList.toggle('active', gameSettings.animations);
-            
-            // Слайдеры
-            document.getElementById('animationSpeed').value = gameSettings.animationSpeed;
-            document.getElementById('coinsPerClickSlider').value = gameSettings.coinsPerClick;
-            
-            // Значения
-            updateSpeedValue();
-            updateCoinsValue();
-        }
-
-        // Обновление значения скорости
-        function updateSpeedValue() {
-            const speed = gameSettings.animationSpeed;
-            const speedText = speed <= 3 ? 'Медленная' : speed <= 7 ? 'Средняя' : 'Быстрая';
-            document.getElementById('speedValue').textContent = speedText;
-        }
-
-        // Обновление значения монет
-        function updateCoinsValue() {
-            const coins = gameSettings.coinsPerClick;
-            const coinsText = coins === 1 ? '1 монета' : `${coins} монет`;
-            document.getElementById('coinsValue').textContent = coinsText;
-        }
-
-        // Сброс прогресса
-        function resetProgress() {
-            if (confirm('⚠️ Вы уверены, что хотите сбросить весь прогресс?\n\nЭто действие нельзя отменить!')) {
-                gameData = {
-                    coins: 0,
-                    clicks: 0,
-                    coinsPerClick: 1
-                };
-                updateDisplay();
-                saveGameData();
-                
-                // Вибрация
-                if (gameSettings.vibration && navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
-                }
-            }
+            // Переходим на страницу настроек
+            window.location.href = '/settings.html';
         }
 
         // Функции магазина
         function openShop() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            document.getElementById('shopModal').classList.add('active');
-            updateShopDisplay();
-        }
-
-        function closeShop() {
-            document.getElementById('shopModal').classList.remove('active');
-        }
-
-        function updateShopDisplay() {
-            document.getElementById('shopCoins').textContent = gameData.coins.toLocaleString();
-            
-            // Обновляем состояние кнопок покупки
-            const upgrade1 = document.getElementById('upgrade1');
-            const upgrade2 = document.getElementById('upgrade2');
-            const upgrade3 = document.getElementById('upgrade3');
-            
-            if (upgrades.speedUpgrade.purchased) {
-                upgrade1.classList.add('purchased');
-                document.getElementById('buyUpgrade1').textContent = 'Куплено';
-                document.getElementById('buyUpgrade1').disabled = true;
-            }
-            
-            if (upgrades.coinMultiplier.purchased) {
-                upgrade2.classList.add('purchased');
-                document.getElementById('buyUpgrade2').textContent = 'Куплено';
-                document.getElementById('buyUpgrade2').disabled = true;
-            }
-            
-            if (upgrades.autoClicker.purchased) {
-                upgrade3.classList.add('purchased');
-                document.getElementById('buyUpgrade3').textContent = 'Куплено';
-                document.getElementById('buyUpgrade3').disabled = true;
-            }
+            // Переходим на страницу магазина
+            window.location.href = '/shop.html';
         }
 
         function buyUpgrade(upgradeType) {
@@ -1215,7 +704,6 @@
                 
                 // Обновляем отображение
                 updateDisplay();
-                updateShopDisplay();
                 saveGameData();
                 
                 // Вибрация и уведомление
@@ -1239,7 +727,6 @@
                 case 'coinMultiplier':
                     // Удваиваем доход
                     gameSettings.coinsPerClick *= 2;
-                    updateSettingsDisplay();
                     break;
                 case 'autoClicker':
                     // Запускаем автокликер
@@ -1264,10 +751,6 @@
             autoClickerInterval = setInterval(() => {
                 handleClick();
             }, 5000);
-        }
-
-        function backToMain() {
-            closeShop();
         }
 
         // Обработчики кнопок панели
@@ -1309,72 +792,12 @@
             // Привязываем обработчик настроек
             document.getElementById('settingsBtn').addEventListener('click', handleSettings);
             
-            // Обработчики настроек
-            document.getElementById('closeSettings').addEventListener('click', closeSettings);
-            document.getElementById('resetBtn').addEventListener('click', resetProgress);
-            
-            // Переключатели
-            document.getElementById('soundToggle').addEventListener('click', () => {
-                gameSettings.sound = !gameSettings.sound;
-                updateSettingsDisplay();
-                saveGameData();
-                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(20);
-            });
-            
-            document.getElementById('vibrationToggle').addEventListener('click', () => {
-                gameSettings.vibration = !gameSettings.vibration;
-                updateSettingsDisplay();
-                saveGameData();
-                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(20);
-            });
-            
-            document.getElementById('animationToggle').addEventListener('click', () => {
-                gameSettings.animations = !gameSettings.animations;
-                updateSettingsDisplay();
-                saveGameData();
-                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(20);
-            });
-            
-            // Слайдеры
-            document.getElementById('animationSpeed').addEventListener('input', (e) => {
-                gameSettings.animationSpeed = parseInt(e.target.value);
-                updateSpeedValue();
-                saveGameData();
-            });
-            
-            document.getElementById('coinsPerClickSlider').addEventListener('input', (e) => {
-                gameSettings.coinsPerClick = parseInt(e.target.value);
-                updateCoinsValue();
-                saveGameData();
-            });
-            
-            // Закрытие по клику вне модального окна
-            document.getElementById('settingsModal').addEventListener('click', (e) => {
-                if (e.target.id === 'settingsModal') {
-                    closeSettings();
-                }
-            });
-            
             // Обработчики кнопок панели
             document.getElementById('shopBtn').addEventListener('click', handleShop);
             document.getElementById('statsBtn').addEventListener('click', handleStats);
             document.getElementById('achievementsBtn').addEventListener('click', handleAchievements);
             document.getElementById('leaderboardBtn').addEventListener('click', handleLeaderboard);
             document.getElementById('helpBtn').addEventListener('click', handleHelp);
-            
-            // Обработчики магазина
-            document.getElementById('closeShop').addEventListener('click', closeShop);
-            document.getElementById('backToMain').addEventListener('click', backToMain);
-            document.getElementById('buyUpgrade1').addEventListener('click', () => buyUpgrade('speedUpgrade'));
-            document.getElementById('buyUpgrade2').addEventListener('click', () => buyUpgrade('coinMultiplier'));
-            document.getElementById('buyUpgrade3').addEventListener('click', () => buyUpgrade('autoClicker'));
-            
-            // Закрытие магазина по клику вне модального окна
-            document.getElementById('shopModal').addEventListener('click', (e) => {
-                if (e.target.id === 'shopModal') {
-                    closeShop();
-                }
-            });
             
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);

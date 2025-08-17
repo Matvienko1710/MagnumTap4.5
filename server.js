@@ -13,6 +13,16 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Страница настроек
+app.get('/settings.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'settings.html'));
+});
+
+// Страница магазина
+app.get('/shop.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });

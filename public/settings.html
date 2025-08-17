@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Настройки - Magnum Coins</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(at 47.966219997892225% 59.17791208933168%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%), radial-gradient(at 47.64933301345313% 82.3942086004094%, hsla(0, 6.25%, 18.823529411764707%, 1) 0%, hsla(0, 6.25%, 18.823529411764707%, 0) 100%), radial-gradient(at 95.4924348957064% 30.991218769813667%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 1) 0%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 0) 100%), radial-gradient(at 33.063428122547755% 63.915493762477546%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 1) 0%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 0) 100%), radial-gradient(at 15.148471558648247% 8.345630190076857%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%);
+            background-size: 400%;
+            animation: gradient 10s infinite linear;
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 80% 0%;
+            }
+            50% {
+                background-position: 20% 100%;
+            }
+            100% {
+                background-position: 80% 0%;
+            }
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .settings-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .setting-item {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .setting-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: rgb(129, 110, 216);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(30px);
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+            margin: 10px 0;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: rgb(129, 110, 216);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: rgb(129, 110, 216);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .setting-value {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .settings-content {
+                padding: 20px;
+            }
+            
+            .setting-item {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">⚙️ Настройки</div>
+            <button class="back-btn" id="backBtn">🏠 Главное меню</button>
+        </div>
+        
+        <div class="settings-content">
+            <div class="setting-item">
+                <div class="setting-label">
+                    <span>🔊 Звуки</span>
+                    <div class="toggle-switch" id="soundToggle"></div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">
+                    <span>📳 Вибрация</span>
+                    <div class="toggle-switch" id="vibrationToggle"></div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">
+                    <span>🎨 Анимации</span>
+                    <div class="toggle-switch" id="animationToggle"></div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">
+                    <span>⚡ Скорость анимации</span>
+                </div>
+                <input type="range" class="slider" id="animationSpeed" min="1" max="10" value="5">
+                <div class="setting-value" id="speedValue">Средняя</div>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">
+                    <span>🎯 Монет за клик</span>
+                </div>
+                <input type="range" class="slider" id="coinsPerClickSlider" min="1" max="10" value="1">
+                <div class="setting-value" id="coinsValue">1 монета</div>
+            </div>
+            
+            <button class="reset-btn" id="resetBtn">🔄 Сбросить прогресс</button>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Настройки игры
+        let gameSettings = {
+            sound: true,
+            vibration: true,
+            animations: true,
+            animationSpeed: 5,
+            coinsPerClick: 1
+        };
+
+        // Загружаем настройки
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('magnumSettings');
+            if (savedSettings) {
+                gameSettings = JSON.parse(savedSettings);
+                updateSettingsDisplay();
+            }
+        }
+
+        // Сохраняем настройки
+        function saveSettings() {
+            localStorage.setItem('magnumSettings', JSON.stringify(gameSettings));
+        }
+
+        // Обновление отображения настроек
+        function updateSettingsDisplay() {
+            // Переключатели
+            document.getElementById('soundToggle').classList.toggle('active', gameSettings.sound);
+            document.getElementById('vibrationToggle').classList.toggle('active', gameSettings.vibration);
+            document.getElementById('animationToggle').classList.toggle('active', gameSettings.animations);
+            
+            // Слайдеры
+            document.getElementById('animationSpeed').value = gameSettings.animationSpeed;
+            document.getElementById('coinsPerClickSlider').value = gameSettings.coinsPerClick;
+            
+            // Значения
+            updateSpeedValue();
+            updateCoinsValue();
+        }
+
+        // Обновление значения скорости
+        function updateSpeedValue() {
+            const speed = gameSettings.animationSpeed;
+            const speedText = speed <= 3 ? 'Медленная' : speed <= 7 ? 'Средняя' : 'Быстрая';
+            document.getElementById('speedValue').textContent = speedText;
+        }
+
+        // Обновление значения монет
+        function updateCoinsValue() {
+            const coins = gameSettings.coinsPerClick;
+            const coinsText = coins === 1 ? '1 монета' : `${coins} монет`;
+            document.getElementById('coinsValue').textContent = coinsText;
+        }
+
+        // Сброс прогресса
+        function resetProgress() {
+            if (confirm('⚠️ Вы уверены, что хотите сбросить весь прогресс?\n\nЭто действие нельзя отменить!')) {
+                // Сбрасываем игровые данные
+                localStorage.removeItem('magnumCoinsData');
+                localStorage.removeItem('magnumUpgrades');
+                
+                // Сбрасываем настройки
+                gameSettings = {
+                    sound: true,
+                    vibration: true,
+                    animations: true,
+                    animationSpeed: 5,
+                    coinsPerClick: 1
+                };
+                
+                updateSettingsDisplay();
+                saveSettings();
+                
+                // Вибрация
+                if (gameSettings.vibration && navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+                
+                alert('✅ Прогресс сброшен!');
+            }
+        }
+
+        // Возврат в главное меню
+        function backToMain() {
+            window.location.href = '/';
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            // Загружаем настройки
+            loadSettings();
+            
+            // Обработчики
+            document.getElementById('backBtn').addEventListener('click', backToMain);
+            document.getElementById('resetBtn').addEventListener('click', resetProgress);
+            
+            // Переключатели
+            document.getElementById('soundToggle').addEventListener('click', () => {
+                gameSettings.sound = !gameSettings.sound;
+                updateSettingsDisplay();
+                saveSettings();
+                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(20);
+            });
+            
+            document.getElementById('vibrationToggle').addEventListener('click', () => {
+                gameSettings.vibration = !gameSettings.vibration;
+                updateSettingsDisplay();
+                saveSettings();
+                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(20);
+            });
+            
+            document.getElementById('animationToggle').addEventListener('click', () => {
+                gameSettings.animations = !gameSettings.animations;
+                updateSettingsDisplay();
+                saveSettings();
+                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(20);
+            });
+            
+            // Слайдеры
+            document.getElementById('animationSpeed').addEventListener('input', (e) => {
+                gameSettings.animationSpeed = parseInt(e.target.value);
+                updateSpeedValue();
+                saveSettings();
+            });
+            
+            document.getElementById('coinsPerClickSlider').addEventListener('input', (e) => {
+                gameSettings.coinsPerClick = parseInt(e.target.value);
+                updateCoinsValue();
+                saveSettings();
+            });
+        });
+    </script>
+</body>
+</html>
