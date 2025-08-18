@@ -371,7 +371,9 @@
         // Игровые данные
         let gameData = {
             coins: 0,
-            clicks: 0
+            clicks: 0,
+            energy: 1000,
+            maxEnergy: 1000
         };
 
         // Загружаем игровые данные
@@ -386,6 +388,11 @@
         // Обновляем баланс
         function updateBalance() {
             document.getElementById('userBalance').textContent = `${gameData.coins.toLocaleString()} монет`;
+            
+            // Обновляем отображение энергии в портфеле если он открыт
+            if (document.getElementById('portfolio').classList.contains('active')) {
+                loadPortfolio();
+            }
         }
 
         // Переключение табов
@@ -438,20 +445,39 @@
                 
                 // Покупаем валюту
                 gameData.coins -= totalCost;
-                addToPortfolio(currency, amount);
+                
+                // Особая логика для энергии
+                if (currency === 'energy') {
+                    gameData.energy += amount;
+                    if (gameData.energy > gameData.maxEnergy) {
+                        gameData.energy = gameData.maxEnergy;
+                    }
+                } else {
+                    addToPortfolio(currency, amount);
+                }
+                
                 addToHistory(action, currency, amount, totalCost);
                 
                 console.log(`✅ Куплено ${amount} ${currency} за ${totalCost} монет`);
             } else {
                 // Продаем валюту
-                const portfolio = getPortfolio();
-                if (!portfolio[currency] || portfolio[currency] < amount) {
-                    console.log('❌ Недостаточно валюты для продажи');
-                    return;
+                if (currency === 'energy') {
+                    // Продаем энергию из игрового баланса
+                    if (gameData.energy < amount) {
+                        console.log('❌ Недостаточно энергии для продажи');
+                        return;
+                    }
+                    gameData.energy -= amount;
+                } else {
+                    const portfolio = getPortfolio();
+                    if (!portfolio[currency] || portfolio[currency] < amount) {
+                        console.log('❌ Недостаточно валюты для продажи');
+                        return;
+                    }
+                    removeFromPortfolio(currency, amount);
                 }
                 
                 gameData.coins += totalCost;
-                removeFromPortfolio(currency, amount);
                 addToHistory(action, currency, amount, totalCost);
                 
                 console.log(`✅ Продано ${amount} ${currency} за ${totalCost} монет`);
@@ -501,8 +527,17 @@
             let totalValue = 0;
             
             portfolioContainer.innerHTML = currencies.map(currency => {
-                const amount = portfolio[currency.key] || 0;
-                const value = amount * currency.rate;
+                let amount, value;
+                
+                // Особая логика для энергии
+                if (currency.key === 'energy') {
+                    amount = gameData.energy;
+                    value = amount * currency.rate;
+                } else {
+                    amount = portfolio[currency.key] || 0;
+                    value = amount * currency.rate;
+                }
+                
                 totalValue += value;
                 const change = Math.random() > 0.5 ? '+' + (Math.random() * 5).toFixed(1) : '-' + (Math.random() * 3).toFixed(1);
                 const changeColor = change.startsWith('+') ? '#4CAF50' : '#ff6b6b';

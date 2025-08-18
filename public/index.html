@@ -672,6 +672,10 @@
                 <span>Монет за клик:</span>
                 <span id="coinsPerClick">1</span>
             </div>
+            <div class="stat-item">
+                <span>⚡ Энергия:</span>
+                <span id="energy">1000</span>
+            </div>
         </div>
     </div>
 
@@ -770,6 +774,8 @@
             coins: 0,
             clicks: 0,
             coinsPerClick: 1,
+            energy: 1000, // Начальный баланс энергии
+            maxEnergy: 1000, // Максимальный баланс энергии
             tasksCompleted: 0,
             adsWatched: 0,
             lastAdWatch: 0
@@ -860,13 +866,29 @@
             document.getElementById('coins').textContent = gameData.coins.toLocaleString();
             document.getElementById('clicks').textContent = gameData.clicks.toLocaleString();
             document.getElementById('coinsPerClick').textContent = gameData.coinsPerClick;
+            
+            // Обновляем отображение энергии
+            const energyElement = document.getElementById('energy');
+            if (energyElement) {
+                energyElement.textContent = gameData.energy.toLocaleString();
+            }
         }
 
         // Обработчик клика
         function handleClick() {
+            // Проверяем, есть ли энергия для клика
+            if (gameData.energy <= 0) {
+                console.log('Нет энергии для клика!');
+                if (gameSettings.vibration && navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+                return;
+            }
+            
             console.log('Клик обработан!');
             gameData.coins += gameSettings.coinsPerClick;
             gameData.clicks++;
+            gameData.energy--; // Тратим 1 энергию за клик
             
             // Анимация кнопки (если включена)
             if (gameSettings.animations) {
@@ -1317,11 +1339,23 @@
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
             
+            // Восстановление энергии каждые 5 секунд
+            setInterval(restoreEnergy, 5000);
+            
             // Проверяем достижения при загрузке
             checkAchievements();
             
             console.log('Инициализация завершена');
         });
+
+        // Восстановление энергии
+        function restoreEnergy() {
+            if (gameData.energy < gameData.maxEnergy) {
+                gameData.energy++;
+                updateDisplay();
+                console.log(`⚡ Энергия восстановлена: ${gameData.energy}/${gameData.maxEnergy}`);
+            }
+        }
 
         // Функции достижений
         function checkAchievements() {
