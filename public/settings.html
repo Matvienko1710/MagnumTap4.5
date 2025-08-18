@@ -385,13 +385,10 @@
                 const userName = tg.initDataUnsafe.user.first_name;
                 const userUsername = tg.initDataUnsafe.user.username;
                 
-                // Список админов (замените на ваши ID)
-                const adminIds = [
-                    // Добавьте сюда ID администраторов
-                    // Например: 123456789, 987654321
-                ];
+                // Используем переменную admin_ids (определите её в вашем коде)
+                // const admin_ids = [123456789, 987654321]; // Пример
                 
-                if (adminIds.includes(userId)) {
+                if (typeof admin_ids !== 'undefined' && admin_ids.includes(userId)) {
                     // Показываем админ панель
                     document.getElementById('adminPanel').style.display = 'block';
                     
