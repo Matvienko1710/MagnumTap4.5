@@ -923,16 +923,16 @@
                 updateDisplay();
                 saveGameData();
                 
-                // Вибрация и уведомление
+                // Вибрация (без всплывающих сообщений)
                 if (gameSettings.vibration && navigator.vibrate) {
                     navigator.vibrate([100, 50, 100]);
                 }
-                
-                alert(`✅ Улучшение куплено!\n\n${upgrade.effect}`);
             } else if (upgrade.purchased) {
-                alert('❌ Это улучшение уже куплено!');
+                // Тихий отказ без alert
+                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(20);
             } else {
-                alert('❌ Недостаточно монет!');
+                // Недостаточно монет — без alert
+                if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
             }
         }
 
@@ -980,8 +980,16 @@
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
             const avgIncome = (gameData.coins / Math.max(gameData.clicks, 1)).toFixed(1);
             const timeSinceLastAd = gameData.lastAdWatch ? Math.floor((Date.now() - gameData.lastAdWatch) / 1000 / 60) : 0;
-            
-            alert(`📊 Статистика\n\n💰 Монет: ${gameData.coins.toLocaleString()}\n👆 Кликов: ${gameData.clicks.toLocaleString()}\n⚡ Монет за клик: ${gameSettings.coinsPerClick}\n🎯 Средний доход: ${avgIncome} монет/клик\n📺 Реклам просмотрено: ${gameData.adsWatched}\n✅ Заданий выполнено: ${gameData.tasksCompleted}\n⏰ Последняя реклама: ${timeSinceLastAd} мин назад`);
+            // Без alert: информация в консоль
+            console.log('[Статистика]', {
+                coins: gameData.coins,
+                clicks: gameData.clicks,
+                coinsPerClick: gameSettings.coinsPerClick,
+                avgIncome,
+                adsWatched: gameData.adsWatched,
+                tasksCompleted: gameData.tasksCompleted,
+                timeSinceLastAd
+            });
         }
 
         function handleAchievements() {
@@ -1002,7 +1010,8 @@
 
         function handleHelp() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            alert('❓ Помощь\n\n🎮 Нажимайте на кнопку для заработка монет\n⚙️ Настройки в левом верхнем углу\n🎯 Измените количество монет за клик в настройках\n📱 Игра автоматически сохраняет прогресс');
+            // Без alert
+            console.log('Помощь: нажимайте на кнопку, настройки в левом верхнем углу, автосохранение включено.');
         }
 
         // Функции для заданий
@@ -1184,8 +1193,11 @@
                     remainingTime = Math.max(0, remainingTime); // Не меньше 0
                 }
                 
-                alert(`⏰ Подождите еще ${remainingTime} минут перед следующим просмотром рекламы`);
-                return;
+                if (remainingTime > 0) {
+                    // Без alert
+                    console.log(`⏰ Подождите еще ${remainingTime} минут перед следующим просмотром рекламы`);
+                    return;
+                }
             }
             
             openAdModal();
@@ -1369,58 +1381,10 @@
             
             // Обновляем отображение
             updateDisplay();
-            
-            // Показываем уведомление
-            showAchievementNotification(achievement);
+            // Без всплывающих уведомлений
         }
 
-        function showAchievementNotification(achievement) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: linear-gradient(45deg, #4CAF50, #45a049);
-                color: white;
-                padding: 20px;
-                border-radius: 15px;
-                text-align: center;
-                z-index: 10000;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                animation: slideIn 0.5s ease;
-            `;
-            
-            notification.innerHTML = `
-                <div style="font-size: 3rem; margin-bottom: 10px;">${achievement.icon}</div>
-                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">🏆 Достижение разблокировано!</div>
-                <div style="font-size: 1rem; margin-bottom: 10px;">${achievement.title}</div>
-                <div style="font-size: 0.9rem; opacity: 0.9;">+${achievement.reward} монет</div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.5s ease';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 500);
-            }, 3000);
-        }
-
-        // Добавляем CSS анимации для уведомлений
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-                to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-                to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
+        // Удаляем функцию showAchievementNotification и связанные стили уведомлений
     </script>
 </body>
 </html>

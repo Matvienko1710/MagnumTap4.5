@@ -211,37 +211,21 @@
 </head>
 <body>
     <div class="container">
-        <div style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+        <div class="header" style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
             <button
-                class="bg-white text-center w-48 rounded-2xl h-14 relative text-black text-xl font-semibold group"
+                class="bg-white text-center w-36 rounded-xl h-12 relative text-black text-lg font-semibold group"
                 type="button"
                 id="backBtn"
             >
-                <div
-                    class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1024 1024"
-                        height="25px"
-                        width="25px"
-                    >
-                        <path
-                            d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
-                            fill="#000000"
-                        ></path>
-                        <path
-                            d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
-                            fill="#000000"
-                        ></path>
+                <div class="bg-green-400 rounded-lg h-10 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[132px] z-10 duration-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" height="20" width="20">
+                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="#000"></path>
+                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="#000"></path>
                     </svg>
                 </div>
                 <p class="translate-x-2">Назад</p>
             </button>
-        </div>
-        
-        <div class="header">
-            <div class="title">🛒 Магазин улучшений</div>
+            <div class="title" style="flex:1;text-align:center;">🛒 Магазин улучшений</div>
         </div>
         
         <div class="shop-content">
@@ -380,16 +364,16 @@
                 updateShopDisplay();
                 saveData();
                 
-                // Вибрация и уведомление
+                // Вибрация (без alert)
                 if (gameSettings.vibration && navigator.vibrate) {
                     navigator.vibrate([100, 50, 100]);
                 }
-                
-                alert(`✅ Улучшение куплено!\n\n${upgrade.effect}`);
             } else if (upgrade.purchased) {
-                alert('❌ Это улучшение уже куплено!');
+                // Тихое уведомление
+                if (navigator.vibrate) navigator.vibrate(20);
             } else {
-                alert('❌ Недостаточно монет!');
+                // Недостаточно монет — тихо
+                if (navigator.vibrate) navigator.vibrate(30);
             }
         }
 
