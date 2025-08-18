@@ -256,6 +256,34 @@
                 <div class="setting-value" id="coinsValue">1 монета</div>
             </div>
             
+            <!-- Секция статистики -->
+            <div class="setting-item" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
+                <h3 style="margin: 0 0 15px 0; font-size: 18px; text-align: center;">📊 Статистика игры</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 5px;">💰</div>
+                        <div style="font-size: 16px; font-weight: bold;" id="statsCoins">0</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Монет</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; text-align: center;">
+                        <div style="font-size: 24px; margin-bottom: 5px;">👆</div>
+                        <div style="font-size: 16px; font-weight: bold;" id="statsClicks">0</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Кликов</div>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px;">📈 Детальная статистика</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px;">
+                        <div>Монет за клик: <strong id="statsCoinsPerClick">1</strong></div>
+                        <div>Средний доход: <strong id="statsAvgIncome">0</strong></div>
+                        <div>Реклам просмотрено: <strong id="statsAdsWatched">0</strong></div>
+                        <div>Заданий выполнено: <strong id="statsTasksCompleted">0</strong></div>
+                    </div>
+                </div>
+            </div>
+            
             <button class="reset-btn" id="resetBtn">🔄 Сбросить прогресс</button>
         </div>
     </div>
@@ -303,6 +331,28 @@
             // Значения
             updateSpeedValue();
             updateCoinsValue();
+            
+            // Обновляем статистику
+            updateStats();
+        }
+
+        // Обновление статистики
+        function updateStats() {
+            // Загружаем игровые данные
+            const savedData = localStorage.getItem('magnumCoinsData');
+            if (savedData) {
+                const gameData = JSON.parse(savedData);
+                
+                // Обновляем основные показатели
+                document.getElementById('statsCoins').textContent = gameData.coins.toLocaleString();
+                document.getElementById('statsClicks').textContent = gameData.clicks.toLocaleString();
+                
+                // Обновляем детальную статистику
+                document.getElementById('statsCoinsPerClick').textContent = gameSettings.coinsPerClick;
+                document.getElementById('statsAvgIncome').textContent = (gameData.coins / Math.max(gameData.clicks, 1)).toFixed(1);
+                document.getElementById('statsAdsWatched').textContent = gameData.adsWatched || 0;
+                document.getElementById('statsTasksCompleted').textContent = gameData.tasksCompleted || 0;
+            }
         }
 
         // Обновление значения скорости
