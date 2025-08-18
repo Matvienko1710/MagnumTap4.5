@@ -827,29 +827,56 @@
 
         // Загружаем сохраненные данные
         function loadGameData() {
-            const saved = localStorage.getItem('magnumCoinsData');
-            if (saved) {
-                gameData = JSON.parse(saved);
+            try {
+                const saved = localStorage.getItem('magnumCoinsData');
+                if (saved) {
+                    const loadedData = JSON.parse(saved);
+                    // Объединяем с дефолтными значениями для новых полей
+                    gameData = {
+                        coins: loadedData.coins || 0,
+                        clicks: loadedData.clicks || 0,
+                        coinsPerClick: loadedData.coinsPerClick || 1,
+                        energy: loadedData.energy || 1000,
+                        maxEnergy: loadedData.maxEnergy || 1000,
+                        tasksCompleted: loadedData.tasksCompleted || 0,
+                        adsWatched: loadedData.adsWatched || 0,
+                        lastAdWatch: loadedData.lastAdWatch || 0
+                    };
+                    updateDisplay();
+                }
+                
+                // Загружаем настройки
+                const savedSettings = localStorage.getItem('magnumSettings');
+                if (savedSettings) {
+                    gameSettings = JSON.parse(savedSettings);
+                }
+                
+                // Загружаем улучшения
+                const savedUpgrades = localStorage.getItem('magnumUpgrades');
+                if (savedUpgrades) {
+                    upgrades = JSON.parse(savedUpgrades);
+                    applyUpgrades();
+                }
+                
+                // Загружаем достижения
+                const savedAchievements = localStorage.getItem('magnumAchievements');
+                if (savedAchievements) {
+                    achievements = JSON.parse(savedAchievements);
+                }
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error);
+                // Используем дефолтные значения при ошибке
+                gameData = {
+                    coins: 0,
+                    clicks: 0,
+                    coinsPerClick: 1,
+                    energy: 1000,
+                    maxEnergy: 1000,
+                    tasksCompleted: 0,
+                    adsWatched: 0,
+                    lastAdWatch: 0
+                };
                 updateDisplay();
-            }
-            
-            // Загружаем настройки
-            const savedSettings = localStorage.getItem('magnumSettings');
-            if (savedSettings) {
-                gameSettings = JSON.parse(savedSettings);
-            }
-            
-            // Загружаем улучшения
-            const savedUpgrades = localStorage.getItem('magnumUpgrades');
-            if (savedUpgrades) {
-                upgrades = JSON.parse(savedUpgrades);
-                applyUpgrades();
-            }
-            
-            // Загружаем достижения
-            const savedAchievements = localStorage.getItem('magnumAchievements');
-            if (savedAchievements) {
-                achievements = JSON.parse(savedAchievements);
             }
         }
 
@@ -863,50 +890,60 @@
 
         // Обновляем отображение
         function updateDisplay() {
-            document.getElementById('coins').textContent = gameData.coins.toLocaleString();
-            document.getElementById('clicks').textContent = gameData.clicks.toLocaleString();
-            document.getElementById('coinsPerClick').textContent = gameData.coinsPerClick;
-            
-            // Обновляем отображение энергии
-            const energyElement = document.getElementById('energy');
-            if (energyElement) {
-                energyElement.textContent = gameData.energy.toLocaleString();
+            try {
+                const coinsElement = document.getElementById('coins');
+                const clicksElement = document.getElementById('clicks');
+                const coinsPerClickElement = document.getElementById('coinsPerClick');
+                const energyElement = document.getElementById('energy');
+                
+                if (coinsElement) coinsElement.textContent = gameData.coins.toLocaleString();
+                if (clicksElement) clicksElement.textContent = gameData.clicks.toLocaleString();
+                if (coinsPerClickElement) coinsPerClickElement.textContent = gameData.coinsPerClick;
+                if (energyElement) energyElement.textContent = gameData.energy.toLocaleString();
+            } catch (error) {
+                console.error('Ошибка при обновлении отображения:', error);
             }
         }
 
         // Обработчик клика
         function handleClick() {
-            // Проверяем, есть ли энергия для клика
-            if (gameData.energy <= 0) {
-                console.log('Нет энергии для клика!');
-                if (gameSettings.vibration && navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
+            try {
+                // Проверяем, есть ли энергия для клика
+                if (!gameData || gameData.energy <= 0) {
+                    console.log('Нет энергии для клика!');
+                    if (gameSettings.vibration && navigator.vibrate) {
+                        navigator.vibrate([100, 50, 100]);
+                    }
+                    return;
                 }
-                return;
-            }
-            
-            console.log('Клик обработан!');
-            gameData.coins += gameSettings.coinsPerClick;
-            gameData.clicks++;
-            gameData.energy--; // Тратим 1 энергию за клик
-            
-            // Анимация кнопки (если включена)
-            if (gameSettings.animations) {
-                const button = document.getElementById('clickButton');
-                const speed = 110 - (gameSettings.animationSpeed * 10);
-                button.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    button.style.transform = 'scale(1)';
-                }, speed);
-            }
-            
-            updateDisplay();
-            checkAchievements();
-            saveGameData();
-            
-            // Вибрация (если включена и поддерживается)
-            if (gameSettings.vibration && navigator.vibrate) {
-                navigator.vibrate(50);
+                
+                console.log('Клик обработан!');
+                gameData.coins += gameSettings.coinsPerClick;
+                gameData.clicks++;
+                gameData.energy--; // Тратим 1 энергию за клик
+                
+                // Анимация кнопки (если включена)
+                if (gameSettings.animations) {
+                    const button = document.getElementById('clickButton');
+                    if (button) {
+                        const speed = 110 - (gameSettings.animationSpeed * 10);
+                        button.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            button.style.transform = 'scale(1)';
+                        }, speed);
+                    }
+                }
+                
+                updateDisplay();
+                checkAchievements();
+                saveGameData();
+                
+                // Вибрация (если включена и поддерживается)
+                if (gameSettings.vibration && navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+            } catch (error) {
+                console.error('Ошибка при обработке клика:', error);
             }
         }
 
@@ -1350,10 +1387,14 @@
 
         // Восстановление энергии
         function restoreEnergy() {
-            if (gameData.energy < gameData.maxEnergy) {
-                gameData.energy++;
-                updateDisplay();
-                console.log(`⚡ Энергия восстановлена: ${gameData.energy}/${gameData.maxEnergy}`);
+            try {
+                if (gameData && gameData.energy < gameData.maxEnergy) {
+                    gameData.energy++;
+                    updateDisplay();
+                    console.log(`⚡ Энергия восстановлена: ${gameData.energy}/${gameData.maxEnergy}`);
+                }
+            } catch (error) {
+                console.error('Ошибка при восстановлении энергии:', error);
             }
         }
 

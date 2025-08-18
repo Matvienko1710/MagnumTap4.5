@@ -380,7 +380,14 @@
         function loadGameData() {
             const savedData = localStorage.getItem('magnumCoinsData');
             if (savedData) {
-                gameData = JSON.parse(savedData);
+                const loadedData = JSON.parse(savedData);
+                // Объединяем с дефолтными значениями для новых полей
+                gameData = {
+                    coins: loadedData.coins || 0,
+                    clicks: loadedData.clicks || 0,
+                    energy: loadedData.energy || 1000,
+                    maxEnergy: loadedData.maxEnergy || 1000
+                };
                 updateBalance();
             }
         }
