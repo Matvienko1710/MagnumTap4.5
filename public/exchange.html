@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Биржа Magnum</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: -webkit-linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
+            background: linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            flex: 1;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: white;
+            text-align: center;
+            width: 144px;
+            border-radius: 12px;
+            height: 48px;
+            position: relative;
+            color: black;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover .bg-green-400 {
+            width: 132px;
+        }
+
+        .bg-green-400 {
+            background: #4ade80;
+            border-radius: 8px;
+            height: 40px;
+            width: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            z-index: 10;
+            transition: width 0.5s ease;
+        }
+
+        .exchange-content {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .currency-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .currency-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        .trade-form {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .form-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-buy {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+
+        .btn-sell {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .portfolio-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-item:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .history-item {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .balance-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.6;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .positive {
+            color: #4CAF50;
+        }
+
+        .negative {
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" id="backBtn">
+                <div class="bg-green-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" height="20" width="20">
+                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="#000"></path>
+                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="#000"></path>
+                    </svg>
+                </div>
+                <p style="margin-left: 40px;">Назад</p>
+            </button>
+            <div class="title">📈 Биржа Magnum</div>
+        </div>
+
+        <!-- Баланс пользователя -->
+        <div class="balance-card">
+            <div style="font-size: 24px; margin-bottom: 10px;">💰</div>
+            <div style="font-size: 18px; font-weight: bold;" id="userBalance">0 монет</div>
+        </div>
+
+        <!-- Табы -->
+        <div class="tab-container">
+            <button class="tab active" data-tab="market">📊 Рынок</button>
+            <button class="tab" data-tab="portfolio">💼 Портфель</button>
+            <button class="tab" data-tab="history">📜 История</button>
+        </div>
+
+        <!-- Рынок -->
+        <div id="market" class="tab-content active">
+            <div class="exchange-content">
+                <h3 style="margin: 0 0 15px 0; font-size: 18px;">💱 Курсы валют</h3>
+                <div class="stats-grid">
+                    <div class="currency-card">
+                        <div style="font-size: 20px; margin-bottom: 5px;">💎</div>
+                        <div style="font-size: 14px; font-weight: bold;">Кристаллы</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Курс: 100 монет</div>
+                        <div class="stat-label positive">↗️ +2.5%</div>
+                    </div>
+                    <div class="currency-card">
+                        <div style="font-size: 20px; margin-bottom: 5px;">🌟</div>
+                        <div style="font-size: 14px; font-weight: bold;">Звезды</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Курс: 500 монет</div>
+                        <div class="stat-label negative">↘️ -1.2%</div>
+                    </div>
+                    <div class="currency-card">
+                        <div style="font-size: 20px; margin-bottom: 5px;">🔥</div>
+                        <div style="font-size: 14px; font-weight: bold;">Огонь</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Курс: 250 монет</div>
+                        <div class="stat-label positive">↗️ +5.8%</div>
+                    </div>
+                    <div class="currency-card">
+                        <div style="font-size: 20px; margin-bottom: 5px;">⚡</div>
+                        <div style="font-size: 14px; font-weight: bold;">Энергия</div>
+                        <div style="font-size: 12px; opacity: 0.8;">Курс: 150 монет</div>
+                        <div class="stat-label negative">↘️ -0.8%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trade-form">
+                <h3 style="margin: 0 0 15px 0; font-size: 18px;">🔄 Торговля</h3>
+                <div class="form-group">
+                    <select id="tradeCurrency" class="form-input">
+                        <option value="crystal">💎 Кристаллы</option>
+                        <option value="star">🌟 Звезды</option>
+                        <option value="fire">🔥 Огонь</option>
+                        <option value="energy">⚡ Энергия</option>
+                    </select>
+                    <input type="number" id="tradeAmount" placeholder="Количество" min="1" class="form-input">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-buy" onclick="executeTrade('buy')">📈 Купить</button>
+                    <button class="btn btn-sell" onclick="executeTrade('sell')">📉 Продать</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Портфель -->
+        <div id="portfolio" class="tab-content">
+            <div class="exchange-content">
+                <h3 style="margin: 0 0 15px 0; font-size: 18px;">💼 Ваш портфель</h3>
+                <div id="portfolio-items">
+                    <!-- Портфель будет загружен динамически -->
+                </div>
+            </div>
+
+            <div class="exchange-content">
+                <h3 style="margin: 0 0 15px 0; font-size: 18px;">📊 Общая стоимость</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; font-weight: bold; margin-bottom: 5px;" id="totalValue">0 монет</div>
+                    <div style="font-size: 12px; opacity: 0.8;">Общая стоимость портфеля</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- История -->
+        <div id="history" class="tab-content">
+            <div class="exchange-content">
+                <h3 style="margin: 0 0 15px 0; font-size: 18px;">📜 История транзакций</h3>
+                <div id="trade-history">
+                    <!-- История будет загружена динамически -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Игровые данные
+        let gameData = {
+            coins: 0,
+            clicks: 0
+        };
+
+        // Загружаем игровые данные
+        function loadGameData() {
+            const savedData = localStorage.getItem('magnumCoinsData');
+            if (savedData) {
+                gameData = JSON.parse(savedData);
+                updateBalance();
+            }
+        }
+
+        // Обновляем баланс
+        function updateBalance() {
+            document.getElementById('userBalance').textContent = `${gameData.coins.toLocaleString()} монет`;
+        }
+
+        // Переключение табов
+        function switchTab(tabName) {
+            // Убираем активный класс со всех табов
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Добавляем активный класс к выбранному табу
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+
+            // Загружаем данные для активного таба
+            if (tabName === 'portfolio') {
+                loadPortfolio();
+            } else if (tabName === 'history') {
+                loadTradeHistory();
+            }
+        }
+
+        // Выполнение торговой операции
+        function executeTrade(action) {
+            const currency = document.getElementById('tradeCurrency').value;
+            const amount = parseInt(document.getElementById('tradeAmount').value);
+            
+            if (!amount || amount <= 0) {
+                console.log('❌ Укажите количество для торговли');
+                return;
+            }
+            
+            const rates = {
+                crystal: 100,
+                star: 500,
+                fire: 250,
+                energy: 150
+            };
+            
+            const rate = rates[currency];
+            const totalCost = amount * rate;
+            
+            if (action === 'buy') {
+                if (gameData.coins < totalCost) {
+                    console.log('❌ Недостаточно монет для покупки');
+                    return;
+                }
+                
+                // Покупаем валюту
+                gameData.coins -= totalCost;
+                addToPortfolio(currency, amount);
+                addToHistory(action, currency, amount, totalCost);
+                
+                console.log(`✅ Куплено ${amount} ${currency} за ${totalCost} монет`);
+            } else {
+                // Продаем валюту
+                const portfolio = getPortfolio();
+                if (!portfolio[currency] || portfolio[currency] < amount) {
+                    console.log('❌ Недостаточно валюты для продажи');
+                    return;
+                }
+                
+                gameData.coins += totalCost;
+                removeFromPortfolio(currency, amount);
+                addToHistory(action, currency, amount, totalCost);
+                
+                console.log(`✅ Продано ${amount} ${currency} за ${totalCost} монет`);
+            }
+            
+            // Сохраняем данные и обновляем отображение
+            saveGameData();
+            updateBalance();
+            
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        }
+
+        // Сохранение игровых данных
+        function saveGameData() {
+            localStorage.setItem('magnumCoinsData', JSON.stringify(gameData));
+        }
+
+        // Работа с портфелем
+        function getPortfolio() {
+            const portfolio = localStorage.getItem('magnumPortfolio');
+            return portfolio ? JSON.parse(portfolio) : {};
+        }
+
+        function addToPortfolio(currency, amount) {
+            const portfolio = getPortfolio();
+            portfolio[currency] = (portfolio[currency] || 0) + amount;
+            localStorage.setItem('magnumPortfolio', JSON.stringify(portfolio));
+        }
+
+        function removeFromPortfolio(currency, amount) {
+            const portfolio = getPortfolio();
+            portfolio[currency] = Math.max(0, (portfolio[currency] || 0) - amount);
+            localStorage.setItem('magnumPortfolio', JSON.stringify(portfolio));
+        }
+
+        function loadPortfolio() {
+            const portfolio = getPortfolio();
+            const portfolioContainer = document.getElementById('portfolio-items');
+            
+            const currencies = [
+                { key: 'crystal', name: '💎 Кристаллы', rate: 100 },
+                { key: 'star', name: '🌟 Звезды', rate: 500 },
+                { key: 'fire', name: '🔥 Огонь', rate: 250 },
+                { key: 'energy', name: '⚡ Энергия', rate: 150 }
+            ];
+            
+            let totalValue = 0;
+            
+            portfolioContainer.innerHTML = currencies.map(currency => {
+                const amount = portfolio[currency.key] || 0;
+                const value = amount * currency.rate;
+                totalValue += value;
+                const change = Math.random() > 0.5 ? '+' + (Math.random() * 5).toFixed(1) : '-' + (Math.random() * 3).toFixed(1);
+                const changeColor = change.startsWith('+') ? '#4CAF50' : '#ff6b6b';
+                
+                return `
+                    <div class="portfolio-item">
+                        <div>
+                            <div style="font-size: 16px; font-weight: bold;">${currency.name}</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Количество: ${amount}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 14px; font-weight: bold;">${value.toLocaleString()} монет</div>
+                            <div style="font-size: 10px; color: ${changeColor};">${change}%</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('totalValue').textContent = `${totalValue.toLocaleString()} монет`;
+        }
+
+        // Работа с историей транзакций
+        function getTradeHistory() {
+            const history = localStorage.getItem('magnumTradeHistory');
+            return history ? JSON.parse(history) : [];
+        }
+
+        function addToHistory(action, currency, amount, cost) {
+            const history = getTradeHistory();
+            const transaction = {
+                id: Date.now(),
+                action: action,
+                currency: currency,
+                amount: amount,
+                cost: cost,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            history.unshift(transaction);
+            
+            // Ограничиваем историю 50 последними транзакциями
+            if (history.length > 50) {
+                history.splice(50);
+            }
+            
+            localStorage.setItem('magnumTradeHistory', JSON.stringify(history));
+        }
+
+        function loadTradeHistory() {
+            const history = getTradeHistory();
+            const historyContainer = document.getElementById('trade-history');
+            
+            if (history.length === 0) {
+                historyContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📜</div>
+                        <div>История транзакций пуста</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Начните торговать, чтобы увидеть историю</div>
+                    </div>
+                `;
+            } else {
+                historyContainer.innerHTML = history.map(transaction => {
+                    const actionText = transaction.action === 'buy' ? '📈 Куплено' : '📉 Продано';
+                    const actionColor = transaction.action === 'buy' ? '#4CAF50' : '#ff6b6b';
+                    const currencyNames = {
+                        crystal: '💎 Кристаллы',
+                        star: '🌟 Звезды',
+                        fire: '🔥 Огонь',
+                        energy: '⚡ Энергия'
+                    };
+                    
+                    return `
+                        <div class="history-item">
+                            <div>
+                                <div style="font-size: 14px; font-weight: bold; color: ${actionColor};">${actionText}</div>
+                                <div style="font-size: 12px; opacity: 0.8;">${currencyNames[transaction.currency]} x${transaction.amount}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 14px; font-weight: bold;">${transaction.cost} монет</div>
+                                <div style="font-size: 10px; opacity: 0.6;">${transaction.timestamp}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Возврат в главное меню
+        function backToMain() {
+            sessionStorage.setItem('returningFromPage', 'true');
+            window.location.href = '/';
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            // Загружаем данные
+            loadGameData();
+            
+            // Обработчики
+            document.getElementById('backBtn').addEventListener('click', backToMain);
+            
+            // Обработчики табов
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchTab(tab.dataset.tab);
+                });
+            });
+            
+            // Загружаем начальные данные
+            loadPortfolio();
+            loadTradeHistory();
+        });
+    </script>
+</body>
+</html>

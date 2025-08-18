@@ -38,6 +38,11 @@ app.get('/leaderboard.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
 });
 
+// Страница биржи
+app.get('/exchange.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'exchange.html'));
+});
+
 // Тестовая страница рекламы
 app.get('/test-ad.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'test-ad.html'));
