@@ -17,8 +17,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: -webkit-linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
-            background: linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
+            background: linear-gradient(135deg, #1f2c51 0%, #2a3a6b 25%, #1a1a2e 50%, #16213e 75%, #000000 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -31,17 +30,17 @@
         }
 
         .balance-block {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
-            padding: 16px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+            border-radius: 18px;
+            padding: 18px;
             width: 180px;
-            box-shadow: 0 6px 24px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4);
             text-align: center;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             margin: 0;
         }
 
@@ -96,14 +95,15 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(31, 44, 81, 0.95);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 20px;
+            background: linear-gradient(90deg, rgba(31, 44, 81, 0.85), rgba(0, 0, 0, 0.7));
+            backdrop-filter: blur(25px);
+            border-bottom: none;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 999;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
         }
 
         .top-panel-left {
@@ -118,8 +118,9 @@
         }
 
         .main-content {
-            margin-top: 70px;
+            margin-top: 80px;
             padding: 20px;
+            background: transparent;
         }
 
         @keyframes gradientShift {
@@ -577,24 +578,26 @@
 
         /* Кнопка настроек */
         .setting-btn {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 4px;
-            background-color: rgb(129, 110, 216);
-            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(129, 110, 216, 0.9), rgba(102, 126, 234, 0.9));
+            border-radius: 12px;
             cursor: pointer;
-            border: none;
-            box-shadow: 0px 0px 0px 2px rgb(212, 209, 255);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(129, 110, 216, 0.4);
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .setting-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0px 0px 0px 3px rgb(212, 209, 255);
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(129, 110, 216, 0.6);
+            background: linear-gradient(135deg, rgba(129, 110, 216, 1), rgba(102, 126, 234, 1));
         }
 
         .bar {
