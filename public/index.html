@@ -96,6 +96,36 @@
             right: 0;
             padding: 15px 20px;
             z-index: 999;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sound-btn {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(129, 110, 216, 0.9), rgba(102, 126, 234, 0.9));
+            border-radius: 12px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(129, 110, 216, 0.4);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 18px;
+            color: white;
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(129, 110, 216, 0.6);
+            background: linear-gradient(135deg, rgba(129, 110, 216, 1), rgba(102, 126, 234, 1));
+        }
+
+        .sound-btn.muted {
+            opacity: 0.6;
         }
 
         .main-content {
@@ -858,6 +888,19 @@
     </style>
 </head>
 <body>
+    <!-- Аудио элементы -->
+    <audio id="bgMusic" loop>
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjIwLjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBtbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjM1AAAAAAAAAAAAAAAAJAYAAAAAAAAABW4A" type="audio/mpeg">
+    </audio>
+    
+    <audio id="clickSound">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjIwLjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBtbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjM1AAAAAAAAAAAAAAAAJAYAAAAAAAAABW4A" type="audio/mpeg">
+    </audio>
+    
+    <audio id="coinSound">
+        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjIwLjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBtbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjM1AAAAAAAAAAAAAAAAJAYAAAAAAAAABW4A" type="audio/mpeg">
+    </audio>
+
     <!-- Окно загрузки -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-title">Magnum Coins</div>
@@ -885,8 +928,11 @@
         <div class="loading-text" id="loadingText">Загрузка...</div>
     </div>
 
-    <!-- Кнопка настроек в правом верхнем углу -->
+    <!-- Кнопки управления в правом верхнем углу -->
     <div class="top-panel">
+        <button class="sound-btn" id="soundBtn" title="Звук">
+            🔊
+        </button>
         <button class="setting-btn" id="settingsBtn">
             <span class="bar bar1"></span>
             <span class="bar bar2"></span>
@@ -1053,7 +1099,11 @@
             vibration: true,
             animations: true,
             animationSpeed: 5,
-            coinsPerClick: 1
+            coinsPerClick: 1,
+            soundEnabled: true,
+            musicEnabled: true,
+            soundVolume: 0.7,
+            musicVolume: 0.5
         };
 
         // Настройки рекламы Monetag
@@ -1145,6 +1195,56 @@
             }
         }
 
+        // Функции управления звуком
+        function playSound(soundId) {
+            if (gameSettings.soundEnabled) {
+                const sound = document.getElementById(soundId);
+                if (sound) {
+                    sound.volume = gameSettings.soundVolume;
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.log('Ошибка воспроизведения звука:', e));
+                }
+            }
+        }
+
+        function toggleSound() {
+            gameSettings.soundEnabled = !gameSettings.soundEnabled;
+            gameSettings.musicEnabled = gameSettings.soundEnabled;
+            
+            const soundBtn = document.getElementById('soundBtn');
+            const bgMusic = document.getElementById('bgMusic');
+            
+            if (soundBtn) {
+                soundBtn.textContent = gameSettings.soundEnabled ? '🔊' : '🔇';
+                soundBtn.classList.toggle('muted', !gameSettings.soundEnabled);
+            }
+            
+            if (bgMusic) {
+                if (gameSettings.musicEnabled) {
+                    bgMusic.volume = gameSettings.musicVolume;
+                    bgMusic.play().catch(e => console.log('Ошибка воспроизведения музыки:', e));
+                } else {
+                    bgMusic.pause();
+                }
+            }
+            
+            saveGameData();
+            
+            if (gameSettings.vibration && navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+        }
+
+        function startBackgroundMusic() {
+            if (gameSettings.musicEnabled) {
+                const bgMusic = document.getElementById('bgMusic');
+                if (bgMusic) {
+                    bgMusic.volume = gameSettings.musicVolume;
+                    bgMusic.play().catch(e => console.log('Ошибка воспроизведения музыки:', e));
+                }
+            }
+        }
+
         // Обработчик клика
         function handleClick() {
             try {
@@ -1161,6 +1261,9 @@
                 gameData.coins += gameSettings.coinsPerClick;
                 gameData.clicks++;
                 gameData.energy--; // Тратим 1 энергию за клик
+                
+                // Воспроизводим звук клика
+                playSound('clickSound');
                 
                 // Анимация монеты уже встроена в CSS
                 
@@ -1214,6 +1317,9 @@
                 // Обновляем отображение
                 updateDisplay();
                 saveGameData();
+                
+                // Звук покупки
+                playSound('coinSound');
                 
                 // Вибрация (без всплывающих сообщений)
                 if (gameSettings.vibration && navigator.vibrate) {
@@ -1527,6 +1633,20 @@
             
             // Загружаем данные игры
             loadGameData();
+            
+            // Инициализируем звук
+            const soundBtn = document.getElementById('soundBtn');
+            if (soundBtn) {
+                soundBtn.textContent = gameSettings.soundEnabled ? '🔊' : '🔇';
+                soundBtn.classList.toggle('muted', !gameSettings.soundEnabled);
+                soundBtn.addEventListener('click', toggleSound);
+                console.log('Кнопка звука привязана');
+            } else {
+                console.error('Кнопка звука не найдена!');
+            }
+            
+            // Запускаем фоновую музыку
+            setTimeout(startBackgroundMusic, 1000);
             
             // Привязываем обработчик клика
             const clickButton = document.getElementById('clickButton');
