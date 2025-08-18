@@ -23,6 +23,11 @@ app.get('/shop.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'shop.html'));
 });
 
+// Страница заданий
+app.get('/tasks.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tasks.html'));
+});
+
 // Тестовая страница рекламы
 app.get('/test-ad.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'test-ad.html'));

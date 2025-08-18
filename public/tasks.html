@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Задания - Magnum Coins</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Monetag SDK -->
+    <script src='//libtl.com/sdk.js' data-zone='9731351' data-sdk='show_9731351'></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(at 47.966219997892225% 59.17791208933168%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%), radial-gradient(at 47.64933301345313% 82.3942086004094%, hsla(0, 6.25%, 18.823529411764707%, 1) 0%, hsla(0, 6.25%, 18.823529411764707%, 0) 100%), radial-gradient(at 95.4924348957064% 30.991218769813667%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 1) 0%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 0) 100%), radial-gradient(at 33.063428122547755% 63.915493762477546%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 1) 0%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 0) 100%), radial-gradient(at 15.148471558648247% 8.345630190076857%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%);
+            background-size: 400%;
+            animation: gradient 10s infinite linear;
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 80% 0%; }
+            50% { background-position: 20% 100%; }
+            100% { background-position: 80% 0%; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .task-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .task-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .task-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .task-reward {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .task-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .task-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .task-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .dev-task {
+            background: rgba(255, 193, 7, 0.2);
+            border-color: #ffc107;
+        }
+
+        .dev-task .task-button {
+            background: linear-gradient(45deg, #ffc107, #ff9800);
+        }
+
+        .cooldown-info {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cooldown-info h3 {
+            color: #ffc107;
+            margin-bottom: 10px;
+        }
+
+        .cooldown-info p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-panel h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .task-item {
+                padding: 20px;
+            }
+            
+            .task-title {
+                font-size: 1.1rem;
+            }
+            
+            .task-button {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">←</button>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Задания</h1>
+            <p>Выполняйте задания и получайте награды!</p>
+        </div>
+
+        <!-- Панель статистики -->
+        <div class="stats-panel">
+            <h3>📊 Ваша статистика</h3>
+            <div class="stat-row">
+                <span>💰 Монет:</span>
+                <span id="coinsDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>📺 Реклам просмотрено:</span>
+                <span id="adsWatchedDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>✅ Заданий выполнено:</span>
+                <span id="tasksCompletedDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>⏰ Последняя реклама:</span>
+                <span id="lastAdDisplay">Никогда</span>
+            </div>
+        </div>
+
+        <!-- Информация о кулдауне -->
+        <div id="cooldownInfo" class="cooldown-info" style="display: none;">
+            <h3>⏰ Время ожидания</h3>
+            <p id="cooldownText">Подождите перед следующим просмотром рекламы</p>
+        </div>
+
+        <!-- Задания -->
+        <div class="task-item">
+            <div class="task-header">
+                <div class="task-icon">📺</div>
+                <div class="task-title">Смотреть рекламу</div>
+            </div>
+            <div class="task-description">
+                Посмотрите рекламу и получите 50 монет! Реклама поможет вам быстро накопить монеты для покупки улучшений.
+            </div>
+            <div class="task-reward">💰 Награда: 50 монет</div>
+            <button class="task-button" id="watchAdBtn">Смотреть рекламу</button>
+        </div>
+
+        <div class="task-item">
+            <div class="task-header">
+                <div class="task-icon">🎮</div>
+                <div class="task-title">Играть в игру</div>
+            </div>
+            <div class="task-description">
+                Завершите мини-игру и получите 100 монет! Увлекательные игры для дополнительного заработка.
+            </div>
+            <div class="task-reward">💰 Награда: 100 монет</div>
+            <button class="task-button" id="playGameBtn">Играть</button>
+        </div>
+
+        <div class="task-item">
+            <div class="task-header">
+                <div class="task-icon">📱</div>
+                <div class="task-title">Установить приложение</div>
+            </div>
+            <div class="task-description">
+                Установите приложение и получите 200 монет! Отличный способ заработать много монет сразу.
+            </div>
+            <div class="task-reward">💰 Награда: 200 монет</div>
+            <button class="task-button" id="installAppBtn">Установить</button>
+        </div>
+
+        <!-- Кнопка для сброса кулдауна (только для разработки) -->
+        <div class="task-item dev-task">
+            <div class="task-header">
+                <div class="task-icon">🔄</div>
+                <div class="task-title">Сбросить кулдаун рекламы</div>
+            </div>
+            <div class="task-description">
+                Сбросить время ожидания для просмотра рекламы. Эта функция доступна только для тестирования.
+            </div>
+            <div class="task-reward">⚠️ Только для разработки</div>
+            <button class="task-button" id="resetCooldownBtn">Сбросить</button>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Игровые данные
+        let gameData = {
+            coins: 0,
+            clicks: 0,
+            coinsPerClick: 1,
+            tasksCompleted: 0,
+            adsWatched: 0,
+            lastAdWatch: 0
+        };
+
+        // Настройки рекламы Monetag
+        const AD_CONFIG = {
+            zoneId: '9731351',
+            rewardAmount: 50,
+            cooldownMinutes: 5,
+            adDuration: 30
+        };
+
+        // Загружаем сохраненные данные
+        function loadGameData() {
+            const saved = localStorage.getItem('magnumCoinsData');
+            if (saved) {
+                gameData = JSON.parse(saved);
+                updateDisplay();
+            }
+        }
+
+        // Сохраняем данные
+        function saveGameData() {
+            localStorage.setItem('magnumCoinsData', JSON.stringify(gameData));
+        }
+
+        // Обновляем отображение
+        function updateDisplay() {
+            document.getElementById('coinsDisplay').textContent = gameData.coins.toLocaleString();
+            document.getElementById('adsWatchedDisplay').textContent = gameData.adsWatched;
+            document.getElementById('tasksCompletedDisplay').textContent = gameData.tasksCompleted;
+            
+            // Время последней рекламы
+            if (gameData.lastAdWatch) {
+                const timeSinceLastAd = Math.floor((Date.now() - gameData.lastAdWatch) / 1000 / 60);
+                document.getElementById('lastAdDisplay').textContent = `${timeSinceLastAd} мин назад`;
+            } else {
+                document.getElementById('lastAdDisplay').textContent = 'Никогда';
+            }
+
+            // Проверяем кулдаун
+            checkCooldown();
+        }
+
+        // Проверяем кулдаун рекламы
+        function checkCooldown() {
+            const cooldownInfo = document.getElementById('cooldownInfo');
+            const watchAdBtn = document.getElementById('watchAdBtn');
+            
+            if (!canWatchAd()) {
+                const now = Date.now();
+                const cooldownMs = AD_CONFIG.cooldownMinutes * 60 * 1000;
+                let remainingTime = 0;
+                
+                if (gameData.lastAdWatch && typeof gameData.lastAdWatch === 'number') {
+                    remainingTime = Math.ceil((cooldownMs - (now - gameData.lastAdWatch)) / 1000 / 60);
+                    remainingTime = Math.max(0, remainingTime);
+                }
+                
+                cooldownInfo.style.display = 'block';
+                document.getElementById('cooldownText').textContent = `Подождите еще ${remainingTime} минут перед следующим просмотром рекламы`;
+                watchAdBtn.disabled = true;
+                watchAdBtn.textContent = 'Подождите...';
+            } else {
+                cooldownInfo.style.display = 'none';
+                watchAdBtn.disabled = false;
+                watchAdBtn.textContent = 'Смотреть рекламу';
+            }
+        }
+
+        // Проверяем, можно ли смотреть рекламу
+        function canWatchAd() {
+            const now = Date.now();
+            const cooldownMs = AD_CONFIG.cooldownMinutes * 60 * 1000;
+            
+            if (!gameData.lastAdWatch || typeof gameData.lastAdWatch !== 'number') {
+                return true;
+            }
+            
+            return (now - gameData.lastAdWatch) >= cooldownMs;
+        }
+
+        // Обработчик просмотра рекламы
+        function handleWatchAd() {
+            if (!canWatchAd()) {
+                return;
+            }
+            
+            console.log('🔍 Проверка SDK Monetag...');
+            console.log('window.show_9731351:', typeof window.show_9731351);
+            console.log('Текущий домен:', window.location.hostname);
+            
+            if (typeof window.show_9731351 !== 'undefined') {
+                console.log('✅ SDK загружен, запускаем рекламу...');
+                try {
+                    window.show_9731351().then(() => {
+                        console.log('✅ Реклама завершена');
+                        completeAdWatch();
+                    }).catch((error) => {
+                        console.error('❌ Ошибка рекламы:', error);
+                        alert('❌ Ошибка загрузки рекламы. Попробуйте позже.');
+                    });
+                } catch (error) {
+                    console.error('❌ Ошибка при показе рекламы:', error);
+                    alert('❌ Ошибка при показе рекламы. Попробуйте позже.');
+                }
+            } else {
+                console.log('⚠️ SDK не загружен');
+                alert('⚠️ Реклама временно недоступна. Попробуйте позже.');
+            }
+        }
+
+        // Завершение просмотра рекламы
+        function completeAdWatch() {
+            gameData.coins += AD_CONFIG.rewardAmount;
+            gameData.adsWatched++;
+            gameData.tasksCompleted++;
+            gameData.lastAdWatch = Date.now();
+            
+            updateDisplay();
+            saveGameData();
+            
+            alert(`🎉 Реклама завершена!\n\n💰 Получено: ${AD_CONFIG.rewardAmount} монет\n📺 Всего просмотрено: ${gameData.adsWatched}`);
+        }
+
+        // Сброс кулдауна (для разработки)
+        function resetAdCooldown() {
+            gameData.lastAdWatch = 0;
+            saveGameData();
+            updateDisplay();
+            alert('🔄 Кулдаун рекламы сброшен! Теперь можно смотреть рекламу.');
+        }
+
+        // Обработчики других заданий
+        function handlePlayGame() {
+            alert('🎮 Мини-игра\n\nСкоро здесь будет мини-игра для заработка монет!');
+        }
+
+        function handleInstallApp() {
+            alert('📱 Установка приложения\n\nСкоро здесь будут предложения по установке приложений!');
+        }
+
+        // Возврат назад
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Страница заданий загружена');
+            
+            // Загружаем данные
+            loadGameData();
+            
+            // Привязываем обработчики
+            document.getElementById('watchAdBtn').addEventListener('click', handleWatchAd);
+            document.getElementById('playGameBtn').addEventListener('click', handlePlayGame);
+            document.getElementById('installAppBtn').addEventListener('click', handleInstallApp);
+            document.getElementById('resetCooldownBtn').addEventListener('click', resetAdCooldown);
+            
+            // Проверяем SDK через 2 секунды
+            setTimeout(() => {
+                console.log('🔍 Проверка SDK Monetag при загрузке...');
+                console.log('window.show_9731351:', typeof window.show_9731351);
+                if (typeof window.show_9731351 === 'undefined') {
+                    console.warn('⚠️ SDK Monetag не загружен!');
+                } else {
+                    console.log('✅ SDK Monetag загружен успешно!');
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

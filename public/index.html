@@ -696,53 +696,7 @@
         </button>
     </div>
 
-    <!-- Модальное окно заданий -->
-    <div id="tasksModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>🎯 Задания</h2>
-                <span class="close" id="closeTasksModal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="task-item">
-                    <div class="task-info">
-                        <h3>📺 Смотреть рекламу</h3>
-                        <p>Посмотрите рекламу и получите 50 монет!</p>
-                        <div class="reward">💰 Награда: 50 монет</div>
-                    </div>
-                    <button class="task-button" id="watchAdBtn">Смотреть рекламу</button>
-                </div>
-                
-                <div class="task-item">
-                    <div class="task-info">
-                        <h3>🎮 Играть в игру</h3>
-                        <p>Завершите мини-игру и получите 100 монет!</p>
-                        <div class="reward">💰 Награда: 100 монет</div>
-                    </div>
-                    <button class="task-button" id="playGameBtn">Играть</button>
-                </div>
-                
-                                 <div class="task-item">
-                     <div class="task-info">
-                         <h3>📱 Установить приложение</h3>
-                         <p>Установите приложение и получите 200 монет!</p>
-                         <div class="reward">💰 Награда: 200 монет</div>
-                     </div>
-                     <button class="task-button" id="installAppBtn">Установить</button>
-                 </div>
-                 
-                 <!-- Кнопка для сброса кулдауна (только для разработки) -->
-                 <div class="task-item" style="background: rgba(255, 193, 7, 0.2); border-color: #ffc107;">
-                     <div class="task-info">
-                         <h3>🔄 Сбросить кулдаун рекламы</h3>
-                         <p>Сбросить время ожидания для просмотра рекламы (только для тестирования)</p>
-                         <div class="reward">⚠️ Только для разработки</div>
-                     </div>
-                     <button class="task-button" id="resetCooldownBtn" style="background: linear-gradient(45deg, #ffc107, #ff9800);">Сбросить</button>
-                 </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Модальное окно рекламы -->
     <div id="adModal" class="modal" style="display: none;">
@@ -1026,13 +980,12 @@
         }
 
         // Функции для заданий
-        function openTasksModal() {
+        function openTasksPage() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            document.getElementById('tasksModal').style.display = 'block';
-        }
-
-        function closeTasksModal() {
-            document.getElementById('tasksModal').style.display = 'none';
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
+            // Переходим на страницу заданий
+            window.location.href = '/tasks.html';
         }
 
         function openAdModal() {
@@ -1212,23 +1165,7 @@
             openAdModal();
         }
 
-        function handlePlayGame() {
-            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            alert('🎮 Мини-игра\n\nСкоро здесь будет мини-игра для заработка монет!');
-        }
 
-        function handleInstallApp() {
-            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            alert('📱 Установка приложения\n\nСкоро здесь будут предложения по установке приложений!');
-        }
-
-        // Функция для сброса кулдауна рекламы (для тестирования)
-        function resetAdCooldown() {
-            gameData.lastAdWatch = 0;
-            saveGameData();
-            console.log('🔄 Кулдаун рекламы сброшен');
-            alert('🔄 Кулдаун рекламы сброшен! Теперь можно смотреть рекламу.');
-        }
 
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
@@ -1318,59 +1255,29 @@
                 console.error('Кнопка лидеров не найдена!');
             }
             
-            // Обработчики для заданий
-            const tasksBtn = document.getElementById('tasksBtn');
-            if (tasksBtn) {
-                tasksBtn.addEventListener('click', openTasksModal);
-                console.log('Кнопка заданий привязана');
-            } else {
-                console.error('Кнопка заданий не найдена!');
-            }
-
-            // Обработчики модальных окон
-            const closeTasksModal = document.getElementById('closeTasksModal');
-            if (closeTasksModal) {
-                closeTasksModal.addEventListener('click', closeTasksModal);
-            }
-
-            const closeAdModal = document.getElementById('closeAdModal');
-            if (closeAdModal) {
-                closeAdModal.addEventListener('click', closeAdModal);
-            }
-
-            // Обработчики кнопок заданий
-            const watchAdBtn = document.getElementById('watchAdBtn');
-            if (watchAdBtn) {
-                watchAdBtn.addEventListener('click', handleWatchAd);
-            }
-
-            const playGameBtn = document.getElementById('playGameBtn');
-            if (playGameBtn) {
-                playGameBtn.addEventListener('click', handlePlayGame);
-            }
-
-                         const installAppBtn = document.getElementById('installAppBtn');
-             if (installAppBtn) {
-                 installAppBtn.addEventListener('click', handleInstallApp);
+                         // Обработчики для заданий
+             const tasksBtn = document.getElementById('tasksBtn');
+             if (tasksBtn) {
+                 tasksBtn.addEventListener('click', openTasksPage);
+                 console.log('Кнопка заданий привязана');
+             } else {
+                 console.error('Кнопка заданий не найдена!');
              }
 
-             const resetCooldownBtn = document.getElementById('resetCooldownBtn');
-             if (resetCooldownBtn) {
-                 resetCooldownBtn.addEventListener('click', resetAdCooldown);
+                         // Обработчики модального окна рекламы
+             const closeAdModal = document.getElementById('closeAdModal');
+             if (closeAdModal) {
+                 closeAdModal.addEventListener('click', closeAdModal);
              }
 
-            // Закрытие модальных окон при клике вне их
-            window.addEventListener('click', (event) => {
-                const tasksModal = document.getElementById('tasksModal');
-                const adModal = document.getElementById('adModal');
-                
-                if (event.target === tasksModal) {
-                    closeTasksModal();
-                }
-                if (event.target === adModal) {
-                    closeAdModal();
-                }
-            });
+             // Закрытие модального окна рекламы при клике вне его
+             window.addEventListener('click', (event) => {
+                 const adModal = document.getElementById('adModal');
+                 
+                 if (event.target === adModal) {
+                     closeAdModal();
+                 }
+             });
             
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
