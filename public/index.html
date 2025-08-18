@@ -29,6 +29,32 @@
             overflow: hidden;
         }
 
+        .balance-block {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 16px;
+            width: 220px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            border: 1px solid #2a2a2a;
+            margin: 0 auto 20px auto;
+        }
+
+        .balance-label {
+            font-size: 12px;
+            color: #888888;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             25% { background-position: 100% 50%; }
@@ -652,11 +678,10 @@
     </button>
 
     <div class="container">
-        <h1>🎮 Magnum Coins</h1>
-        
-        <div class="balance">
-            <div id="coins">0</div>
-            <div style="font-size: 1rem; opacity: 0.8;">монет</div>
+        <!-- Новый блок баланса в верхней части -->
+        <div class="balance-block">
+            <span class="balance-label">Магнум коин</span>
+            <div class="balance-amount" id="coins">0</div>
         </div>
         
         <button class="click-button" id="clickButton">
@@ -664,14 +689,6 @@
         </button>
         
         <div class="stats">
-            <div class="stat-item">
-                <span>Кликов:</span>
-                <span id="clicks">0</span>
-            </div>
-            <div class="stat-item">
-                <span>Монет за клик:</span>
-                <span id="coinsPerClick">1</span>
-            </div>
             <div class="stat-item">
                 <span>⚡ Энергия:</span>
                 <span id="energy">1000</span>
@@ -892,13 +909,9 @@
         function updateDisplay() {
             try {
                 const coinsElement = document.getElementById('coins');
-                const clicksElement = document.getElementById('clicks');
-                const coinsPerClickElement = document.getElementById('coinsPerClick');
                 const energyElement = document.getElementById('energy');
                 
                 if (coinsElement) coinsElement.textContent = gameData.coins.toLocaleString();
-                if (clicksElement) clicksElement.textContent = gameData.clicks.toLocaleString();
-                if (coinsPerClickElement) coinsPerClickElement.textContent = gameData.coinsPerClick;
                 if (energyElement) energyElement.textContent = gameData.energy.toLocaleString();
             } catch (error) {
                 console.error('Ошибка при обновлении отображения:', error);

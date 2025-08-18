@@ -253,6 +253,32 @@
         .negative {
             color: #ff6b6b;
         }
+
+        .balance-block {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 16px;
+            width: 220px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            border: 1px solid #2a2a2a;
+            margin: 0 auto 20px auto;
+        }
+
+        .balance-label {
+            font-size: 12px;
+            color: #888888;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -271,9 +297,9 @@
         </div>
 
         <!-- Баланс пользователя -->
-        <div class="balance-card">
-            <div style="font-size: 24px; margin-bottom: 10px;">💰</div>
-            <div style="font-size: 18px; font-weight: bold;" id="userBalance">0 монет</div>
+        <div class="balance-block">
+            <span class="balance-label">Магнум коин</span>
+            <div class="balance-amount" id="userBalance">0</div>
         </div>
 
         <!-- Табы -->
@@ -394,7 +420,7 @@
 
         // Обновляем баланс
         function updateBalance() {
-            document.getElementById('userBalance').textContent = `${gameData.coins.toLocaleString()} монет`;
+            document.getElementById('userBalance').textContent = gameData.coins.toLocaleString();
             
             // Обновляем отображение энергии в портфеле если он открыт
             if (document.getElementById('portfolio').classList.contains('active')) {
