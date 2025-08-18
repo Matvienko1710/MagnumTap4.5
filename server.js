@@ -43,6 +43,11 @@ app.get('/exchange.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'exchange.html'));
 });
 
+// Страница улучшений
+app.get('/upgrades.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'upgrades.html'));
+});
+
 // Тестовая страница рекламы
 app.get('/test-ad.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'test-ad.html'));
