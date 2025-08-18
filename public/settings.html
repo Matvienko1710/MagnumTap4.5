@@ -284,6 +284,29 @@
                 </div>
             </div>
             
+            <!-- Админ панель (скрыта по умолчанию) -->
+            <div class="setting-item" id="adminPanel" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
+                <h3 style="margin: 0 0 15px 0; font-size: 18px; text-align: center; color: #ff6b6b;">🔧 Админ панель</h3>
+                
+                <div style="background: rgba(255,107,107,0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #ff6b6b;">👤 Информация о пользователе</h4>
+                    <div style="font-size: 12px; line-height: 1.6;">
+                        <div>ID пользователя: <strong id="adminUserId">-</strong></div>
+                        <div>Имя: <strong id="adminUserName">-</strong></div>
+                        <div>Username: <strong id="adminUserUsername">-</strong></div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="admin-btn" id="addCoinsBtn" style="background: linear-gradient(45deg, #4CAF50, #45a049); border: none; border-radius: 10px; padding: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 12px;">
+                        💰 +1000 монет
+                    </button>
+                    <button class="admin-btn" id="resetAllBtn" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); border: none; border-radius: 10px; padding: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 12px;">
+                        🔄 Сброс всех
+                    </button>
+                </div>
+            </div>
+            
             <button class="reset-btn" id="resetBtn">🔄 Сбросить прогресс</button>
         </div>
     </div>
@@ -355,6 +378,71 @@
             }
         }
 
+        // Проверка на админа
+        function checkAdmin() {
+            try {
+                const userId = tg.initDataUnsafe.user.id;
+                const userName = tg.initDataUnsafe.user.first_name;
+                const userUsername = tg.initDataUnsafe.user.username;
+                
+                // Список админов (замените на ваши ID)
+                const adminIds = [
+                    // Добавьте сюда ID администраторов
+                    // Например: 123456789, 987654321
+                ];
+                
+                if (adminIds.includes(userId)) {
+                    // Показываем админ панель
+                    document.getElementById('adminPanel').style.display = 'block';
+                    
+                    // Заполняем информацию о пользователе
+                    document.getElementById('adminUserId').textContent = userId;
+                    document.getElementById('adminUserName').textContent = userName || 'Не указано';
+                    document.getElementById('adminUserUsername').textContent = userUsername ? '@' + userUsername : 'Не указано';
+                    
+                    console.log('🔧 Админ панель активирована для пользователя:', userId);
+                } else {
+                    console.log('👤 Пользователь не является администратором:', userId);
+                }
+            } catch (error) {
+                console.error('❌ Ошибка при проверке админа:', error);
+            }
+        }
+
+        // Функции админ панели
+        function addCoins() {
+            const savedData = localStorage.getItem('magnumCoinsData');
+            if (savedData) {
+                const gameData = JSON.parse(savedData);
+                gameData.coins += 1000;
+                localStorage.setItem('magnumCoinsData', JSON.stringify(gameData));
+                updateStats();
+                
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                console.log('💰 Добавлено 1000 монет');
+            }
+        }
+
+        function resetAllUsers() {
+            // Сброс всех данных пользователей
+            localStorage.clear();
+            
+            // Сбрасываем настройки
+            gameSettings = {
+                sound: true,
+                vibration: true,
+                animations: true,
+                animationSpeed: 5,
+                coinsPerClick: 1
+            };
+            
+            updateSettingsDisplay();
+            saveSettings();
+            
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            console.log('🔄 Сброшены данные всех пользователей');
+        }
+
         // Обновление значения скорости
         function updateSpeedValue() {
             const speed = gameSettings.animationSpeed;
@@ -403,9 +491,23 @@
             // Загружаем настройки
             loadSettings();
             
+            // Проверяем админа
+            checkAdmin();
+            
             // Обработчики
             document.getElementById('backBtn').addEventListener('click', backToMain);
             document.getElementById('resetBtn').addEventListener('click', resetProgress);
+            
+            // Обработчики админ панели
+            const addCoinsBtn = document.getElementById('addCoinsBtn');
+            if (addCoinsBtn) {
+                addCoinsBtn.addEventListener('click', addCoins);
+            }
+            
+            const resetAllBtn = document.getElementById('resetAllBtn');
+            if (resetAllBtn) {
+                resetAllBtn.addEventListener('click', resetAllUsers);
+            }
             
             // Переключатели
             document.getElementById('soundToggle').addEventListener('click', () => {
