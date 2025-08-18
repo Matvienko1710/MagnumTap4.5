@@ -96,36 +96,6 @@
             right: 0;
             padding: 15px 20px;
             z-index: 999;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .sound-btn {
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(129, 110, 216, 0.9), rgba(102, 126, 234, 0.9));
-            border-radius: 12px;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(129, 110, 216, 0.4);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            font-size: 18px;
-            color: white;
-        }
-
-        .sound-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(129, 110, 216, 0.6);
-            background: linear-gradient(135deg, rgba(129, 110, 216, 1), rgba(102, 126, 234, 1));
-        }
-
-        .sound-btn.muted {
-            opacity: 0.6;
         }
 
         .main-content {
@@ -647,67 +617,91 @@
 
 
 
-        /* Панель кнопок внизу */
-        .button-container {
-            display: flex;
-            background: -webkit-linear-gradient(90deg,#29482a,#4e8950,#9fb97f);
-            background: linear-gradient(90deg,#29482a,#4e8950,#9fb97f);
-            width: 400px;
-            height: 100px;
-            align-items: center;
-            justify-content: space-around;
-            border-radius: 25px;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 8px 20px,
-                  rgba(78, 137, 80, 0.4) 8px 15px 20px;
+        /* Новая панель кнопок */
+        .menu {
+            padding: 0.5rem;
+            background: -webkit-linear-gradient(90deg,#ec7513,#cc1414,#340548,#1a1820);
+            background: linear-gradient(90deg,#ec7513,#cc1414,#340548,#1a1820);
             position: fixed;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 50;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 15px;
+            display: flex;
+            justify-content: center;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.075);
+            z-index: 1000;
         }
 
-        .button {
-            outline: 0 !important;
-            border: 0 !important;
-            width: 70px;
-            height: 70px;
-            border-radius: 15px;
-            background-color: transparent;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .link {
+            display: inline-flex;
             justify-content: center;
-            color: #fff;
-            transition: all ease-in-out 0.3s;
-            cursor: pointer;
+            align-items: center;
+            width: 70px;
+            height: 50px;
+            border-radius: 8px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transform-origin: center left;
+            transition: width 0.2s ease-in;
+            text-decoration: none;
+            color: white;
+        }
+
+        .link:before {
+            position: absolute;
+            z-index: -1;
+            content: "";
+            display: block;
+            border-radius: 8px;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            transform: translateX(100%);
+            transition: transform 0.2s ease-in;
+            transform-origin: center right;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .link:hover,
+        .link:focus {
+            outline: 0;
+            width: 130px;
+        }
+
+        .link:hover:before,
+        .link:focus:before,
+        .link:hover .link-title,
+        .link:focus .link-title {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .link-icon {
+            width: 28px;
+            height: 28px;
+            display: block;
+            flex-shrink: 0;
+            left: 18px;
+            position: absolute;
+        }
+
+        .link-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .link-title {
+            transform: translateX(100%);
+            transition: transform 0.2s ease-in;
+            transform-origin: center right;
+            display: block;
+            text-align: center;
+            text-indent: 28px;
+            width: 100%;
             font-size: 12px;
             font-weight: bold;
-            text-align: center;
-            padding: 8px;
-        }
-
-        .button-text {
-            font-size: 10px;
-            line-height: 1.2;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            margin-top: 3px;
-        }
-
-        .button:hover {
-            transform: translateY(-3px);
-            background-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .button:active {
-            transform: translateY(-1px);
-        }
-
-        .icon {
-            font-size: 24px;
         }
 
 
@@ -883,18 +877,7 @@
     </style>
 </head>
 <body>
-    <!-- Аудио элементы -->
-    <audio id="bgMusic" loop>
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjIwLjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBtbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjM1AAAAAAAAAAAAAAAAJAYAAAAAAAAABW4A" type="audio/mpeg">
-    </audio>
-    
-    <audio id="clickSound">
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjIwLjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBtbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjM1AAAAAAAAAAAAAAAAJAYAAAAAAAAABW4A" type="audio/mpeg">
-    </audio>
-    
-    <audio id="coinSound">
-        <source src="data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjIwLjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBtbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjM1AAAAAAAAAAAAAAAAJAYAAAAAAAAABW4A" type="audio/mpeg">
-    </audio>
+
 
     <!-- Окно загрузки -->
     <div class="loading-screen" id="loadingScreen">
@@ -923,11 +906,8 @@
         <div class="loading-text" id="loadingText">Загрузка...</div>
     </div>
 
-    <!-- Кнопки управления в правом верхнем углу -->
+    <!-- Кнопка настроек в правом верхнем углу -->
     <div class="top-panel">
-        <button class="sound-btn" id="soundBtn" title="Звук">
-            🔊
-        </button>
         <button class="setting-btn" id="settingsBtn">
             <span class="bar bar1"></span>
             <span class="bar bar2"></span>
@@ -964,28 +944,59 @@
         </div>
     </div>
 
-    <!-- Панель кнопок внизу -->
-    <div class="button-container">
-        <button class="button" id="shopBtn" title="Магазин">
-            <span class="icon">🛒</span>
-            <span class="button-text">Магазин</span>
-        </button>
-        <button class="button" id="tasksBtn" title="Задания">
-            <span class="icon">🎯</span>
-            <span class="button-text">Задания</span>
-        </button>
-        <button class="button" id="exchangeBtn" title="Биржа">
-            <span class="icon">📈</span>
-            <span class="button-text">Биржа</span>
-        </button>
-        <button class="button" id="achievementsBtn" title="Достижения">
-            <span class="icon">🏆</span>
-            <span class="button-text">Достижения</span>
-        </button>
-        <button class="button" id="leaderboardBtn" title="Таблица лидеров">
-            <span class="icon">👑</span>
-            <span class="button-text">Лидеры</span>
-        </button>
+    <!-- Новая панель кнопок -->
+    <div class="menu">
+        <a href="#" class="link" id="shopBtn" data-action="shop">
+            <span class="link-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path d="M213.3815,109.61945,133.376,36.88436a8,8,0,0,0-10.76339.00036l-79.9945,72.73477A8,8,0,0,0,40,115.53855V208a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V115.53887A8,8,0,0,0,213.3815,109.61945Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+                </svg>
+            </span>
+            <span class="link-title">Магазин</span>
+        </a>
+        <a href="#" class="link" id="exchangeBtn" data-action="exchange">
+            <span class="link-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <polyline points="76.201 132.201 152.201 40.201 216 40 215.799 103.799 123.799 179.799" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></polyline>
+                    <line x1="100" y1="156" x2="160" y2="96" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+                    <path d="M82.14214,197.45584,52.201,227.397a8,8,0,0,1-11.31371,0L28.603,215.11268a8,8,0,0,1,0-11.31371l29.94113-29.94112a8,8,0,0,0,0-11.31371L37.65685,141.65685a8,8,0,0,1,0-11.3137l12.6863-12.6863a8,8,0,0,1,11.3137,0l76.6863,76.6863a8,8,0,0,1,0,11.3137l-12.6863,12.6863a8,8,0,0,1-11.3137,0L93.45584,197.45584A8,8,0,0,0,82.14214,197.45584Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+                </svg>
+            </span>
+            <span class="link-title">Биржа</span>
+        </a>
+        <a href="#" class="link" id="achievementsBtn" data-action="achievements">
+            <span class="link-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <path d="M45.42853,176.99811A95.95978,95.95978,0,1,1,79.00228,210.5717l.00023-.001L45.84594,220.044a8,8,0,0,1-9.89-9.89l9.47331-33.15657Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+                    <line x1="96" y1="112" x2="160" y2="112" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+                    <line x1="96" y1="144" x2="160" y2="144" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+                </svg>
+            </span>
+            <span class="link-title">Достижения</span>
+        </a>
+        <a href="#" class="link" id="leaderboardBtn" data-action="leaderboard">
+            <span class="link-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <circle cx="116" cy="116" r="84" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
+                    <line x1="175.39356" y1="175.40039" x2="223.99414" y2="224.00098" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></line>
+                </svg>
+            </span>
+            <span class="link-title">Лидеры</span>
+        </a>
+        <a href="#" class="link" id="tasksBtn" data-action="tasks">
+            <span class="link-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
+                    <rect width="256" height="256" fill="none"></rect>
+                    <circle cx="128" cy="96" r="64" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="16"></circle>
+                    <path d="M30.989,215.99064a112.03731,112.03731,0,0,1,194.02311.002" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+                </svg>
+            </span>
+            <span class="link-title">Задания</span>
+        </a>
     </div>
 
     
@@ -1094,11 +1105,7 @@
             vibration: true,
             animations: true,
             animationSpeed: 5,
-            coinsPerClick: 1,
-            soundEnabled: true,
-            musicEnabled: true,
-            soundVolume: 0.7,
-            musicVolume: 0.5
+            coinsPerClick: 1
         };
 
         // Настройки рекламы Monetag
@@ -1190,55 +1197,7 @@
             }
         }
 
-        // Функции управления звуком
-        function playSound(soundId) {
-            if (gameSettings.soundEnabled) {
-                const sound = document.getElementById(soundId);
-                if (sound) {
-                    sound.volume = gameSettings.soundVolume;
-                    sound.currentTime = 0;
-                    sound.play().catch(() => {});
-                }
-            }
-        }
 
-        function toggleSound() {
-            gameSettings.soundEnabled = !gameSettings.soundEnabled;
-            gameSettings.musicEnabled = gameSettings.soundEnabled;
-            
-            const soundBtn = document.getElementById('soundBtn');
-            const bgMusic = document.getElementById('bgMusic');
-            
-            if (soundBtn) {
-                soundBtn.textContent = gameSettings.soundEnabled ? '🔊' : '🔇';
-                soundBtn.classList.toggle('muted', !gameSettings.soundEnabled);
-            }
-            
-            if (bgMusic) {
-                if (gameSettings.musicEnabled) {
-                    bgMusic.volume = gameSettings.musicVolume;
-                    bgMusic.play().catch(() => {});
-                } else {
-                    bgMusic.pause();
-                }
-            }
-            
-            saveGameData();
-            
-            if (gameSettings.vibration && navigator.vibrate) {
-                navigator.vibrate(30);
-            }
-        }
-
-        function startBackgroundMusic() {
-            if (gameSettings.musicEnabled) {
-                const bgMusic = document.getElementById('bgMusic');
-                if (bgMusic) {
-                    bgMusic.volume = gameSettings.musicVolume;
-                    bgMusic.play().catch(() => {});
-                }
-            }
-        }
 
         // Обработчик клика
         function handleClick() {
@@ -1255,8 +1214,7 @@
                 gameData.clicks++;
                 gameData.energy--; // Тратим 1 энергию за клик
                 
-                // Воспроизводим звук клика
-                playSound('clickSound');
+
                 
                 // Анимация монеты уже встроена в CSS
                 
@@ -1308,8 +1266,7 @@
                 updateDisplay();
                 saveGameData();
                 
-                // Звук покупки
-                playSound('coinSound');
+
                 
                 // Вибрация (без всплывающих сообщений)
                 if (gameSettings.vibration && navigator.vibrate) {
@@ -1599,16 +1556,7 @@
             // Загружаем данные игры
             loadGameData();
             
-            // Инициализируем звук
-            const soundBtn = document.getElementById('soundBtn');
-            if (soundBtn) {
-                soundBtn.textContent = gameSettings.soundEnabled ? '🔊' : '🔇';
-                soundBtn.classList.toggle('muted', !gameSettings.soundEnabled);
-                soundBtn.addEventListener('click', toggleSound);
-            }
-            
-            // Запускаем фоновую музыку
-            setTimeout(startBackgroundMusic, 1000);
+
             
             // Привязываем обработчик клика
             const clickButton = document.getElementById('clickButton');
@@ -1623,31 +1571,29 @@
             }
             
             // Обработчики кнопок панели
-            const shopBtn = document.getElementById('shopBtn');
-            if (shopBtn) {
-                shopBtn.addEventListener('click', handleShop);
-            }
-            
-            const exchangeBtn = document.getElementById('exchangeBtn');
-            if (exchangeBtn) {
-                exchangeBtn.addEventListener('click', handleExchange);
-            }
-            
-            const achievementsBtn = document.getElementById('achievementsBtn');
-            if (achievementsBtn) {
-                achievementsBtn.addEventListener('click', handleAchievements);
-            }
-            
-            const leaderboardBtn = document.getElementById('leaderboardBtn');
-            if (leaderboardBtn) {
-                leaderboardBtn.addEventListener('click', handleLeaderboard);
-            }
-            
-            // Обработчики для заданий
-            const tasksBtn = document.getElementById('tasksBtn');
-            if (tasksBtn) {
-                tasksBtn.addEventListener('click', openTasksPage);
-            }
+            document.querySelectorAll('.link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const action = link.getAttribute('data-action');
+                    switch(action) {
+                        case 'shop':
+                            handleShop();
+                            break;
+                        case 'exchange':
+                            handleExchange();
+                            break;
+                        case 'achievements':
+                            handleAchievements();
+                            break;
+                        case 'leaderboard':
+                            handleLeaderboard();
+                            break;
+                        case 'tasks':
+                            openTasksPage();
+                            break;
+                    }
+                });
+            });
 
                          // Обработчики модального окна рекламы
              const closeAdModal = document.getElementById('closeAdModal');
