@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Таблица лидеров - Magnum Coins</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(at 47.966219997892225% 59.17791208933168%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%), radial-gradient(at 47.64933301345313% 82.3942086004094%, hsla(0, 6.25%, 18.823529411764707%, 1) 0%, hsla(0, 6.25%, 18.823529411764707%, 0) 100%), radial-gradient(at 95.4924348957064% 30.991218769813667%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 1) 0%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 0) 100%), radial-gradient(at 33.063428122547755% 63.915493762477546%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 1) 0%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 0) 100%), radial-gradient(at 15.148471558648247% 8.345630190076857%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%);
+            background-size: 400%;
+            animation: gradient 10s infinite linear;
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 80% 0%; }
+            50% { background-position: 20% 100%; }
+            100% { background-position: 80% 0%; }
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 80px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-panel h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffd700;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .leaderboard-item.current-user {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4CAF50;
+        }
+
+        .rank {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 20px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .rank.gold { color: #ffd700; }
+        .rank.silver { color: #c0c0c0; }
+        .rank.bronze { color: #cd7f32; }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .player-stats {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .player-score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin-left: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .leaderboard-item {
+                padding: 15px;
+            }
+            
+            .player-name {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+        <button
+            class="bg-white text-center w-48 rounded-2xl h-14 relative text-black text-xl font-semibold group"
+            type="button"
+            onclick="goBack()"
+        >
+            <div
+                class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1024 1024"
+                    height="25px"
+                    width="25px"
+                >
+                    <path
+                        d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
+                        fill="#000000"
+                    ></path>
+                    <path
+                        d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
+                        fill="#000000"
+                    ></path>
+                </svg>
+            </div>
+            <p class="translate-x-2">Назад</p>
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Таблица лидеров</h1>
+            <p>Соревнуйтесь с другими игроками!</p>
+        </div>
+
+        <!-- Панель статистики -->
+        <div class="stats-panel">
+            <h3>📊 Ваша статистика</h3>
+            <div class="stat-row">
+                <span>💰 Монет:</span>
+                <span id="coinsDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>👆 Кликов:</span>
+                <span id="clicksDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>🏆 Ваша позиция:</span>
+                <span id="positionDisplay">-</span>
+            </div>
+            <div class="stat-row">
+                <span>📈 Уровень:</span>
+                <span id="levelDisplay">Новичок</span>
+            </div>
+        </div>
+
+        <!-- Кнопка обновления -->
+        <button class="refresh-btn" onclick="refreshLeaderboard()">
+            🔄 Обновить таблицу
+        </button>
+
+        <!-- Табы для разных типов рейтинга -->
+        <div class="leaderboard-tabs">
+            <div class="tab active" onclick="switchTab('coins')">💰 Монеты</div>
+            <div class="tab" onclick="switchTab('clicks')">👆 Клики</div>
+            <div class="tab" onclick="switchTab('achievements')">🏆 Достижения</div>
+        </div>
+
+        <!-- Таблица лидеров -->
+        <div id="leaderboardList">
+            <!-- Лидеры будут добавлены через JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Игровые данные
+        let gameData = {
+            coins: 0,
+            clicks: 0,
+            coinsPerClick: 1,
+            tasksCompleted: 0,
+            adsWatched: 0,
+            lastAdWatch: 0
+        };
+
+        // Достижения
+        let achievements = {};
+
+        // Текущий активный таб
+        let currentTab = 'coins';
+
+        // Демо-данные лидеров (в реальном проекте это будет с сервера)
+        let leaderboardData = {
+            coins: [
+                { name: "Алексей", coins: 15420, clicks: 1250, achievements: 6, isCurrentUser: false },
+                { name: "Мария", coins: 12850, clicks: 980, achievements: 5, isCurrentUser: false },
+                { name: "Дмитрий", coins: 9870, clicks: 750, achievements: 4, isCurrentUser: false },
+                { name: "Анна", coins: 7650, clicks: 620, achievements: 3, isCurrentUser: false },
+                { name: "Сергей", coins: 5430, clicks: 450, achievements: 2, isCurrentUser: false },
+                { name: "Елена", coins: 4320, clicks: 380, achievements: 2, isCurrentUser: false },
+                { name: "Игорь", coins: 3210, clicks: 290, achievements: 1, isCurrentUser: false },
+                { name: "Ольга", coins: 2150, clicks: 200, achievements: 1, isCurrentUser: false },
+                { name: "Павел", coins: 1200, clicks: 150, achievements: 0, isCurrentUser: false },
+                { name: "Наталья", coins: 800, clicks: 100, achievements: 0, isCurrentUser: false }
+            ],
+            clicks: [
+                { name: "Алексей", coins: 15420, clicks: 1250, achievements: 6, isCurrentUser: false },
+                { name: "Мария", coins: 12850, clicks: 980, achievements: 5, isCurrentUser: false },
+                { name: "Дмитрий", coins: 9870, clicks: 750, achievements: 4, isCurrentUser: false },
+                { name: "Анна", coins: 7650, clicks: 620, achievements: 3, isCurrentUser: false },
+                { name: "Сергей", coins: 5430, clicks: 450, achievements: 2, isCurrentUser: false },
+                { name: "Елена", coins: 4320, clicks: 380, achievements: 2, isCurrentUser: false },
+                { name: "Игорь", coins: 3210, clicks: 290, achievements: 1, isCurrentUser: false },
+                { name: "Ольга", coins: 2150, clicks: 200, achievements: 1, isCurrentUser: false },
+                { name: "Павел", coins: 1200, clicks: 150, achievements: 0, isCurrentUser: false },
+                { name: "Наталья", coins: 800, clicks: 100, achievements: 0, isCurrentUser: false }
+            ],
+            achievements: [
+                { name: "Алексей", coins: 15420, clicks: 1250, achievements: 6, isCurrentUser: false },
+                { name: "Мария", coins: 12850, clicks: 980, achievements: 5, isCurrentUser: false },
+                { name: "Дмитрий", coins: 9870, clicks: 750, achievements: 4, isCurrentUser: false },
+                { name: "Анна", coins: 7650, clicks: 620, achievements: 3, isCurrentUser: false },
+                { name: "Сергей", coins: 5430, clicks: 450, achievements: 2, isCurrentUser: false },
+                { name: "Елена", coins: 4320, clicks: 380, achievements: 2, isCurrentUser: false },
+                { name: "Игорь", coins: 3210, clicks: 290, achievements: 1, isCurrentUser: false },
+                { name: "Ольга", coins: 2150, clicks: 200, achievements: 1, isCurrentUser: false },
+                { name: "Павел", coins: 1200, clicks: 150, achievements: 0, isCurrentUser: false },
+                { name: "Наталья", coins: 800, clicks: 100, achievements: 0, isCurrentUser: false }
+            ]
+        };
+
+        // Загружаем данные
+        function loadData() {
+            const saved = localStorage.getItem('magnumCoinsData');
+            if (saved) {
+                gameData = JSON.parse(saved);
+            }
+            
+            const savedAchievements = localStorage.getItem('magnumAchievements');
+            if (savedAchievements) {
+                achievements = JSON.parse(savedAchievements);
+            }
+            
+            updateDisplay();
+            updateLeaderboard();
+        }
+
+        // Обновляем отображение
+        function updateDisplay() {
+            document.getElementById('coinsDisplay').textContent = gameData.coins.toLocaleString();
+            document.getElementById('clicksDisplay').textContent = gameData.clicks.toLocaleString();
+            
+            // Определяем позицию пользователя
+            const userPosition = getUserPosition();
+            document.getElementById('positionDisplay').textContent = userPosition > 0 ? `#${userPosition}` : '-';
+            
+            // Определяем уровень пользователя
+            const level = getUserLevel();
+            document.getElementById('levelDisplay').textContent = level;
+        }
+
+        // Получаем позицию пользователя
+        function getUserPosition() {
+            const currentData = leaderboardData[currentTab];
+            const userScore = getCurrentUserScore();
+            
+            for (let i = 0; i < currentData.length; i++) {
+                const score = getScore(currentData[i]);
+                if (userScore >= score) {
+                    return i + 1;
+                }
+            }
+            return currentData.length + 1;
+        }
+
+        // Получаем уровень пользователя
+        function getUserLevel() {
+            const coins = gameData.coins;
+            const clicks = gameData.clicks;
+            const achievementsCount = Object.values(achievements).filter(a => a.unlocked).length;
+            
+            if (coins >= 10000 && clicks >= 1000 && achievementsCount >= 6) return "Легенда";
+            if (coins >= 5000 && clicks >= 500 && achievementsCount >= 4) return "Мастер";
+            if (coins >= 2000 && clicks >= 200 && achievementsCount >= 2) return "Опытный";
+            if (coins >= 500 && clicks >= 50 && achievementsCount >= 1) return "Начинающий";
+            return "Новичок";
+        }
+
+        // Получаем текущий счет пользователя
+        function getCurrentUserScore() {
+            switch (currentTab) {
+                case 'coins': return gameData.coins;
+                case 'clicks': return gameData.clicks;
+                case 'achievements': return Object.values(achievements).filter(a => a.unlocked).length;
+                default: return 0;
+            }
+        }
+
+        // Получаем счет игрока
+        function getScore(player) {
+            switch (currentTab) {
+                case 'coins': return player.coins;
+                case 'clicks': return player.clicks;
+                case 'achievements': return player.achievements;
+                default: return 0;
+            }
+        }
+
+        // Переключение табов
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Обновляем активный таб
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Обновляем таблицу лидеров
+            updateLeaderboard();
+        }
+
+        // Обновляем таблицу лидеров
+        function updateLeaderboard() {
+            const container = document.getElementById('leaderboardList');
+            const currentData = leaderboardData[currentTab];
+            
+            // Сортируем данные по текущему критерию
+            const sortedData = [...currentData].sort((a, b) => getScore(b) - getScore(a));
+            
+            // Добавляем текущего пользователя
+            const userScore = getCurrentUserScore();
+            const userData = {
+                name: "Вы",
+                coins: gameData.coins,
+                clicks: gameData.clicks,
+                achievements: Object.values(achievements).filter(a => a.unlocked).length,
+                isCurrentUser: true
+            };
+            
+            // Вставляем пользователя в правильную позицию
+            let inserted = false;
+            for (let i = 0; i < sortedData.length; i++) {
+                if (userScore >= getScore(sortedData[i])) {
+                    sortedData.splice(i, 0, userData);
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted) {
+                sortedData.push(userData);
+            }
+            
+            // Ограничиваем до топ-10
+            const top10 = sortedData.slice(0, 10);
+            
+            container.innerHTML = '';
+            
+            if (top10.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🏆</div>
+                        <div>Пока нет данных для отображения</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            top10.forEach((player, index) => {
+                const rank = index + 1;
+                const score = getScore(player);
+                
+                let rankClass = '';
+                if (rank === 1) rankClass = 'gold';
+                else if (rank === 2) rankClass = 'silver';
+                else if (rank === 3) rankClass = 'bronze';
+                
+                const item = document.createElement('div');
+                item.className = `leaderboard-item ${player.isCurrentUser ? 'current-user' : ''}`;
+                
+                let scoreText = '';
+                switch (currentTab) {
+                    case 'coins': scoreText = `${score.toLocaleString()} монет`; break;
+                    case 'clicks': scoreText = `${score.toLocaleString()} кликов`; break;
+                    case 'achievements': scoreText = `${score} достижений`; break;
+                }
+                
+                item.innerHTML = `
+                    <div class="rank ${rankClass}">${rank}</div>
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-stats">
+                            💰 ${player.coins.toLocaleString()} монет • 👆 ${player.clicks.toLocaleString()} кликов • 🏆 ${player.achievements} достижений
+                        </div>
+                    </div>
+                    <div class="player-score">${scoreText}</div>
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+
+        // Обновление таблицы лидеров
+        function refreshLeaderboard() {
+            // В реальном проекте здесь был бы запрос к серверу
+            // Пока просто обновляем отображение
+            updateDisplay();
+            updateLeaderboard();
+            
+            // Показываем уведомление
+            showNotification('Таблица лидеров обновлена!');
+        }
+
+        // Показываем уведомление
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(45deg, #4CAF50, #45a049);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                text-align: center;
+                z-index: 10000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                animation: slideIn 0.3s ease;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 2000);
+        }
+
+        // Возврат назад
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+        });
+
+        // Добавляем CSS анимации
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+                to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

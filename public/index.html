@@ -779,6 +779,18 @@
             autoClicker: { purchased: false, price: 1000, effect: 'Автоматически кликает каждые 5 сек' }
         };
 
+        // Достижения
+        let achievements = {
+            firstClick: { unlocked: false, progress: 0, target: 1, reward: 10, icon: '👆', title: 'Первый клик', description: 'Сделайте свой первый клик' },
+            clickMaster: { unlocked: false, progress: 0, target: 100, reward: 50, icon: '⚡', title: 'Мастер кликов', description: 'Сделайте 100 кликов' },
+            clickPro: { unlocked: false, progress: 0, target: 1000, reward: 200, icon: '🔥', title: 'Про-кликер', description: 'Сделайте 1000 кликов' },
+            coinCollector: { unlocked: false, progress: 0, target: 1000, reward: 100, icon: '💰', title: 'Коллекционер монет', description: 'Накопите 1000 монет' },
+            coinMillionaire: { unlocked: false, progress: 0, target: 10000, reward: 500, icon: '💎', title: 'Миллионер', description: 'Накопите 10000 монет' },
+            adWatcher: { unlocked: false, progress: 0, target: 5, reward: 150, icon: '📺', title: 'Любитель рекламы', description: 'Посмотрите 5 реклам' },
+            taskMaster: { unlocked: false, progress: 0, target: 10, reward: 300, icon: '✅', title: 'Мастер заданий', description: 'Выполните 10 заданий' },
+            allRounder: { unlocked: false, progress: 0, target: 7, reward: 1000, icon: '🌟', title: 'Универсал', description: 'Разблокируйте все остальные достижения' }
+        };
+
         // Автокликер
         let autoClickerInterval = null;
 
@@ -824,6 +836,12 @@
                 upgrades = JSON.parse(savedUpgrades);
                 applyUpgrades();
             }
+            
+            // Загружаем достижения
+            const savedAchievements = localStorage.getItem('magnumAchievements');
+            if (savedAchievements) {
+                achievements = JSON.parse(savedAchievements);
+            }
         }
 
         // Сохраняем данные
@@ -831,6 +849,7 @@
             localStorage.setItem('magnumCoinsData', JSON.stringify(gameData));
             localStorage.setItem('magnumSettings', JSON.stringify(gameSettings));
             localStorage.setItem('magnumUpgrades', JSON.stringify(upgrades));
+            localStorage.setItem('magnumAchievements', JSON.stringify(achievements));
         }
 
         // Обновляем отображение
@@ -857,6 +876,7 @@
             }
             
             updateDisplay();
+            checkAchievements();
             saveGameData();
             
             // Вибрация (если включена и поддерживается)
@@ -966,12 +986,18 @@
 
         function handleAchievements() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            alert('🏆 Достижения\n\nСкоро здесь появятся достижения!');
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
+            // Переходим на страницу достижений
+            window.location.href = '/achievements.html';
         }
 
         function handleLeaderboard() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            alert('👑 Таблица лидеров\n\nСкоро здесь будет таблица лидеров!');
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
+            // Переходим на страницу лидеров
+            window.location.href = '/leaderboard.html';
         }
 
         function handleHelp() {
@@ -1282,8 +1308,119 @@
             // Автосохранение каждые 5 секунд
             setInterval(saveGameData, 5000);
             
+            // Проверяем достижения при загрузке
+            checkAchievements();
+            
             console.log('Инициализация завершена');
         });
+
+        // Функции достижений
+        function checkAchievements() {
+            // Первый клик
+            if (gameData.clicks >= 1 && !achievements.firstClick.unlocked) {
+                unlockAchievement('firstClick');
+            }
+            
+            // Мастер кликов
+            if (gameData.clicks >= 100 && !achievements.clickMaster.unlocked) {
+                unlockAchievement('clickMaster');
+            }
+            
+            // Про-кликер
+            if (gameData.clicks >= 1000 && !achievements.clickPro.unlocked) {
+                unlockAchievement('clickPro');
+            }
+            
+            // Коллекционер монет
+            if (gameData.coins >= 1000 && !achievements.coinCollector.unlocked) {
+                unlockAchievement('coinCollector');
+            }
+            
+            // Миллионер
+            if (gameData.coins >= 10000 && !achievements.coinMillionaire.unlocked) {
+                unlockAchievement('coinMillionaire');
+            }
+            
+            // Любитель рекламы
+            if (gameData.adsWatched >= 5 && !achievements.adWatcher.unlocked) {
+                unlockAchievement('adWatcher');
+            }
+            
+            // Мастер заданий
+            if (gameData.tasksCompleted >= 10 && !achievements.taskMaster.unlocked) {
+                unlockAchievement('taskMaster');
+            }
+            
+            // Универсал (все остальные достижения)
+            const otherAchievements = Object.values(achievements).filter(a => a.title !== 'Универсал');
+            const unlockedOthers = otherAchievements.filter(a => a.unlocked).length;
+            if (unlockedOthers >= 7 && !achievements.allRounder.unlocked) {
+                unlockAchievement('allRounder');
+            }
+        }
+
+        function unlockAchievement(achievementKey) {
+            const achievement = achievements[achievementKey];
+            achievement.unlocked = true;
+            achievement.progress = achievement.target;
+            
+            // Начисляем награду
+            gameData.coins += achievement.reward;
+            
+            // Обновляем отображение
+            updateDisplay();
+            
+            // Показываем уведомление
+            showAchievementNotification(achievement);
+        }
+
+        function showAchievementNotification(achievement) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(45deg, #4CAF50, #45a049);
+                color: white;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                animation: slideIn 0.5s ease;
+            `;
+            
+            notification.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 10px;">${achievement.icon}</div>
+                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">🏆 Достижение разблокировано!</div>
+                <div style="font-size: 1rem; margin-bottom: 10px;">${achievement.title}</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">+${achievement.reward} монет</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+
+        // Добавляем CSS анимации для уведомлений
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+                to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

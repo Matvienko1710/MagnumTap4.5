@@ -28,6 +28,16 @@ app.get('/tasks.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'tasks.html'));
 });
 
+// Страница достижений
+app.get('/achievements.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'achievements.html'));
+});
+
+// Страница таблицы лидеров
+app.get('/leaderboard.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'leaderboard.html'));
+});
+
 // Тестовая страница рекламы
 app.get('/test-ad.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'test-ad.html'));

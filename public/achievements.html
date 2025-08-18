@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>Достижения - Magnum Coins</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(at 47.966219997892225% 59.17791208933168%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%), radial-gradient(at 47.64933301345313% 82.3942086004094%, hsla(0, 6.25%, 18.823529411764707%, 1) 0%, hsla(0, 6.25%, 18.823529411764707%, 0) 100%), radial-gradient(at 95.4924348957064% 30.991218769813667%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 1) 0%, hsla(135.00000000000003, 5.454545454545454%, 43.13725490196079%, 0) 100%), radial-gradient(at 33.063428122547755% 63.915493762477546%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 1) 0%, hsla(195.99999999999997, 8.021390374331544%, 36.66666666666667%, 0) 100%), radial-gradient(at 15.148471558648247% 8.345630190076857%, hsla(195, 8.16326530612245%, 19.215686274509807%, 1) 0%, hsla(195, 8.16326530612245%, 19.215686274509807%, 0) 100%);
+            background-size: 400%;
+            animation: gradient 10s infinite linear;
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 80% 0%; }
+            50% { background-position: 20% 100%; }
+            100% { background-position: 80% 0%; }
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 80px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-panel h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .achievement-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .achievement-item.unlocked {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4CAF50;
+        }
+
+        .achievement-item.unlocked::before {
+            content: '✅';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .achievement-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+
+        .achievement-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .achievement-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .achievement-progress {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .achievement-reward {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .achievement-status {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .achievement-item {
+                padding: 20px;
+            }
+            
+            .achievement-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+        <button
+            class="bg-white text-center w-48 rounded-2xl h-14 relative text-black text-xl font-semibold group"
+            type="button"
+            onclick="goBack()"
+        >
+            <div
+                class="bg-green-400 rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1024 1024"
+                    height="25px"
+                    width="25px"
+                >
+                    <path
+                        d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"
+                        fill="#000000"
+                    ></path>
+                    <path
+                        d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"
+                        fill="#000000"
+                    ></path>
+                </svg>
+            </div>
+            <p class="translate-x-2">Назад</p>
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Достижения</h1>
+            <p>Разблокируйте достижения и получайте награды!</p>
+        </div>
+
+        <!-- Панель статистики -->
+        <div class="stats-panel">
+            <h3>📊 Ваша статистика</h3>
+            <div class="stat-row">
+                <span>💰 Монет:</span>
+                <span id="coinsDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>👆 Кликов:</span>
+                <span id="clicksDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>🏆 Достижений:</span>
+                <span id="achievementsDisplay">0/8</span>
+            </div>
+            <div class="stat-row">
+                <span>💎 Общий прогресс:</span>
+                <span id="progressDisplay">0%</span>
+            </div>
+        </div>
+
+        <!-- Достижения -->
+        <div id="achievementsList">
+            <!-- Достижения будут добавлены через JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Игровые данные
+        let gameData = {
+            coins: 0,
+            clicks: 0,
+            coinsPerClick: 1,
+            tasksCompleted: 0,
+            adsWatched: 0,
+            lastAdWatch: 0
+        };
+
+        // Достижения
+        let achievements = {
+            firstClick: { unlocked: false, progress: 0, target: 1, reward: 10, icon: '👆', title: 'Первый клик', description: 'Сделайте свой первый клик' },
+            clickMaster: { unlocked: false, progress: 0, target: 100, reward: 50, icon: '⚡', title: 'Мастер кликов', description: 'Сделайте 100 кликов' },
+            clickPro: { unlocked: false, progress: 0, target: 1000, reward: 200, icon: '🔥', title: 'Про-кликер', description: 'Сделайте 1000 кликов' },
+            coinCollector: { unlocked: false, progress: 0, target: 1000, reward: 100, icon: '💰', title: 'Коллекционер монет', description: 'Накопите 1000 монет' },
+            coinMillionaire: { unlocked: false, progress: 0, target: 10000, reward: 500, icon: '💎', title: 'Миллионер', description: 'Накопите 10000 монет' },
+            adWatcher: { unlocked: false, progress: 0, target: 5, reward: 150, icon: '📺', title: 'Любитель рекламы', description: 'Посмотрите 5 реклам' },
+            taskMaster: { unlocked: false, progress: 0, target: 10, reward: 300, icon: '✅', title: 'Мастер заданий', description: 'Выполните 10 заданий' },
+            allRounder: { unlocked: false, progress: 0, target: 7, reward: 1000, icon: '🌟', title: 'Универсал', description: 'Разблокируйте все остальные достижения' }
+        };
+
+        // Загружаем данные
+        function loadData() {
+            const saved = localStorage.getItem('magnumCoinsData');
+            if (saved) {
+                gameData = JSON.parse(saved);
+            }
+            
+            const savedAchievements = localStorage.getItem('magnumAchievements');
+            if (savedAchievements) {
+                achievements = JSON.parse(savedAchievements);
+            }
+            
+            updateDisplay();
+            renderAchievements();
+        }
+
+        // Сохраняем данные
+        function saveData() {
+            localStorage.setItem('magnumCoinsData', JSON.stringify(gameData));
+            localStorage.setItem('magnumAchievements', JSON.stringify(achievements));
+        }
+
+        // Обновляем отображение
+        function updateDisplay() {
+            document.getElementById('coinsDisplay').textContent = gameData.coins.toLocaleString();
+            document.getElementById('clicksDisplay').textContent = gameData.clicks.toLocaleString();
+            
+            const unlockedCount = Object.values(achievements).filter(a => a.unlocked).length;
+            document.getElementById('achievementsDisplay').textContent = `${unlockedCount}/8`;
+            
+            const progress = Math.round((unlockedCount / 8) * 100);
+            document.getElementById('progressDisplay').textContent = `${progress}%`;
+        }
+
+        // Проверяем достижения
+        function checkAchievements() {
+            // Первый клик
+            if (gameData.clicks >= 1 && !achievements.firstClick.unlocked) {
+                unlockAchievement('firstClick');
+            }
+            
+            // Мастер кликов
+            if (gameData.clicks >= 100 && !achievements.clickMaster.unlocked) {
+                unlockAchievement('clickMaster');
+            }
+            
+            // Про-кликер
+            if (gameData.clicks >= 1000 && !achievements.clickPro.unlocked) {
+                unlockAchievement('clickPro');
+            }
+            
+            // Коллекционер монет
+            if (gameData.coins >= 1000 && !achievements.coinCollector.unlocked) {
+                unlockAchievement('coinCollector');
+            }
+            
+            // Миллионер
+            if (gameData.coins >= 10000 && !achievements.coinMillionaire.unlocked) {
+                unlockAchievement('coinMillionaire');
+            }
+            
+            // Любитель рекламы
+            if (gameData.adsWatched >= 5 && !achievements.adWatcher.unlocked) {
+                unlockAchievement('adWatcher');
+            }
+            
+            // Мастер заданий
+            if (gameData.tasksCompleted >= 10 && !achievements.taskMaster.unlocked) {
+                unlockAchievement('taskMaster');
+            }
+            
+            // Универсал (все остальные достижения)
+            const otherAchievements = Object.values(achievements).filter(a => a.title !== 'Универсал');
+            const unlockedOthers = otherAchievements.filter(a => a.unlocked).length;
+            if (unlockedOthers >= 7 && !achievements.allRounder.unlocked) {
+                unlockAchievement('allRounder');
+            }
+        }
+
+        // Разблокировка достижения
+        function unlockAchievement(achievementKey) {
+            const achievement = achievements[achievementKey];
+            achievement.unlocked = true;
+            achievement.progress = achievement.target;
+            
+            // Начисляем награду
+            gameData.coins += achievement.reward;
+            
+            // Сохраняем данные
+            saveData();
+            
+            // Обновляем отображение
+            updateDisplay();
+            renderAchievements();
+            
+            // Показываем уведомление
+            showAchievementNotification(achievement);
+        }
+
+        // Показываем уведомление о достижении
+        function showAchievementNotification(achievement) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(45deg, #4CAF50, #45a049);
+                color: white;
+                padding: 20px;
+                border-radius: 15px;
+                text-align: center;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                animation: slideIn 0.5s ease;
+            `;
+            
+            notification.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 10px;">${achievement.icon}</div>
+                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">🏆 Достижение разблокировано!</div>
+                <div style="font-size: 1rem; margin-bottom: 10px;">${achievement.title}</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">+${achievement.reward} монет</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+
+        // Рендерим достижения
+        function renderAchievements() {
+            const container = document.getElementById('achievementsList');
+            container.innerHTML = '';
+            
+            Object.entries(achievements).forEach(([key, achievement]) => {
+                const progress = Math.min(achievement.progress, achievement.target);
+                const progressPercent = (progress / achievement.target) * 100;
+                
+                const item = document.createElement('div');
+                item.className = `achievement-item ${achievement.unlocked ? 'unlocked' : ''}`;
+                
+                item.innerHTML = `
+                    <div class="achievement-header">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-title">${achievement.title}</div>
+                    </div>
+                    <div class="achievement-description">${achievement.description}</div>
+                    <div class="achievement-progress">
+                        <div class="progress-bar" style="width: ${progressPercent}%"></div>
+                    </div>
+                    <div class="achievement-reward">💰 Награда: ${achievement.reward} монет</div>
+                    <div class="achievement-status">
+                        ${achievement.unlocked ? '✅ Разблокировано' : `${progress}/${achievement.target}`}
+                    </div>
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+
+        // Обновляем прогресс достижений
+        function updateAchievementProgress() {
+            achievements.firstClick.progress = gameData.clicks;
+            achievements.clickMaster.progress = gameData.clicks;
+            achievements.clickPro.progress = gameData.clicks;
+            achievements.coinCollector.progress = gameData.coins;
+            achievements.coinMillionaire.progress = gameData.coins;
+            achievements.adWatcher.progress = gameData.adsWatched;
+            achievements.taskMaster.progress = gameData.tasksCompleted;
+            
+            checkAchievements();
+            renderAchievements();
+        }
+
+        // Возврат назад
+        function goBack() {
+            window.location.href = '/';
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateAchievementProgress();
+        });
+
+        // Добавляем CSS анимации
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+                to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                to { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
