@@ -384,15 +384,15 @@
         /* Панель кнопок внизу */
         .button-container {
             display: flex;
-            background: -webkit-linear-gradient(90deg,#2f485c,#ff4c29);
-            background: linear-gradient(90deg,#2f485c,#ff4c29);
+            background: -webkit-linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
+            background: linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
             width: 450px;
             height: 450px;
             align-items: center;
             justify-content: center;
             border-radius: 30px;
             box-shadow: rgba(0, 0, 0, 0.35) 0px 8px 20px,
-                  rgba(255, 76, 41, 0.4) 8px 15px 20px;
+                  rgba(31, 44, 81, 0.4) 8px 15px 20px;
             position: fixed;
             bottom: 30px;
             left: 50%;
@@ -680,18 +680,23 @@
     <!-- Панель кнопок внизу -->
     <div class="button-container">
         <button class="button" id="shopBtn" title="Магазин">
+            <span class="icon">🛒</span>
             <span class="button-text">Магазин</span>
         </button>
         <button class="button" id="tasksBtn" title="Задания">
+            <span class="icon">🎯</span>
             <span class="button-text">Задания</span>
         </button>
         <button class="button" id="statsBtn" title="Статистика">
+            <span class="icon">📊</span>
             <span class="button-text">Статистика</span>
         </button>
         <button class="button" id="achievementsBtn" title="Достижения">
+            <span class="icon">🏆</span>
             <span class="button-text">Достижения</span>
         </button>
         <button class="button" id="leaderboardBtn" title="Таблица лидеров">
+            <span class="icon">👑</span>
             <span class="button-text">Лидеры</span>
         </button>
     </div>
