@@ -384,15 +384,15 @@
         /* Панель кнопок внизу */
         .button-container {
             display: flex;
-            background: -webkit-linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
-            background: linear-gradient(90deg,#1f2c51,#1f2c51,#000000);
+            background: -webkit-linear-gradient(90deg,#29482a,#4e8950,#9fb97f);
+            background: linear-gradient(90deg,#29482a,#4e8950,#9fb97f);
             width: 400px;
             height: 100px;
             align-items: center;
             justify-content: space-around;
             border-radius: 25px;
             box-shadow: rgba(0, 0, 0, 0.35) 0px 8px 20px,
-                  rgba(31, 44, 81, 0.4) 8px 15px 20px;
+                  rgba(78, 137, 80, 0.4) 8px 15px 20px;
             position: fixed;
             bottom: 30px;
             left: 50%;
@@ -981,18 +981,69 @@
 
         function handleStats() {
             if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
-            const avgIncome = (gameData.coins / Math.max(gameData.clicks, 1)).toFixed(1);
-            const timeSinceLastAd = gameData.lastAdWatch ? Math.floor((Date.now() - gameData.lastAdWatch) / 1000 / 60) : 0;
-            // Без alert: информация в консоль
-            console.log('[Статистика]', {
-                coins: gameData.coins,
-                clicks: gameData.clicks,
-                coinsPerClick: gameSettings.coinsPerClick,
-                avgIncome,
-                adsWatched: gameData.adsWatched,
-                tasksCompleted: gameData.tasksCompleted,
-                timeSinceLastAd
+            
+            // Создаем модальное окно статистики
+            const statsModal = document.createElement('div');
+            statsModal.className = 'modal';
+            statsModal.style.display = 'block';
+            statsModal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h2>📊 Статистика игры</h2>
+                        <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
+                    </div>
+                    <div class="modal-body" style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 5px;">💰</div>
+                                <div style="font-size: 18px; font-weight: bold;">${gameData.coins.toLocaleString()}</div>
+                                <div style="font-size: 12px; opacity: 0.8;">Монет</div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; text-align: center;">
+                                <div style="font-size: 24px; margin-bottom: 5px;">👆</div>
+                                <div style="font-size: 18px; font-weight: bold;">${gameData.clicks.toLocaleString()}</div>
+                                <div style="font-size: 12px; opacity: 0.8;">Кликов</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 16px;">📈 Детальная статистика</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                                <div>Монет за клик: <strong>${gameSettings.coinsPerClick}</strong></div>
+                                <div>Средний доход: <strong>${(gameData.coins / Math.max(gameData.clicks, 1)).toFixed(1)}</strong></div>
+                                <div>Реклам просмотрено: <strong>${gameData.adsWatched}</strong></div>
+                                <div>Заданий выполнено: <strong>${gameData.tasksCompleted}</strong></div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 16px;">⚙️ Настройки</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+                                <div>Звуки: <strong>${gameSettings.sound ? 'Вкл' : 'Выкл'}</strong></div>
+                                <div>Вибрация: <strong>${gameSettings.vibration ? 'Вкл' : 'Выкл'}</strong></div>
+                                <div>Анимации: <strong>${gameSettings.animations ? 'Вкл' : 'Выкл'}</strong></div>
+                                <div>Скорость анимации: <strong>${gameSettings.animationSpeed}/10</strong></div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                    style="background: linear-gradient(45deg, #4CAF50, #45a049); border: none; border-radius: 10px; padding: 12px 25px; color: white; font-weight: bold; cursor: pointer;">
+                                Закрыть
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Добавляем обработчик закрытия по клику вне модального окна
+            statsModal.addEventListener('click', (e) => {
+                if (e.target === statsModal) {
+                    statsModal.remove();
+                }
             });
+            
+            document.body.appendChild(statsModal);
         }
 
         function handleAchievements() {
