@@ -352,27 +352,197 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .click-button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border: none;
-            border-radius: 50%;
-            width: 200px;
-            height: 200px;
-            font-size: 2rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            margin: 20px 0;
+        /* ============ CONFIG ============ */
+        .magnum-coin{
+          --coin-size: 200px;                 /* общий размер монеты */
+          --gold-1: #fef4c6;                  /* свет */
+          --gold-2: #ffd675;                  /* средний свет */
+          --gold-3: #ffb43b;                  /* базовое золото */
+          --gold-4: #d88a20;                  /* тени */
+          --gold-5: #7a4b13;                  /* глубокие тени */
+          --specular: rgba(255,255,255,.55);  /* блик */
+          --shadow: rgba(0,0,0,.35);          /* тень от монеты */
+
+          --lava-1: #ff3b0a;
+          --lava-2: #ff7a00;
+          --lava-3: #ffd200;
+          --lava-glow: rgba(255, 77, 0, .35);
+
+          --rim-width: 12px;                  /* ширина канта */
+          --bevel: 14px;                      /* "фаска" */
+          --logo-emboss: 10px;                /* глубина рельефа буквы M */
+          --shine-speed: 4s;                  /* скорость пробега блика */
+          --lava-speed: 6s;                   /* скорость "течения" лавы */
         }
 
-        .click-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        /* ============ RESET ============ */
+        .magnum-coin{
+          -webkit-tap-highlight-color: transparent;
+          appearance: none; border: 0; background: transparent; padding: 0;
+          cursor: pointer; outline: none;
         }
 
-        .click-button:active {
-            transform: scale(0.95);
+        /* ============ COIN WRAPPER ============ */
+        .magnum-coin{
+          width: var(--coin-size);
+          height: var(--coin-size);
+          border-radius: 50%;
+          display: inline-grid;
+          place-items: center;
+          transform: translateZ(0); /* включаем композитинг */
+          filter: drop-shadow(0 10px 18px var(--shadow));
+          transition: transform .08s ease, filter .2s ease;
+          margin: 20px 0;
+        }
+        .magnum-coin:active{
+          transform: translateY(2px) scale(.985);
+          filter: drop-shadow(0 6px 12px var(--shadow));
+        }
+
+        /* ============ COIN FACE ============ */
+        .magnum-coin__face{
+          position: relative;
+          width: 100%; height: 100%;
+          border-radius: 50%;
+          overflow: hidden;
+          /* главный золотой градиент */
+          background:
+            radial-gradient(120% 120% at 30% 30%, var(--gold-1) 0 18%, var(--gold-2) 30%, var(--gold-3) 55%, var(--gold-4) 75%, var(--gold-5) 100%);
+          box-shadow:
+            inset 0 2px 4px rgba(255,255,255,.25),
+            inset 0 -10px 18px rgba(0,0,0,.25),
+            0 0 0 1px rgba(255,255,255,.1);
+        }
+
+        /* ============ RIM (КАНТ) ============ */
+        .magnum-coin__rim{
+          content: "";
+          position: absolute; inset: 0;
+          border-radius: 50%;
+          padding: var(--rim-width);
+          background:
+            radial-gradient(circle at 50% 50%, transparent calc(100% - var(--rim-width)), rgba(0,0,0,.25) calc(100% - var(--rim-width) + 1px));
+          -webkit-mask:
+            radial-gradient(circle, #000 62%, transparent 63%); /* "выкусить" центр */
+                mask:
+            radial-gradient(circle, #000 62%, transparent 63%);
+          pointer-events: none;
+        }
+
+        /* насечки на канте (микро) */
+        .magnum-coin__rim::after{
+          content:"";
+          position:absolute; inset: 4%;
+          border-radius: 50%;
+          background:
+            conic-gradient(from 0deg,
+              rgba(255,255,255,.08) 0 2deg, transparent 2deg 6deg) ;
+          -webkit-mask: radial-gradient(circle, transparent 0 66%, #000 67%);
+                  mask: radial-gradient(circle, transparent 0 66%, #000 67%);
+          filter: blur(.4px);
+          opacity:.55;
+        }
+
+        /* ============ INNER (ВНУТРЕННЕЕ ПОЛЕ) ============ */
+        .magnum-coin__inner{
+          content:"";
+          position:absolute; inset: calc(var(--rim-width) + 3px);
+          border-radius: 50%;
+          background:
+            linear-gradient(145deg, rgba(255,255,255,.25), rgba(0,0,0,.15)) border-box,
+            radial-gradient(120% 120% at 70% 70%, var(--gold-2), var(--gold-3) 40%, var(--gold-4) 75%) padding-box;
+          box-shadow:
+            inset 0 6px 12px rgba(255,255,255,.18),
+            inset 0 -12px 20px rgba(0,0,0,.28);
+        }
+
+        /* декоративные концентрические кольца */
+        .magnum-coin__inner::after{
+          content:"";
+          position:absolute; inset: 10%;
+          border-radius: 50%;
+          background:
+            radial-gradient(closest-side, transparent calc(100% - 1px), rgba(255,255,255,.22) calc(100% - 0px)) ,
+            radial-gradient(closest-side, transparent calc(100% - 12px), rgba(0,0,0,.18) calc(100% - 11px));
+          opacity:.6;
+        }
+
+        /* ============ LOGO (M) ============ */
+        .magnum-coin__logo{
+          position:absolute; inset: 0;
+          display:grid; place-items:center;
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Inter', Arial, sans-serif;
+          font-weight: 800;
+          letter-spacing: .02em;
+          font-size: calc(var(--coin-size) * .36);
+          color: transparent;
+          /* Рельефный текст через градиенты и тени */
+          background:
+            linear-gradient(180deg, #fff 0%, #ffe9a8 35%, #f2b54d 60%, #7a4b13 100%);
+          -webkit-background-clip: text;
+                  background-clip: text;
+          text-shadow:
+            0 1px 0 rgba(255,255,255,.7),
+            0 2px 0 rgba(255,255,255,.35),
+            0 3px 0 rgba(255,255,255,.2),
+            0 4px 6px rgba(0,0,0,.4);
+
+          /* Вдавленность */
+          filter:
+            drop-shadow(0 2px 0 rgba(0,0,0,.25))
+            drop-shadow(0 6px var(--logo-emboss) rgba(0,0,0,.2));
+          pointer-events:none;
+        }
+
+        /* ============ SPECULAR SHINE (ПРОБЕГАЮЩИЙ БЛИК) ============ */
+        .magnum-coin__shine{
+          content:"";
+          position:absolute; inset:-30%;
+          background:
+            conic-gradient(from 0deg, transparent 0 70%, rgba(255,255,255,.7) 74%, transparent 80% 100%);
+          animation: sweep var(--shine-speed) linear infinite;
+          mix-blend-mode: screen;
+          opacity:.6; pointer-events:none;
+          border-radius:50%;
+          filter: blur(10px);
+        }
+
+        @keyframes sweep {
+          0%   { transform: rotate(0deg)   scale(1.05); }
+          100% { transform: rotate(360deg) scale(1.05); }
+        }
+
+        /* ============ LAVA GLOW (МИНИ "МАГМА") ============ */
+        .magnum-coin__lava{
+          content:"";
+          position:absolute; inset: 2%;
+          border-radius:50%;
+          background:
+            radial-gradient(120% 100% at 75% 85%, var(--lava-1), transparent 55%),
+            radial-gradient(120% 100% at 25% 20%, var(--lava-2), transparent 55%),
+            radial-gradient(100% 80%  at 50% 100%, var(--lava-3), transparent 45%);
+          mix-blend-mode: overlay;
+          filter: blur(12px) saturate(1.2);
+          opacity:.22;
+          animation: lavaFlow var(--lava-speed) ease-in-out infinite alternate;
+          pointer-events:none;
+        }
+
+        @keyframes lavaFlow{
+          0%  { transform: translate(-2px, 0) scale(1.0); opacity:.18; }
+          50% { transform: translate(2px, 1px) scale(1.02); opacity:.28; }
+          100%{ transform: translate(-1px, -1px) scale(1.01); opacity:.22; }
+        }
+
+        /* Ховер-эффекты */
+        @media (hover:hover){
+          .magnum-coin:hover .magnum-coin__lava{ opacity:.3; }
+          .magnum-coin:hover{ filter: drop-shadow(0 14px 22px var(--shadow)); }
+        }
+
+        /* Поддержка тёмных страниц (необязательно) */
+        @media (prefers-color-scheme: dark){
+          .magnum-coin{ filter: drop-shadow(0 14px 22px rgba(0,0,0,.55)); }
         }
 
         .stats {
@@ -396,10 +566,8 @@
                 font-size: 2rem;
             }
             
-            .click-button {
-                width: 150px;
-                height: 150px;
-                font-size: 1.5rem;
+            .magnum-coin {
+                --coin-size: 150px;
             }
             
             .balance {
@@ -756,8 +924,14 @@
 
     <div class="main-content">
         <div class="container">
-            <button class="click-button" id="clickButton">
-                🪙<br>КЛИК!
+            <button class="magnum-coin" id="clickButton" aria-label="Magnum Coin">
+                <span class="magnum-coin__face">
+                    <span class="magnum-coin__rim"></span>
+                    <span class="magnum-coin__inner"></span>
+                    <span class="magnum-coin__logo">M</span>
+                    <span class="magnum-coin__shine"></span>
+                    <span class="magnum-coin__lava"></span>
+                </span>
             </button>
             
             <div class="stats">
@@ -1008,17 +1182,7 @@
                 gameData.clicks++;
                 gameData.energy--; // Тратим 1 энергию за клик
                 
-                // Анимация кнопки (если включена)
-                if (gameSettings.animations) {
-                    const button = document.getElementById('clickButton');
-                    if (button) {
-                        const speed = 110 - (gameSettings.animationSpeed * 10);
-                        button.style.transform = 'scale(0.95)';
-                        setTimeout(() => {
-                            button.style.transform = 'scale(1)';
-                        }, speed);
-                    }
-                }
+                // Анимация монеты уже встроена в CSS
                 
                 updateDisplay();
                 checkAchievements();
