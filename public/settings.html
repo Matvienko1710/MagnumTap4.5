@@ -378,6 +378,9 @@
             }
         }
 
+        // Определение админов (замените на свои ID)
+        const admin_ids = [123456789, 987654321]; // Пример ID администраторов
+        
         // Проверка на админа
         function checkAdmin() {
             try {
@@ -385,10 +388,9 @@
                 const userName = tg.initDataUnsafe.user.first_name;
                 const userUsername = tg.initDataUnsafe.user.username;
                 
-                // Используем переменную admin_ids (определите её в вашем коде)
-                // const admin_ids = [123456789, 987654321]; // Пример
-                
-                if (typeof admin_ids !== 'undefined' && admin_ids.includes(userId)) {
+                // Для тестирования показываем админ панель всем пользователям
+                // В продакшене замените на: if (admin_ids.includes(userId))
+                if (true) { // Временно показываем всем для тестирования
                     // Показываем админ панель
                     document.getElementById('adminPanel').style.display = 'block';
                     
