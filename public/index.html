@@ -124,6 +124,41 @@
             fill: #f09f33;
             transition: .3s ease;
         }
+        
+        .tasks-btn {
+            width: fit-content;
+            display: flex;
+            padding: 0.8em 1rem;
+            cursor: pointer;
+            gap: 0.4rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
+            background: linear-gradient(15deg, #4CAF50, #45a049, #2E7D32, #1B5E20, #0D4F14, #1B5E20, #2E7D32, #45a049, #4CAF50) no-repeat;
+            background-size: 300%;
+            color: #fff;
+            border: none;
+            background-position: left center;
+            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
+            transition: background .3s ease;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .tasks-btn:hover {
+            background-size: 320%;
+            background-position: right center;
+        }
+
+        .tasks-btn:hover svg {
+            fill: #fff;
+        }
+
+        .tasks-btn svg {
+            width: 16px;
+            fill: #90EE90;
+            transition: .3s ease;
+        }
 
         .top-panel {
             position: fixed;
@@ -974,6 +1009,12 @@
                     </svg>
                     Улучшения
                 </button>
+                <button class="tasks-btn" id="tasksBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
+                        <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                    </svg>
+                    Задания
+                </button>
             </div>
             
             <div class="stats">
@@ -1038,19 +1079,16 @@
             </span>
             <span class="link-title">Лидеры</span>
         </a>
-        <a href="#" class="link" id="tasksBtn" data-action="tasks">
+        <a href="#" class="link" id="walletBtn" data-action="wallet">
             <span class="link-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
                     <rect width="256" height="256" fill="none"></rect>
-                    <path d="M32,72H224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M32,128H224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M32,184H224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M64,72V184" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M128,72V184" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M192,72V184" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+                    <path d="M184,72H24a8,8,0,0,0-8,8V176a8,8,0,0,0,8,8H184a8,8,0,0,0,8-8V80A8,8,0,0,0,184,72Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+                    <path d="M184,88H32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
+                    <circle cx="104" cy="128" r="16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></circle>
                 </svg>
             </span>
-            <span class="link-title">Задания</span>
+            <span class="link-title">Кошелек</span>
         </a>
     </div>
 
@@ -1313,6 +1351,20 @@
             // Переходим на страницу улучшений
             window.location.href = '/upgrades.html';
         }
+        
+        // Обработчик кнопки заданий
+        function handleTasks() {
+            // Вибрация (если включена и поддерживается)
+            if (gameSettings.vibration && navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+            
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
+            
+            // Переходим на страницу заданий
+            window.location.href = '/tasks.html';
+        }
 
         // Функции магазина
         function openShop() {
@@ -1428,6 +1480,15 @@
             sessionStorage.setItem('returningFromPage', 'true');
             // Переходим на страницу заданий
             window.location.href = '/tasks.html';
+        }
+        
+        // Функции для кошелька
+        function openWalletPage() {
+            if (gameSettings.vibration && navigator.vibrate) navigator.vibrate(30);
+            // Устанавливаем флаг возврата
+            sessionStorage.setItem('returningFromPage', 'true');
+            // Переходим на страницу кошелька
+            window.location.href = '/wallet.html';
         }
 
         function openAdModal() {
@@ -1645,6 +1706,12 @@
                 upgradeBtn.addEventListener('click', handleUpgrade);
             }
             
+            // Привязываем обработчик кнопки заданий
+            const tasksBtn = document.getElementById('tasksBtn');
+            if (tasksBtn) {
+                tasksBtn.addEventListener('click', handleTasks);
+            }
+            
             // Обработчики кнопок панели
             document.querySelectorAll('.link').forEach(link => {
                 link.addEventListener('click', (e) => {
@@ -1663,8 +1730,8 @@
                         case 'leaderboard':
                             handleLeaderboard();
                             break;
-                        case 'tasks':
-                            openTasksPage();
+                        case 'wallet':
+                            openWalletPage();
                             break;
                     }
                 });

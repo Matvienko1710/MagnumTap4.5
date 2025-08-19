@@ -48,6 +48,11 @@ app.get('/upgrades.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'upgrades.html'));
 });
 
+// Страница кошелька
+app.get('/wallet.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'wallet.html'));
+});
+
 // Тестовая страница рекламы
 app.get('/test-ad.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'test-ad.html'));
