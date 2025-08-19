@@ -29,7 +29,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .header h1 {
@@ -64,31 +64,247 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .content {
+        .wallet-content {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 30px;
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .balance-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .balance-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffcb13;
+            margin-bottom: 10px;
+        }
+
+        .balance-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .wallet-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .action-btn.secondary:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .telegram-wallet-section {
+            background: rgba(0, 136, 204, 0.1);
+            border: 1px solid rgba(0, 136, 204, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .telegram-wallet-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #0088cc;
+        }
+
+        .telegram-wallet-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff6b6b;
+        }
+
+        .status-indicator.connected {
+            background: #4CAF50;
+        }
+
+        .connect-btn {
+            background: linear-gradient(135deg, #0088cc, #006699);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 136, 204, 0.3);
+        }
+
+        .history-section {
+            margin-top: 25px;
+        }
+
+        .history-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .transaction-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-type {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .transaction-amount {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .transaction-amount.positive {
+            color: #4CAF50;
+        }
+
+        .transaction-amount.negative {
+            color: #ff6b6b;
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 15% auto;
+            max-width: 400px;
             text-align: center;
         }
 
-        .content h2 {
-            font-size: 24px;
+        .modal h3 {
             margin-bottom: 20px;
             color: #667eea;
         }
 
-        .content p {
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             font-size: 16px;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
         }
 
-        .placeholder {
-            font-size: 48px;
-            margin: 40px 0;
-            opacity: 0.5;
+        .modal input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
         }
     </style>
 </head>
@@ -100,10 +316,65 @@
             <h1>💳 Кошелек</h1>
         </div>
         
-        <div class="content">
-            <div class="placeholder">💳</div>
-            <h2>Кошелек в разработке</h2>
-            <p>Здесь скоро появится функционал кошелька для управления вашими активами!</p>
+        <div class="wallet-content">
+            <!-- Основной баланс -->
+            <div class="balance-section">
+                <div class="balance-title">💰 Основной баланс</div>
+                <div class="balance-amount" id="mainBalance">0</div>
+                <div class="balance-subtitle">Magnum Coins</div>
+            </div>
+
+            <!-- Действия с кошельком -->
+            <div class="wallet-actions">
+                <button class="action-btn" onclick="showDepositModal()">💸 Пополнить</button>
+                <button class="action-btn secondary" onclick="showWithdrawModal()">💳 Вывести</button>
+            </div>
+
+            <!-- Telegram кошелек -->
+            <div class="telegram-wallet-section">
+                <div class="telegram-wallet-title">📱 Telegram кошелек</div>
+                <div class="telegram-wallet-status">
+                    <div class="status-indicator" id="telegramStatus"></div>
+                    <span id="telegramStatusText">Не подключен</span>
+                </div>
+                <button class="connect-btn" id="connectTelegramBtn" onclick="connectTelegramWallet()">
+                    Подключить Telegram кошелек
+                </button>
+            </div>
+
+            <!-- История транзакций -->
+            <div class="history-section">
+                <div class="history-title">📊 История транзакций</div>
+                <div id="transactionHistory">
+                    <div class="empty-history">
+                        Пока нет транзакций
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно пополнения -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <h3>💸 Пополнить кошелек</h3>
+            <input type="number" id="depositAmount" placeholder="Введите сумму" min="1">
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal('depositModal')">Отмена</button>
+                <button class="modal-btn primary" onclick="deposit()">Пополнить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно вывода -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <h3>💳 Вывести средства</h3>
+            <input type="number" id="withdrawAmount" placeholder="Введите сумму" min="1">
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal('withdrawModal')">Отмена</button>
+                <button class="modal-btn primary" onclick="withdraw()">Вывести</button>
+            </div>
         </div>
     </div>
 
@@ -112,6 +383,191 @@
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand();
+        }
+
+        // Данные кошелька
+        let walletData = {
+            balance: 0,
+            telegramConnected: false,
+            transactions: []
+        };
+
+        // Загружаем данные кошелька
+        function loadWalletData() {
+            try {
+                const savedData = localStorage.getItem('walletData');
+                if (savedData) {
+                    walletData = JSON.parse(savedData);
+                }
+                updateWalletDisplay();
+            } catch (error) {
+                console.error('Ошибка загрузки данных кошелька:', error);
+            }
+        }
+
+        // Сохраняем данные кошелька
+        function saveWalletData() {
+            try {
+                localStorage.setItem('walletData', JSON.stringify(walletData));
+            } catch (error) {
+                console.error('Ошибка сохранения данных кошелька:', error);
+            }
+        }
+
+        // Обновляем отображение кошелька
+        function updateWalletDisplay() {
+            // Обновляем основной баланс
+            document.getElementById('mainBalance').textContent = walletData.balance.toLocaleString();
+            
+            // Обновляем статус Telegram кошелька
+            const statusIndicator = document.getElementById('telegramStatus');
+            const statusText = document.getElementById('telegramStatusText');
+            const connectBtn = document.getElementById('connectTelegramBtn');
+            
+            if (walletData.telegramConnected) {
+                statusIndicator.classList.add('connected');
+                statusText.textContent = 'Подключен';
+                connectBtn.textContent = 'Отключить';
+                connectBtn.onclick = disconnectTelegramWallet;
+            } else {
+                statusIndicator.classList.remove('connected');
+                statusText.textContent = 'Не подключен';
+                connectBtn.textContent = 'Подключить Telegram кошелек';
+                connectBtn.onclick = connectTelegramWallet;
+            }
+            
+            // Обновляем историю транзакций
+            updateTransactionHistory();
+        }
+
+        // Обновляем историю транзакций
+        function updateTransactionHistory() {
+            const historyContainer = document.getElementById('transactionHistory');
+            
+            if (walletData.transactions.length === 0) {
+                historyContainer.innerHTML = '<div class="empty-history">Пока нет транзакций</div>';
+                return;
+            }
+            
+            historyContainer.innerHTML = walletData.transactions
+                .slice(-10) // Показываем последние 10 транзакций
+                .reverse()
+                .map(transaction => `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-type">${transaction.type}</div>
+                            <div class="transaction-date">${new Date(transaction.date).toLocaleString()}</div>
+                        </div>
+                        <div class="transaction-amount ${transaction.amount > 0 ? 'positive' : 'negative'}">
+                            ${transaction.amount > 0 ? '+' : ''}${transaction.amount.toLocaleString()}
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        // Добавляем транзакцию
+        function addTransaction(type, amount) {
+            const transaction = {
+                type: type,
+                amount: amount,
+                date: new Date().toISOString()
+            };
+            
+            walletData.transactions.push(transaction);
+            walletData.balance += amount;
+            
+            saveWalletData();
+            updateWalletDisplay();
+        }
+
+        // Показываем модальное окно пополнения
+        function showDepositModal() {
+            document.getElementById('depositModal').style.display = 'block';
+            document.getElementById('depositAmount').focus();
+        }
+
+        // Показываем модальное окно вывода
+        function showWithdrawModal() {
+            document.getElementById('withdrawModal').style.display = 'block';
+            document.getElementById('withdrawAmount').focus();
+        }
+
+        // Закрываем модальное окно
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Пополнение кошелька
+        function deposit() {
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            
+            if (amount && amount > 0) {
+                addTransaction('Пополнение', amount);
+                closeModal('depositModal');
+                document.getElementById('depositAmount').value = '';
+                
+                // Вибрация
+                if (navigator.vibrate) {
+                    navigator.vibrate(100);
+                }
+                
+                alert(`✅ Кошелек пополнен на ${amount.toLocaleString()} монет!`);
+            } else {
+                alert('❌ Введите корректную сумму!');
+            }
+        }
+
+        // Вывод средств
+        function withdraw() {
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+            
+            if (amount && amount > 0) {
+                if (amount <= walletData.balance) {
+                    addTransaction('Вывод', -amount);
+                    closeModal('withdrawModal');
+                    document.getElementById('withdrawAmount').value = '';
+                    
+                    // Вибрация
+                    if (navigator.vibrate) {
+                        navigator.vibrate(100);
+                    }
+                    
+                    alert(`✅ Выведено ${amount.toLocaleString()} монет!`);
+                } else {
+                    alert('❌ Недостаточно средств!');
+                }
+            } else {
+                alert('❌ Введите корректную сумму!');
+            }
+        }
+
+        // Подключение Telegram кошелька
+        function connectTelegramWallet() {
+            // В будущем здесь будет интеграция с Telegram кошельком
+            walletData.telegramConnected = true;
+            saveWalletData();
+            updateWalletDisplay();
+            
+            // Вибрация
+            if (navigator.vibrate) {
+                navigator.vibrate(100);
+            }
+            
+            alert('✅ Telegram кошелек подключен!');
+        }
+
+        // Отключение Telegram кошелька
+        function disconnectTelegramWallet() {
+            walletData.telegramConnected = false;
+            saveWalletData();
+            updateWalletDisplay();
+            
+            // Вибрация
+            if (navigator.vibrate) {
+                navigator.vibrate(100);
+            }
+            
+            alert('❌ Telegram кошелек отключен!');
         }
 
         // Функция возврата назад
@@ -133,6 +589,18 @@
             if (e.key === 'Escape') {
                 goBack();
             }
+        });
+
+        // Закрытие модальных окон при клике вне их
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Загружаем данные при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWalletData();
         });
     </script>
 </body>

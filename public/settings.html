@@ -388,10 +388,9 @@
                 const userName = tg.initDataUnsafe.user.first_name;
                 const userUsername = tg.initDataUnsafe.user.username;
                 
-                // Для тестирования показываем админ панель всем пользователям
-                // В продакшене замените на: if (admin_ids.includes(userId))
-                if (true) { // Временно показываем всем для тестирования
-                    // Показываем админ панель
+                // Проверяем, является ли пользователь админом
+                if (admin_ids.includes(userId)) {
+                    // Показываем админ панель только админам
                     document.getElementById('adminPanel').style.display = 'block';
                     
                     // Заполняем информацию о пользователе
