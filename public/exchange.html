@@ -493,7 +493,7 @@
             const amount = parseInt(document.getElementById('tradeAmount').value);
             
             if (!amount || amount <= 0) {
-                console.log('❌ Укажите количество для торговли');
+                showNotification('error', 'Ошибка', 'Укажите количество для торговли');
                 return;
             }
             
@@ -509,7 +509,7 @@
             
             if (action === 'buy') {
                 if (gameData.coins < totalCost) {
-                    console.log('❌ Недостаточно монет для покупки');
+                    showNotification('error', 'Ошибка', 'Недостаточно монет для покупки');
                     return;
                 }
                 
@@ -528,20 +528,20 @@
                 
                 addToHistory(action, currency, amount, totalCost);
                 
-                console.log(`✅ Куплено ${amount} ${currency} за ${totalCost} монет`);
+                showNotification('success', 'Успешно!', `Куплено ${amount} ${currency} за ${totalCost} монет`);
             } else {
                 // Продаем валюту
                 if (currency === 'energy') {
-                    // Продаем энергию из игрового баланса
-                    if (gameData.energy < amount) {
-                        console.log('❌ Недостаточно энергии для продажи');
-                        return;
-                    }
+                                    // Продаем энергию из игрового баланса
+                if (gameData.energy < amount) {
+                    showNotification('error', 'Ошибка', 'Недостаточно энергии для продажи');
+                    return;
+                }
                     gameData.energy -= amount;
                 } else {
                     const portfolio = getPortfolio();
                     if (!portfolio[currency] || portfolio[currency] < amount) {
-                        console.log('❌ Недостаточно валюты для продажи');
+                        showNotification('error', 'Ошибка', 'Недостаточно валюты для продажи');
                         return;
                     }
                     removeFromPortfolio(currency, amount);
@@ -550,7 +550,7 @@
                 gameData.coins += totalCost;
                 addToHistory(action, currency, amount, totalCost);
                 
-                console.log(`✅ Продано ${amount} ${currency} за ${totalCost} монет`);
+                showNotification('success', 'Успешно!', `Продано ${amount} ${currency} за ${totalCost} монет`);
             }
             
             // Сохраняем данные и обновляем отображение
@@ -701,6 +701,64 @@
             window.location.href = '/';
         }
 
+        // Функции для уведомлений
+        function showNotification(type, title, description, duration = 3000) {
+            const container = document.getElementById('notificationsContainer');
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const successIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"></path>
+            </svg>`;
+            
+            const errorIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"></path>
+            </svg>`;
+            
+            const closeIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
+            </svg>`;
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    ${type === 'success' ? successIcon : errorIcon}
+                </div>
+                <div class="notification-content">
+                    <p class="notification-title">${title}</p>
+                    <p class="notification-description">${description}</p>
+                </div>
+                <button class="notification-close" onclick="closeNotification(this)">
+                    ${closeIcon}
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Показываем уведомление
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Автоматически скрываем через указанное время
+            if (duration > 0) {
+                setTimeout(() => {
+                    closeNotification(notification.querySelector('.notification-close'));
+                }, duration);
+            }
+        }
+        
+        function closeNotification(button) {
+            const notification = button.closest('.notification');
+            notification.classList.remove('show');
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             // Загружаем данные
@@ -721,5 +779,7 @@
             loadTradeHistory();
         });
     </script>
+
+    <div class="notifications-container" id="notificationsContainer"></div>
 </body>
 </html>
