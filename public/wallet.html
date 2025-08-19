@@ -792,6 +792,111 @@
             text-decoration: none;
         }
 
+        /* Стили для уведомлений */
+        .notifications-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 280px;
+            height: 56px;
+            border-radius: 12px;
+            padding: 0 12px;
+            background: #232531;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid #2b9875;
+        }
+
+        .notification.error {
+            border-left: 4px solid #d65563;
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .notification.success .notification-icon {
+            color: #2b9875;
+        }
+
+        .notification.error .notification-icon {
+            color: #d65563;
+        }
+
+        .notification-content {
+            flex: 1;
+            margin-left: 12px;
+        }
+
+        .notification-title {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .notification-description {
+            color: #9ca3af;
+            font-size: 12px;
+            margin: 2px 0 0 0;
+        }
+
+        .notification-close {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .notification-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .notification-close svg {
+            width: 16px;
+            height: 16px;
+        }
+
 
     </style>
 </head>
@@ -1266,9 +1371,9 @@
                     navigator.vibrate(100);
                 }
                 
-                alert(`✅ Кошелек пополнен на ${amount.toLocaleString()} монет!`);
+                showNotification('success', 'Успешно!', `Кошелек пополнен на ${amount.toLocaleString()} монет!`);
             } else {
-                alert('❌ Введите корректную сумму!');
+                showNotification('error', 'Ошибка', 'Введите корректную сумму!');
             }
         }
 
@@ -1287,12 +1392,12 @@
                         navigator.vibrate(100);
                     }
                     
-                    alert(`✅ Выведено ${amount.toLocaleString()} монет!`);
+                    showNotification('success', 'Успешно!', `Выведено ${amount.toLocaleString()} монет!`);
                 } else {
-                    alert('❌ Недостаточно средств!');
+                    showNotification('error', 'Ошибка', 'Недостаточно средств!');
                 }
             } else {
-                alert('❌ Введите корректную сумму!');
+                showNotification('error', 'Ошибка', 'Введите корректную сумму!');
             }
         }
 
@@ -1308,7 +1413,7 @@
                 navigator.vibrate(100);
             }
             
-            alert('✅ Telegram кошелек подключен!');
+            showNotification('success', 'Успешно!', 'Telegram кошелек подключен!');
         }
 
         // Отключение Telegram кошелька
@@ -1322,7 +1427,7 @@
                 navigator.vibrate(100);
             }
             
-            alert('❌ Telegram кошелек отключен!');
+            showNotification('error', 'Отключено', 'Telegram кошелек отключен!');
         }
 
         // Функция возврата назад
@@ -1409,12 +1514,12 @@
             const message = document.getElementById('transferMessage').value.trim();
             
             if (!recipient || !amount || amount <= 0) {
-                alert('❌ Заполните все обязательные поля!');
+                showNotification('error', 'Ошибка', 'Заполните все обязательные поля!');
                 return;
             }
             
             if (amount > walletData.balance) {
-                alert('❌ Недостаточно средств!');
+                showNotification('error', 'Ошибка', 'Недостаточно средств!');
                 return;
             }
             
@@ -1428,7 +1533,7 @@
             clearTransferForm();
             
             if (navigator.vibrate) navigator.vibrate(100);
-            alert(`✅ Переведено ${amount.toLocaleString()} монет пользователю ${recipient}!`);
+            showNotification('success', 'Успешно!', `Переведено ${amount.toLocaleString()} монет пользователю ${recipient}!`);
         }
         
         // Обмен валют
@@ -1438,13 +1543,13 @@
             const toCurrency = document.getElementById('exchangeToCurrency').value;
             
             if (!fromAmount || fromAmount <= 0) {
-                alert('❌ Введите корректную сумму!');
+                showNotification('error', 'Ошибка', 'Введите корректную сумму!');
                 return;
             }
             
             // Проверяем баланс (только для Magnum Coins)
             if (fromCurrency === 'coins' && fromAmount > walletData.balance) {
-                alert('❌ Недостаточно Magnum Coins для обмена!');
+                showNotification('error', 'Ошибка', 'Недостаточно Magnum Coins для обмена!');
                 return;
             }
             
@@ -1467,7 +1572,7 @@
             clearExchangeForm();
             
             if (navigator.vibrate) navigator.vibrate(100);
-            alert(`✅ Обменено ${fromAmount} ${fromCurrency} на ${toAmount.toFixed(2)} ${toCurrency}!`);
+            showNotification('success', 'Успешно!', `Обменено ${fromAmount} ${fromCurrency} на ${toAmount.toFixed(2)} ${toCurrency}!`);
         }
         
         // Добавление карты
@@ -1479,13 +1584,13 @@
             const holder = document.getElementById('cardHolder').value.trim();
             
             if (!name || !number || !expiry || !cvv || !holder) {
-                alert('❌ Заполните все поля!');
+                showNotification('error', 'Ошибка', 'Заполните все поля!');
                 return;
             }
             
             // Простая валидация номера карты
             if (number.length < 13 || number.length > 19) {
-                alert('❌ Неверный номер карты!');
+                showNotification('error', 'Ошибка', 'Неверный номер карты!');
                 return;
             }
             
@@ -1508,7 +1613,7 @@
             clearCardForm();
             
             if (navigator.vibrate) navigator.vibrate(100);
-            alert('✅ Карта успешно добавлена!');
+            showNotification('success', 'Успешно!', 'Карта успешно добавлена!');
         }
         
         // Обновление курса обмена
@@ -1552,7 +1657,7 @@
             window.URL.revokeObjectURL(url);
             
             if (navigator.vibrate) navigator.vibrate(100);
-            alert('✅ Транзакции экспортированы!');
+            showNotification('success', 'Успешно!', 'Транзакции экспортированы!');
         }
         
         // Очистка форм
@@ -1652,6 +1757,64 @@
         function goToMainBot() {
             window.open('https://t.me/magnumtap_bot', '_blank');
         }
+
+        // Функции для уведомлений
+        function showNotification(type, title, description, duration = 3000) {
+            const container = document.getElementById('notificationsContainer');
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const successIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"></path>
+            </svg>`;
+            
+            const errorIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"></path>
+            </svg>`;
+            
+            const closeIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
+            </svg>`;
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    ${type === 'success' ? successIcon : errorIcon}
+                </div>
+                <div class="notification-content">
+                    <p class="notification-title">${title}</p>
+                    <p class="notification-description">${description}</p>
+                </div>
+                <button class="notification-close" onclick="closeNotification(this)">
+                    ${closeIcon}
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Показываем уведомление
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Автоматически скрываем через указанное время
+            if (duration > 0) {
+                setTimeout(() => {
+                    closeNotification(notification.querySelector('.notification-close'));
+                }, duration);
+            }
+        }
+        
+        function closeNotification(button) {
+            const notification = button.closest('.notification');
+            notification.classList.remove('show');
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
     </script>
 
     <!-- Coming Soon Page -->
@@ -1667,5 +1830,7 @@
             </div>
         </div>
     </div>
+
+    <div class="notifications-container" id="notificationsContainer"></div>
 </body>
 </html>

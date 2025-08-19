@@ -276,6 +276,111 @@
         .card button.purchased:hover {
             box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
         }
+
+        /* Стили для уведомлений */
+        .notifications-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 280px;
+            height: 56px;
+            border-radius: 12px;
+            padding: 0 12px;
+            background: #232531;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid #2b9875;
+        }
+
+        .notification.error {
+            border-left: 4px solid #d65563;
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .notification.success .notification-icon {
+            color: #2b9875;
+        }
+
+        .notification.error .notification-icon {
+            color: #d65563;
+        }
+
+        .notification-content {
+            flex: 1;
+            margin-left: 12px;
+        }
+
+        .notification-title {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .notification-description {
+            color: #9ca3af;
+            font-size: 12px;
+            margin: 2px 0 0 0;
+        }
+
+        .notification-close {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .notification-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .notification-close svg {
+            width: 16px;
+            height: 16px;
+        }
     </style>
 </head>
 <body>
@@ -297,6 +402,8 @@
             </div>
         </div>
     </div>
+
+    <div class="notifications-container" id="notificationsContainer"></div>
 
     <script>
         // Инициализация Telegram WebApp
@@ -455,7 +562,7 @@
                 }
 
                 if (gameData.purchasedUpgrades.includes(itemId)) {
-                    alert('Это улучшение уже куплено!');
+                    showNotification('error', 'Ошибка', 'Это улучшение уже куплено!');
                     return;
                 }
 
@@ -477,9 +584,9 @@
                     navigator.vibrate(100);
                 }
 
-                alert(`✅ ${item.name} успешно куплено!`);
+                showNotification('success', 'Успешно!', `${item.name} куплено!`);
             } else {
-                alert('Недостаточно монет!');
+                showNotification('error', 'Ошибка', 'Недостаточно монет!');
             }
         }
 
@@ -537,6 +644,64 @@
             }
         });
 
+        // Функции для уведомлений
+        function showNotification(type, title, description, duration = 3000) {
+            const container = document.getElementById('notificationsContainer');
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const successIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"></path>
+            </svg>`;
+            
+            const errorIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"></path>
+            </svg>`;
+            
+            const closeIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
+            </svg>`;
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    ${type === 'success' ? successIcon : errorIcon}
+                </div>
+                <div class="notification-content">
+                    <p class="notification-title">${title}</p>
+                    <p class="notification-description">${description}</p>
+                </div>
+                <button class="notification-close" onclick="closeNotification(this)">
+                    ${closeIcon}
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Показываем уведомление
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Автоматически скрываем через указанное время
+            if (duration > 0) {
+                setTimeout(() => {
+                    closeNotification(notification.querySelector('.notification-close'));
+                }, duration);
+            }
+        }
+        
+        function closeNotification(button) {
+            const notification = button.closest('.notification');
+            notification.classList.remove('show');
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+        
         // Загружаем данные при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
             loadGameData();
