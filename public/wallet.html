@@ -707,15 +707,15 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Coming Soon Modal */
-        .coming-soon-modal {
+        /* Coming Soon Page */
+        .coming-soon-page {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
+            background: #00091B;
+            display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
@@ -792,20 +792,7 @@
             text-decoration: none;
         }
 
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 10001;
-        }
+
     </style>
 </head>
 <body>
@@ -1617,34 +1604,48 @@
         // Проверка админа и показ Coming Soon
         function checkAdminAndShowComingSoon() {
             try {
-                const userId = tg.initDataUnsafe.user.id;
+                // Получаем данные пользователя из Telegram WebApp
+                const user = window.Telegram.WebApp.initDataUnsafe?.user;
+                
+                if (!user) {
+                    console.log('👤 Данные пользователя недоступны');
+                    showComingSoonPage();
+                    return false;
+                }
+                
+                const userId = user.id;
                 const admin_ids = [123456789, 987654321]; // Замените на реальные ID админов
+                
+                console.log('🔍 Проверяем пользователя:', userId);
                 
                 if (admin_ids.includes(userId)) {
                     // Админ - показываем полный функционал
+                    console.log('🔧 Админ - показываем полный кошелек');
+                    showWalletContent();
                     return true;
                 } else {
                     // Обычный пользователь - показываем Coming Soon
-                    showComingSoonModal();
+                    console.log('👤 Пользователь - показываем Coming Soon');
+                    showComingSoonPage();
                     return false;
                 }
             } catch (error) {
                 console.error('Ошибка при проверке админа:', error);
-                showComingSoonModal();
+                showComingSoonPage();
                 return false;
             }
         }
 
-        // Показать модальное окно Coming Soon
-        function showComingSoonModal() {
-            const modal = document.getElementById('comingSoonModal');
-            modal.style.display = 'flex';
+        // Показать страницу Coming Soon
+        function showComingSoonPage() {
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('comingSoonPage').style.display = 'block';
         }
 
-        // Закрыть модальное окно
-        function closeComingSoonModal() {
-            const modal = document.getElementById('comingSoonModal');
-            modal.style.display = 'none';
+        // Показать полный кошелек
+        function showWalletContent() {
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('comingSoonPage').style.display = 'none';
         }
 
         // Переход в основной бот
@@ -1653,9 +1654,9 @@
         }
     </script>
 
-    <!-- Coming Soon Modal -->
-    <div class="coming-soon-modal" id="comingSoonModal">
-        <button class="close-modal" onclick="closeComingSoonModal()">✕</button>
+    <!-- Coming Soon Page -->
+    <div class="coming-soon-page" id="comingSoonPage" style="display: none;">
+        <button class="back-btn" onclick="goBack()">← Назад</button>
         <div class="coming-soon-wrapper">
             <h1>coming soon<span class="dot">.</span></h1>
             <p>Кошелек находится в разработке. Скоро будет доступен!</p>

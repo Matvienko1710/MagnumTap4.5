@@ -384,9 +384,19 @@
         // Проверка на админа
         function checkAdmin() {
             try {
-                const userId = tg.initDataUnsafe.user.id;
-                const userName = tg.initDataUnsafe.user.first_name;
-                const userUsername = tg.initDataUnsafe.user.username;
+                // Получаем данные пользователя из Telegram WebApp
+                const user = window.Telegram.WebApp.initDataUnsafe?.user;
+                
+                if (!user) {
+                    console.log('👤 Данные пользователя недоступны');
+                    return;
+                }
+                
+                const userId = user.id;
+                const userName = user.first_name;
+                const userUsername = user.username;
+                
+                console.log('🔍 Проверяем пользователя:', userId, userName);
                 
                 // Проверяем, является ли пользователь админом
                 if (admin_ids.includes(userId)) {
@@ -401,6 +411,7 @@
                     console.log('🔧 Админ панель активирована для пользователя:', userId);
                 } else {
                     console.log('👤 Пользователь не является администратором:', userId);
+                    document.getElementById('adminPanel').style.display = 'none';
                 }
             } catch (error) {
                 console.error('❌ Ошибка при проверке админа:', error);
