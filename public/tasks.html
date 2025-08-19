@@ -247,16 +247,24 @@
                 <span id="coinsDisplay">0</span>
             </div>
             <div class="stat-row">
-                <span>📺 Реклам просмотрено:</span>
+                <span>📺 Monetag реклам:</span>
                 <span id="adsWatchedDisplay">0</span>
+            </div>
+            <div class="stat-row">
+                <span>📺 Adstera реклам:</span>
+                <span id="adsteraAdsWatchedDisplay">0</span>
             </div>
             <div class="stat-row">
                 <span>✅ Заданий выполнено:</span>
                 <span id="tasksCompletedDisplay">0</span>
             </div>
             <div class="stat-row">
-                <span>⏰ Последняя реклама:</span>
+                <span>⏰ Последняя Monetag:</span>
                 <span id="lastAdDisplay">Никогда</span>
+            </div>
+            <div class="stat-row">
+                <span>⏰ Последняя Adstera:</span>
+                <span id="lastAdsteraDisplay">Никогда</span>
             </div>
         </div>
 
@@ -270,13 +278,25 @@
         <div class="task-item">
             <div class="task-header">
                 <div class="task-icon">📺</div>
-                <div class="task-title">Смотреть рекламу</div>
+                <div class="task-title">Смотреть рекламу Monetag</div>
             </div>
             <div class="task-description">
-                Посмотрите рекламу и получите 50 монет! Реклама поможет вам быстро накопить монеты для покупки улучшений.
+                Посмотрите рекламу Monetag и получите 50 монет! Реклама поможет вам быстро накопить монеты для покупки улучшений.
             </div>
             <div class="task-reward">💰 Награда: 50 монет</div>
             <button class="task-button" id="watchAdBtn">Смотреть рекламу</button>
+        </div>
+
+        <div class="task-item">
+            <div class="task-header">
+                <div class="task-icon">📺</div>
+                <div class="task-title">Смотреть рекламу Adstera</div>
+            </div>
+            <div class="task-description">
+                Посмотрите рекламу Adstera и получите 75 монет! Дополнительная возможность заработка с повышенной наградой.
+            </div>
+            <div class="task-reward">💰 Награда: 75 монет</div>
+            <button class="task-button" id="watchAdsteraBtn">Смотреть рекламу Adstera</button>
         </div>
 
         <div class="task-item">
@@ -330,7 +350,9 @@
             coinsPerClick: 1,
             tasksCompleted: 0,
             adsWatched: 0,
-            lastAdWatch: 0
+            lastAdWatch: 0,
+            adsteraAdsWatched: 0,
+            lastAdsteraWatch: 0
         };
 
         // Настройки рекламы Monetag
@@ -339,6 +361,14 @@
             rewardAmount: 50,
             cooldownMinutes: 5,
             adDuration: 30
+        };
+
+        // Настройки рекламы Adstera
+        const ADSTERA_CONFIG = {
+            zoneId: 'adstera-zone-id', // Замените на реальный ID зоны Adstera
+            rewardAmount: 75,
+            cooldownMinutes: 7,
+            adDuration: 25
         };
 
         // Загружаем сохраненные данные
@@ -359,9 +389,10 @@
         function updateDisplay() {
             document.getElementById('coinsDisplay').textContent = gameData.coins.toLocaleString();
             document.getElementById('adsWatchedDisplay').textContent = gameData.adsWatched;
+            document.getElementById('adsteraAdsWatchedDisplay').textContent = gameData.adsteraAdsWatched;
             document.getElementById('tasksCompletedDisplay').textContent = gameData.tasksCompleted;
             
-            // Время последней рекламы
+            // Время последней рекламы Monetag
             if (gameData.lastAdWatch) {
                 const timeSinceLastAd = Math.floor((Date.now() - gameData.lastAdWatch) / 1000 / 60);
                 document.getElementById('lastAdDisplay').textContent = `${timeSinceLastAd} мин назад`;
@@ -369,11 +400,20 @@
                 document.getElementById('lastAdDisplay').textContent = 'Никогда';
             }
 
-            // Проверяем кулдаун
+            // Время последней рекламы Adstera
+            if (gameData.lastAdsteraWatch) {
+                const timeSinceLastAdstera = Math.floor((Date.now() - gameData.lastAdsteraWatch) / 1000 / 60);
+                document.getElementById('lastAdsteraDisplay').textContent = `${timeSinceLastAdstera} мин назад`;
+            } else {
+                document.getElementById('lastAdsteraDisplay').textContent = 'Никогда';
+            }
+
+            // Проверяем кулдауны
             checkCooldown();
+            checkAdsteraCooldown();
         }
 
-        // Проверяем кулдаун рекламы
+        // Проверяем кулдаун рекламы Monetag
         function checkCooldown() {
             const cooldownInfo = document.getElementById('cooldownInfo');
             const watchAdBtn = document.getElementById('watchAdBtn');
@@ -389,7 +429,7 @@
                 }
                 
                 cooldownInfo.style.display = 'block';
-                document.getElementById('cooldownText').textContent = `Подождите еще ${remainingTime} минут перед следующим просмотром рекламы`;
+                document.getElementById('cooldownText').textContent = `Подождите еще ${remainingTime} минут перед следующим просмотром рекламы Monetag`;
                 watchAdBtn.disabled = true;
                 watchAdBtn.textContent = 'Подождите...';
             } else {
@@ -399,7 +439,29 @@
             }
         }
 
-        // Проверяем, можно ли смотреть рекламу
+        // Проверяем кулдаун рекламы Adstera
+        function checkAdsteraCooldown() {
+            const watchAdsteraBtn = document.getElementById('watchAdsteraBtn');
+            
+            if (!canWatchAdstera()) {
+                const now = Date.now();
+                const cooldownMs = ADSTERA_CONFIG.cooldownMinutes * 60 * 1000;
+                let remainingTime = 0;
+                
+                if (gameData.lastAdsteraWatch && typeof gameData.lastAdsteraWatch === 'number') {
+                    remainingTime = Math.ceil((cooldownMs - (now - gameData.lastAdsteraWatch)) / 1000 / 60);
+                    remainingTime = Math.max(0, remainingTime);
+                }
+                
+                watchAdsteraBtn.disabled = true;
+                watchAdsteraBtn.textContent = `Подождите ${remainingTime} мин...`;
+            } else {
+                watchAdsteraBtn.disabled = false;
+                watchAdsteraBtn.textContent = 'Смотреть рекламу Adstera';
+            }
+        }
+
+        // Проверяем, можно ли смотреть рекламу Monetag
         function canWatchAd() {
             const now = Date.now();
             const cooldownMs = AD_CONFIG.cooldownMinutes * 60 * 1000;
@@ -411,7 +473,19 @@
             return (now - gameData.lastAdWatch) >= cooldownMs;
         }
 
-        // Обработчик просмотра рекламы
+        // Проверяем, можно ли смотреть рекламу Adstera
+        function canWatchAdstera() {
+            const now = Date.now();
+            const cooldownMs = ADSTERA_CONFIG.cooldownMinutes * 60 * 1000;
+            
+            if (!gameData.lastAdsteraWatch || typeof gameData.lastAdsteraWatch !== 'number') {
+                return true;
+            }
+            
+            return (now - gameData.lastAdsteraWatch) >= cooldownMs;
+        }
+
+        // Обработчик просмотра рекламы Monetag
         function handleWatchAd() {
             if (!canWatchAd()) {
                 return;
@@ -442,7 +516,78 @@
             }
         }
 
-        // Завершение просмотра рекламы
+        // Обработчик просмотра рекламы Adstera
+        function handleWatchAdstera() {
+            if (!canWatchAdstera()) {
+                return;
+            }
+            
+            console.log('🔍 Запуск рекламы Adstera...');
+            
+            // Симуляция рекламы Adstera (замените на реальный SDK)
+            try {
+                // Здесь будет интеграция с реальным SDK Adstera
+                // Пока используем демо-рекламу
+                showDemoAdsteraAd();
+            } catch (error) {
+                console.error('❌ Ошибка при показе рекламы Adstera:', error);
+                if (navigator.vibrate) navigator.vibrate(30);
+            }
+        }
+
+        // Демо-реклама Adstera (замените на реальную интеграцию)
+        function showDemoAdsteraAd() {
+            const adModal = document.createElement('div');
+            adModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            `;
+            
+            adModal.innerHTML = `
+                <div style="text-align: center; color: white; padding: 20px;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">📺</div>
+                    <h2 style="margin-bottom: 15px;">Реклама Adstera</h2>
+                    <p style="margin-bottom: 20px;">Демонстрационная реклама Adstera</p>
+                    <div id="adsteraTimer" style="font-size: 24px; color: #ffd700; margin-bottom: 20px;">25</div>
+                    <p style="font-size: 14px; opacity: 0.7;">Закрытие через <span id="adsteraCountdown">25</span> секунд</p>
+                </div>
+            `;
+            
+            document.body.appendChild(adModal);
+            
+            let countdown = ADSTERA_CONFIG.adDuration;
+            const timerElement = document.getElementById('adsteraTimer');
+            const countdownElement = document.getElementById('adsteraCountdown');
+            
+            const timer = setInterval(() => {
+                countdown--;
+                timerElement.textContent = countdown;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    document.body.removeChild(adModal);
+                    completeAdsteraWatch();
+                }
+            }, 1000);
+            
+            // Запрещаем закрытие до истечения времени
+            adModal.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        }
+
+        // Завершение просмотра рекламы Monetag
         function completeAdWatch() {
             gameData.coins += AD_CONFIG.rewardAmount;
             gameData.adsWatched++;
@@ -452,6 +597,21 @@
             updateDisplay();
             saveGameData();
             // Без alert
+        }
+
+        // Завершение просмотра рекламы Adstera
+        function completeAdsteraWatch() {
+            gameData.coins += ADSTERA_CONFIG.rewardAmount;
+            gameData.adsteraAdsWatched++;
+            gameData.tasksCompleted++;
+            gameData.lastAdsteraWatch = Date.now();
+            
+            updateDisplay();
+            saveGameData();
+            
+            // Уведомление о награде
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            console.log(`✅ Реклама Adstera завершена! Получено ${ADSTERA_CONFIG.rewardAmount} монет`);
         }
 
         // Сброс кулдауна (для разработки)
@@ -486,6 +646,7 @@
             
             // Привязываем обработчики
             document.getElementById('watchAdBtn').addEventListener('click', handleWatchAd);
+            document.getElementById('watchAdsteraBtn').addEventListener('click', handleWatchAdstera);
             document.getElementById('playGameBtn').addEventListener('click', handlePlayGame);
             document.getElementById('installAppBtn').addEventListener('click', handleInstallApp);
             document.getElementById('resetCooldownBtn').addEventListener('click', resetAdCooldown);
