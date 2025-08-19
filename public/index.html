@@ -138,21 +138,7 @@
             will-change: width;
         }
 
-        .energy-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: energyShine 2s infinite;
-        }
 
-        @keyframes energyShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
 
         .buttons-grid {
             display: grid;
@@ -189,84 +175,61 @@
             transition: .3s ease;
         }
         
-        .upgrade-btn {
-            background: linear-gradient(15deg, #880088, #aa2068, #cc3f47, #de6f3d, #f09f33, #de6f3d, #cc3f47, #aa2068, #880088) no-repeat;
-            background-size: 300%;
-            color: #fff;
-            background-position: left center;
-        }
-
-        .upgrade-btn:hover {
-            background-size: 320%;
-            background-position: right center;
-        }
-
-        .upgrade-btn svg {
-            fill: #f09f33;
-        }
-
-        .upgrade-btn:hover svg {
-            fill: #fff;
-        }
-        
-        .tasks-btn {
-            background: linear-gradient(15deg, #4CAF50, #45a049, #2E7D32, #1B5E20, #0D4F14, #1B5E20, #2E7D32, #45a049, #4CAF50) no-repeat;
-            background-size: 300%;
-            color: #fff;
-            background-position: left center;
-        }
-
-        .tasks-btn:hover {
-            background-size: 320%;
-            background-position: right center;
-        }
-
-        .tasks-btn svg {
-            fill: #90EE90;
-        }
-
-        .tasks-btn:hover svg {
-            fill: #fff;
-        }
-        
-        .achievements-btn {
-            background: linear-gradient(15deg, #FF6B6B, #ee5a24, #ff8c42, #ffa726, #ffcc02, #ffa726, #ff8c42, #ee5a24, #FF6B6B) no-repeat;
-            background-size: 300%;
-            color: #fff;
-            background-position: left center;
-        }
-
-        .achievements-btn:hover {
-            background-size: 320%;
-            background-position: right center;
-        }
-
-        .achievements-btn svg {
-            fill: #ffcc02;
-        }
-
-        .achievements-btn:hover svg {
-            fill: #fff;
-        }
-        
+        .upgrade-btn,
+        .tasks-btn,
+        .achievements-btn,
         .leaderboard-btn {
-            background: linear-gradient(15deg, #9C27B0, #673AB7, #3F51B5, #2196F3, #00BCD4, #2196F3, #3F51B5, #673AB7, #9C27B0) no-repeat;
-            background-size: 300%;
+            background: linear-gradient(
+                -45deg,
+                #00eff8,
+                #f800b4,
+                #ebf503,
+                #02f6c1,
+                #00eff8,
+                #9400f8
+            );
+            background-size: 400% 400%;
+            animation: gradient 30s ease infinite;
             color: #fff;
-            background-position: left center;
         }
 
+        .upgrade-btn:hover,
+        .tasks-btn:hover,
+        .achievements-btn:hover,
         .leaderboard-btn:hover {
-            background-size: 320%;
-            background-position: right center;
+            animation: gradient 15s ease infinite;
         }
 
+        .upgrade-btn svg,
+        .tasks-btn svg,
+        .achievements-btn svg,
         .leaderboard-btn svg {
-            fill: #00BCD4;
+            fill: #fff;
         }
 
+        .upgrade-btn:hover svg,
+        .tasks-btn:hover svg,
+        .achievements-btn:hover svg,
         .leaderboard-btn:hover svg {
             fill: #fff;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 50% 100%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            75% {
+                background-position: 50% 0%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .top-panel {
