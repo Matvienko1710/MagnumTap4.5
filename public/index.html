@@ -159,6 +159,76 @@
             fill: #90EE90;
             transition: .3s ease;
         }
+        
+        .achievements-btn {
+            width: fit-content;
+            display: flex;
+            padding: 0.8em 1rem;
+            cursor: pointer;
+            gap: 0.4rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
+            background: linear-gradient(15deg, #FF6B6B, #ee5a24, #ff8c42, #ffa726, #ffcc02, #ffa726, #ff8c42, #ee5a24, #FF6B6B) no-repeat;
+            background-size: 300%;
+            color: #fff;
+            border: none;
+            background-position: left center;
+            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
+            transition: background .3s ease;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .achievements-btn:hover {
+            background-size: 320%;
+            background-position: right center;
+        }
+
+        .achievements-btn:hover svg {
+            fill: #fff;
+        }
+
+        .achievements-btn svg {
+            width: 16px;
+            fill: #ffcc02;
+            transition: .3s ease;
+        }
+        
+        .leaderboard-btn {
+            width: fit-content;
+            display: flex;
+            padding: 0.8em 1rem;
+            cursor: pointer;
+            gap: 0.4rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
+            background: linear-gradient(15deg, #9C27B0, #673AB7, #3F51B5, #2196F3, #00BCD4, #2196F3, #3F51B5, #673AB7, #9C27B0) no-repeat;
+            background-size: 300%;
+            color: #fff;
+            border: none;
+            background-position: left center;
+            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
+            transition: background .3s ease;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .leaderboard-btn:hover {
+            background-size: 320%;
+            background-position: right center;
+        }
+
+        .leaderboard-btn:hover svg {
+            fill: #fff;
+        }
+
+        .leaderboard-btn svg {
+            width: 16px;
+            fill: #00BCD4;
+            transition: .3s ease;
+        }
 
         .top-panel {
             position: fixed;
@@ -1015,6 +1085,18 @@
                     </svg>
                     Задания
                 </button>
+                <button class="achievements-btn" id="achievementsBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
+                        <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                    </svg>
+                    Достижения
+                </button>
+                <button class="leaderboard-btn" id="leaderboardBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
+                        <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                    </svg>
+                    Лидеры
+                </button>
             </div>
             
             <div class="stats">
@@ -1054,31 +1136,7 @@
             </span>
             <span class="link-title">Биржа</span>
         </a>
-        <a href="#" class="link" id="achievementsBtn" data-action="achievements">
-            <span class="link-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
-                    <rect width="256" height="256" fill="none"></rect>
-                    <path d="M128,24C104.852,24,88,40.852,88,64s16.852,40,40,40,40-16.852,40-40S151.148,24,128,24Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M128,104c-35.346,0-64,28.654-64,64s28.654,64,64,64,64-28.654,64-64S163.346,104,128,104Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M128,168c-17.673,0-32,14.327-32,32s14.327,32,32,32,32-14.327,32-32S145.673,168,128,168Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                </svg>
-            </span>
-            <span class="link-title">Достижения</span>
-        </a>
-        <a href="#" class="link" id="leaderboardBtn" data-action="leaderboard">
-            <span class="link-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
-                    <rect width="256" height="256" fill="none"></rect>
-                    <path d="M32,72H224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M32,128H224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M32,184H224" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M64,72V184" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M128,72V184" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                    <path d="M192,72V184" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16"></path>
-                </svg>
-            </span>
-            <span class="link-title">Лидеры</span>
-        </a>
+
         <a href="#" class="link" id="walletBtn" data-action="wallet">
             <span class="link-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
@@ -1710,6 +1768,18 @@
             const tasksBtn = document.getElementById('tasksBtn');
             if (tasksBtn) {
                 tasksBtn.addEventListener('click', handleTasks);
+            }
+            
+            // Привязываем обработчик кнопки достижений
+            const achievementsBtn = document.getElementById('achievementsBtn');
+            if (achievementsBtn) {
+                achievementsBtn.addEventListener('click', handleAchievements);
+            }
+            
+            // Привязываем обработчик кнопки лидеров
+            const leaderboardBtn = document.getElementById('leaderboardBtn');
+            if (leaderboardBtn) {
+                leaderboardBtn.addEventListener('click', handleLeaderboard);
             }
             
             // Обработчики кнопок панели
