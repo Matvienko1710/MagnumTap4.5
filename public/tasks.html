@@ -216,137 +216,7 @@
             }
         }
 
-        /* Анимированные часы */
-
-        #h1, #h1-adstera {
-            animation: rotate 60s linear infinite;
-        }
-
-        #h2, #h2-adstera {
-            width: 45%;
-            left: 5%;
-            top: 45%;
-            background-color: #636363;
-            animation: rotate 1s linear infinite;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(90deg);
-            }
-
-            to {
-                transform: rotate(450deg);
-            }
-        }
-
-        /* Исправление позиционирования для миниатюрных часов */
-        .cloader {
-            width: 2em;
-            height: 2em;
-            border: 2px solid white;
-            border-radius: 50%;
-            margin: 0 auto;
-            position: relative;
-            padding: 0.5rem;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
-            overflow: visible;
-        }
-
-        .clface {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transform: translateY(-1px);
-        }
-
-        .top {
-            height: 4px;
-            width: 2px;
-            content: '';
-            background-color: white;
-            border-radius: 5em;
-            margin-top: -12px;
-            margin-left: 17px;
-        }
-
-        .bottom {
-            height: 4px;
-            width: 2px;
-            content: '';
-            background-color: white;
-            border-radius: 5em;
-            margin-top: 54px;
-            margin-left: 17px;
-        }
-
-        .left {
-            height: 2px;
-            width: 4px;
-            content: '';
-            background-color: white;
-            border-radius: 5em;
-            margin-top: -33px;
-            margin-left: 45px;
-        }
-
-        .right {
-            height: 2px;
-            width: 4px;
-            content: '';
-            background-color: white;
-            border-radius: 5em;
-            margin-top: -2px;
-            margin-left: -14px;
-        }
-
-        .clsface {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            margin-left: 10px;
-            margin-top: 6px;
-            border-radius: 6em;
-            border: 1px solid #636363;
-        }
-
-        .hand {
-            width: 65%;
-            height: 2px;
-            background-color: white;
-            border-radius: 3em;
-            border: none;
-            position: absolute;
-            top: 85%;
-            left: -15%;
-            transform-origin: 100%;
-            transform: rotate(90deg);
-        }
-
-        .pin {
-            width: 25%;
-            height: 25%;
-            border-radius: 50%;
-            background: white;
-            position: absolute;
-            top: 86%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        #sub, #sub-adstera {
-            width: 10%;
-            height: 10%;
-            border-radius: 50%;
-            background: #636363;
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
+        /* Простой кулдаун */
         .cooldown-container {
             display: flex;
             align-items: center;
@@ -356,8 +226,9 @@
 
         .cooldown-text {
             color: #ff6b6b;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
         }
     </style>
 </head>
@@ -433,20 +304,6 @@
             <button class="task-button" id="watchAdBtn">
                 <span class="button-text">Смотреть рекламу</span>
                 <div class="cooldown-container" style="display: none;">
-                    <div class="cloader">
-                        <div class="clface">
-                            <div class="clsface">
-                                <div id="h2" class="hand"></div>
-                            </div>
-                            <div class="top"></div>
-                            <div class="bottom"></div>
-                            <div class="left"></div>
-                            <div class="right"></div>
-                            <div id="sub" class="pin"></div>
-                            <div id="h1" class="hand"></div>
-                            <div id="main" class="pin"></div>
-                        </div>
-                    </div>
                     <span class="cooldown-text">Подождите</span>
                 </div>
             </button>
@@ -464,20 +321,6 @@
             <button class="task-button" id="watchAdsteraBtn">
                 <span class="button-text">Смотреть рекламу Adstera</span>
                 <div class="cooldown-container" style="display: none;">
-                    <div class="cloader">
-                        <div class="clface">
-                            <div class="clsface">
-                                <div id="h2-adstera" class="hand"></div>
-                            </div>
-                            <div class="top"></div>
-                            <div class="bottom"></div>
-                            <div class="left"></div>
-                            <div class="right"></div>
-                            <div id="sub-adstera" class="pin"></div>
-                            <div id="h1-adstera" class="hand"></div>
-                            <div id="main-adstera" class="pin"></div>
-                        </div>
-                    </div>
                     <span class="cooldown-text">Подождите</span>
                 </div>
             </button>
@@ -623,6 +466,7 @@
             const watchAdBtn = document.getElementById('watchAdBtn');
             const buttonText = watchAdBtn.querySelector('.button-text');
             const cooldownContainer = watchAdBtn.querySelector('.cooldown-container');
+            const cooldownText = watchAdBtn.querySelector('.cooldown-text');
             
             if (!canWatchAd()) {
                 const now = Date.now();
@@ -640,8 +484,10 @@
                 buttonText.style.display = 'none';
                 cooldownContainer.style.display = 'flex';
                 
-                // Обновляем анимацию часов
-                updateClockAnimation(watchAdBtn, remainingSeconds);
+                // Обновляем текст кулдауна
+                const minutes = Math.floor(remainingSeconds / 60);
+                const seconds = remainingSeconds % 60;
+                cooldownText.textContent = `Подождите ${minutes}:${seconds.toString().padStart(2, '0')}`;
             } else {
                 cooldownInfo.style.display = 'none';
                 watchAdBtn.disabled = false;
@@ -655,6 +501,7 @@
             const watchAdsteraBtn = document.getElementById('watchAdsteraBtn');
             const buttonText = watchAdsteraBtn.querySelector('.button-text');
             const cooldownContainer = watchAdsteraBtn.querySelector('.cooldown-container');
+            const cooldownText = watchAdsteraBtn.querySelector('.cooldown-text');
             
             if (!canWatchAdstera()) {
                 const now = Date.now();
@@ -670,8 +517,10 @@
                 buttonText.style.display = 'none';
                 cooldownContainer.style.display = 'flex';
                 
-                // Обновляем анимацию часов
-                updateClockAnimation(watchAdsteraBtn, remainingSeconds);
+                // Обновляем текст кулдауна
+                const minutes = Math.floor(remainingSeconds / 60);
+                const seconds = remainingSeconds % 60;
+                cooldownText.textContent = `Подождите ${minutes}:${seconds.toString().padStart(2, '0')}`;
             } else {
                 watchAdsteraBtn.disabled = false;
                 buttonText.style.display = 'block';
@@ -703,26 +552,7 @@
             return (now - gameData.lastAdsteraWatch) >= cooldownMs;
         }
 
-        // Обновление анимации часов
-        function updateClockAnimation(button, remainingSeconds) {
-            const h1 = button.querySelector('#h1, #h1-adstera');
-            const cooldownText = button.querySelector('.cooldown-text');
-            
-            if (h1 && cooldownText) {
-                // Обновляем текст
-                const minutes = Math.floor(remainingSeconds / 60);
-                const seconds = remainingSeconds % 60;
-                cooldownText.textContent = `Подождите ${minutes}:${seconds.toString().padStart(2, '0')}`;
-                
-                // Сбрасываем и перезапускаем анимацию
-                h1.style.animation = 'none';
-                h1.offsetHeight; // Принудительный reflow
-                
-                // Устанавливаем новую анимацию
-                const animationDuration = Math.max(1, remainingSeconds);
-                h1.style.animation = `rotate ${animationDuration}s linear infinite`;
-            }
-        }
+
 
         // Обработчик просмотра рекламы Monetag
         function handleWatchAd() {
