@@ -306,6 +306,422 @@
             background: rgba(255, 255, 255, 0.1);
             color: white;
         }
+
+        /* Новые стили для расширенного функционала */
+        .balance-overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .balance-card.main {
+            background: linear-gradient(135deg, rgba(255, 203, 19, 0.2), rgba(255, 193, 7, 0.2));
+        }
+
+        .balance-icon {
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+
+        .balance-info {
+            flex: 1;
+        }
+
+        .balance-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffcb13;
+            margin-bottom: 2px;
+        }
+
+        .balance-currency {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .balance-change {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        .energy-bar {
+            width: 60px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.3s ease;
+        }
+
+        .quick-actions {
+            margin-bottom: 25px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .quick-btn.deposit:hover {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(69, 160, 73, 0.2));
+        }
+
+        .quick-btn.withdraw:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        }
+
+        .quick-btn.transfer:hover {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+        }
+
+        .quick-btn.exchange:hover {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(103, 58, 183, 0.2));
+        }
+
+        .btn-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .btn-text {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .wallets-section {
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin: 0;
+        }
+
+        .add-btn {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .wallets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .wallet-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .wallet-card:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+        }
+
+        .wallet-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .wallet-type {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .wallet-balance {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffcb13;
+        }
+
+        .telegram-wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .telegram-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-icon {
+            font-size: 14px;
+        }
+
+        .stats-section {
+            margin-bottom: 25px;
+        }
+
+        .period-selector {
+            display: flex;
+            gap: 5px;
+        }
+
+        .period-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 5px 10px;
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .period-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffcb13;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .history-filters {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .history-filters select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 5px 10px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Стили для модальных окон */
+        .exchange-form {
+            margin-bottom: 20px;
+        }
+
+        .exchange-row {
+            margin-bottom: 15px;
+        }
+
+        .exchange-row label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .exchange-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .exchange-input-group input {
+            flex: 1;
+        }
+
+        .exchange-input-group select {
+            width: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .exchange-arrow {
+            text-align: center;
+            font-size: 20px;
+            margin: 10px 0;
+            color: #667eea;
+        }
+
+        .exchange-rate {
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 10px;
+        }
+
+        .card-details {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-details input {
+            flex: 1;
+        }
+
+        .settings-group {
+            margin-bottom: 20px;
+        }
+
+        .settings-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 0;
+        }
+
+        .setting-item span {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .setting-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -317,34 +733,141 @@
         </div>
         
         <div class="wallet-content">
-            <!-- Основной баланс -->
-            <div class="balance-section">
-                <div class="balance-title">💰 Основной баланс</div>
-                <div class="balance-amount" id="mainBalance">0</div>
-                <div class="balance-subtitle">Magnum Coins</div>
+            <!-- Верхняя панель с основными балансами -->
+            <div class="balance-overview">
+                <div class="balance-card main">
+                    <div class="balance-icon">💰</div>
+                    <div class="balance-info">
+                        <div class="balance-label">Основной баланс</div>
+                        <div class="balance-amount" id="mainBalance">0</div>
+                        <div class="balance-currency">Magnum Coins</div>
+                    </div>
+                    <div class="balance-change" id="balanceChange">+0%</div>
+                </div>
+                
+                <div class="balance-card secondary">
+                    <div class="balance-icon">⚡</div>
+                    <div class="balance-info">
+                        <div class="balance-label">Энергия</div>
+                        <div class="balance-amount" id="energyBalance">1000</div>
+                        <div class="balance-currency">/ 1000</div>
+                    </div>
+                    <div class="energy-bar">
+                        <div class="energy-fill" id="energyFill"></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Действия с кошельком -->
-            <div class="wallet-actions">
-                <button class="action-btn" onclick="showDepositModal()">💸 Пополнить</button>
-                <button class="action-btn secondary" onclick="showWithdrawModal()">💳 Вывести</button>
+            <!-- Быстрые действия -->
+            <div class="quick-actions">
+                <div class="action-grid">
+                    <button class="quick-btn deposit" onclick="showDepositModal()">
+                        <div class="btn-icon">💸</div>
+                        <div class="btn-text">Пополнить</div>
+                    </button>
+                    <button class="quick-btn withdraw" onclick="showWithdrawModal()">
+                        <div class="btn-icon">💳</div>
+                        <div class="btn-text">Вывести</div>
+                    </button>
+                    <button class="quick-btn transfer" onclick="showTransferModal()">
+                        <div class="btn-icon">🔄</div>
+                        <div class="btn-text">Перевод</div>
+                    </button>
+                    <button class="quick-btn exchange" onclick="showExchangeModal()">
+                        <div class="btn-icon">💱</div>
+                        <div class="btn-text">Обмен</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Карты и кошельки -->
+            <div class="wallets-section">
+                <div class="section-header">
+                    <h3>💳 Карты и кошельки</h3>
+                    <button class="add-btn" onclick="showAddCardModal()">+</button>
+                </div>
+                <div class="wallets-grid" id="walletsGrid">
+                    <!-- Карты будут добавлены динамически -->
+                </div>
             </div>
 
             <!-- Telegram кошелек -->
             <div class="telegram-wallet-section">
-                <div class="telegram-wallet-title">📱 Telegram кошелек</div>
-                <div class="telegram-wallet-status">
-                    <div class="status-indicator" id="telegramStatus"></div>
-                    <span id="telegramStatusText">Не подключен</span>
+                <div class="telegram-wallet-header">
+                    <div class="telegram-wallet-title">📱 Telegram кошелек</div>
+                    <div class="telegram-wallet-status">
+                        <div class="status-indicator" id="telegramStatus"></div>
+                        <span id="telegramStatusText">Не подключен</span>
+                    </div>
+                </div>
+                <div class="telegram-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">🔐</span>
+                        <span class="feature-text">Безопасные платежи</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <span class="feature-text">Мгновенные переводы</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🌍</span>
+                        <span class="feature-text">Глобальные переводы</span>
+                    </div>
                 </div>
                 <button class="connect-btn" id="connectTelegramBtn" onclick="connectTelegramWallet()">
                     Подключить Telegram кошелек
                 </button>
             </div>
 
+            <!-- Статистика -->
+            <div class="stats-section">
+                <div class="section-header">
+                    <h3>📊 Статистика</h3>
+                    <div class="period-selector">
+                        <button class="period-btn active" data-period="week">Неделя</button>
+                        <button class="period-btn" data-period="month">Месяц</button>
+                        <button class="period-btn" data-period="year">Год</button>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value" id="totalIncome">0</div>
+                        <div class="stat-label">Общий доход</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📉</div>
+                        <div class="stat-value" id="totalExpense">0</div>
+                        <div class="stat-label">Общий расход</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔄</div>
+                        <div class="stat-value" id="totalTransactions">0</div>
+                        <div class="stat-label">Транзакций</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="avgTransaction">0</div>
+                        <div class="stat-label">Средняя сумма</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- История транзакций -->
             <div class="history-section">
-                <div class="history-title">📊 История транзакций</div>
+                <div class="section-header">
+                    <h3>📋 История транзакций</h3>
+                    <div class="history-filters">
+                        <select id="transactionType" onchange="filterTransactions()">
+                            <option value="all">Все типы</option>
+                            <option value="deposit">Пополнения</option>
+                            <option value="withdraw">Выводы</option>
+                            <option value="transfer">Переводы</option>
+                            <option value="exchange">Обмены</option>
+                        </select>
+                        <button class="export-btn" onclick="exportTransactions()">📤 Экспорт</button>
+                    </div>
+                </div>
                 <div id="transactionHistory">
                     <div class="empty-history">
                         Пока нет транзакций
@@ -378,6 +901,114 @@
         </div>
     </div>
 
+    <!-- Модальное окно перевода -->
+    <div id="transferModal" class="modal">
+        <div class="modal-content">
+            <h3>🔄 Перевод средств</h3>
+            <input type="text" id="transferRecipient" placeholder="ID получателя или @username" required>
+            <input type="number" id="transferAmount" placeholder="Сумма перевода" min="1">
+            <textarea id="transferMessage" placeholder="Сообщение к переводу (необязательно)"></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal('transferModal')">Отмена</button>
+                <button class="modal-btn primary" onclick="transfer()">Перевести</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно обмена -->
+    <div id="exchangeModal" class="modal">
+        <div class="modal-content">
+            <h3>💱 Обмен валют</h3>
+            <div class="exchange-form">
+                <div class="exchange-row">
+                    <label>Отдаете:</label>
+                    <div class="exchange-input-group">
+                        <input type="number" id="exchangeFromAmount" placeholder="0" min="0">
+                        <select id="exchangeFromCurrency">
+                            <option value="coins">Magnum Coins</option>
+                            <option value="energy">Энергия</option>
+                            <option value="usd">USD</option>
+                            <option value="eur">EUR</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="exchange-arrow">↓</div>
+                <div class="exchange-row">
+                    <label>Получаете:</label>
+                    <div class="exchange-input-group">
+                        <input type="number" id="exchangeToAmount" placeholder="0" readonly>
+                        <select id="exchangeToCurrency">
+                            <option value="energy">Энергия</option>
+                            <option value="coins">Magnum Coins</option>
+                            <option value="usd">USD</option>
+                            <option value="eur">EUR</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="exchange-rate" id="exchangeRate">Курс: 1 MC = 1 Энергия</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal('exchangeModal')">Отмена</button>
+                <button class="modal-btn primary" onclick="exchange()">Обменять</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления карты -->
+    <div id="addCardModal" class="modal">
+        <div class="modal-content">
+            <h3>💳 Добавить карту</h3>
+            <input type="text" id="cardName" placeholder="Название карты" required>
+            <input type="text" id="cardNumber" placeholder="Номер карты" maxlength="19" required>
+            <div class="card-details">
+                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                <input type="text" id="cardCvv" placeholder="CVV" maxlength="3" required>
+            </div>
+            <input type="text" id="cardHolder" placeholder="Имя держателя карты" required>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal('addCardModal')">Отмена</button>
+                <button class="modal-btn primary" onclick="addCard()">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно настроек кошелька -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h3>⚙️ Настройки кошелька</h3>
+            <div class="settings-group">
+                <label>Уведомления:</label>
+                <div class="setting-item">
+                    <span>Пополнения</span>
+                    <input type="checkbox" id="notifyDeposits" checked>
+                </div>
+                <div class="setting-item">
+                    <span>Выводы</span>
+                    <input type="checkbox" id="notifyWithdrawals" checked>
+                </div>
+                <div class="setting-item">
+                    <span>Переводы</span>
+                    <input type="checkbox" id="notifyTransfers" checked>
+                </div>
+            </div>
+            <div class="settings-group">
+                <label>Безопасность:</label>
+                <div class="setting-item">
+                    <span>Двухфакторная аутентификация</span>
+                    <input type="checkbox" id="twoFactorAuth">
+                </div>
+                <div class="setting-item">
+                    <span>Биометрическая защита</span>
+                    <input type="checkbox" id="biometricAuth">
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal('settingsModal')">Отмена</button>
+                <button class="modal-btn primary" onclick="saveSettings()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Инициализация Telegram WebApp
         if (window.Telegram && window.Telegram.WebApp) {
@@ -385,11 +1016,39 @@
             window.Telegram.WebApp.expand();
         }
 
-        // Данные кошелька
+        // Расширенные данные кошелька
         let walletData = {
             balance: 0,
+            energy: 1000,
+            maxEnergy: 1000,
             telegramConnected: false,
-            transactions: []
+            transactions: [],
+            cards: [],
+            settings: {
+                notifications: {
+                    deposits: true,
+                    withdrawals: true,
+                    transfers: true
+                },
+                security: {
+                    twoFactorAuth: false,
+                    biometricAuth: false
+                }
+            },
+            exchangeRates: {
+                'coins-energy': 1,
+                'energy-coins': 1,
+                'coins-usd': 0.01,
+                'usd-coins': 100,
+                'coins-eur': 0.008,
+                'eur-coins': 125
+            },
+            statistics: {
+                totalIncome: 0,
+                totalExpense: 0,
+                totalTransactions: 0,
+                avgTransaction: 0
+            }
         };
 
         // Загружаем данные кошелька
@@ -419,6 +1078,11 @@
             // Обновляем основной баланс
             document.getElementById('mainBalance').textContent = walletData.balance.toLocaleString();
             
+            // Обновляем энергию
+            document.getElementById('energyBalance').textContent = walletData.energy;
+            const energyPercent = (walletData.energy / walletData.maxEnergy) * 100;
+            document.getElementById('energyFill').style.width = energyPercent + '%';
+            
             // Обновляем статус Telegram кошелька
             const statusIndicator = document.getElementById('telegramStatus');
             const statusText = document.getElementById('telegramStatusText');
@@ -436,20 +1100,39 @@
                 connectBtn.onclick = connectTelegramWallet;
             }
             
+            // Обновляем карты
+            updateWalletsGrid();
+            
+            // Обновляем статистику
+            updateStatistics();
+            
             // Обновляем историю транзакций
             updateTransactionHistory();
         }
 
         // Обновляем историю транзакций
-        function updateTransactionHistory() {
+        function updateTransactionHistory(filterType = 'all') {
             const historyContainer = document.getElementById('transactionHistory');
             
-            if (walletData.transactions.length === 0) {
+            let filteredTransactions = walletData.transactions;
+            
+            // Применяем фильтр
+            if (filterType !== 'all') {
+                const typeMap = {
+                    'deposit': 'Пополнение',
+                    'withdraw': 'Вывод',
+                    'transfer': 'Перевод',
+                    'exchange': 'Обмен'
+                };
+                filteredTransactions = walletData.transactions.filter(t => t.type === typeMap[filterType]);
+            }
+            
+            if (filteredTransactions.length === 0) {
                 historyContainer.innerHTML = '<div class="empty-history">Пока нет транзакций</div>';
                 return;
             }
             
-            historyContainer.innerHTML = walletData.transactions
+            historyContainer.innerHTML = filteredTransactions
                 .slice(-10) // Показываем последние 10 транзакций
                 .reverse()
                 .map(transaction => `
@@ -457,6 +1140,9 @@
                         <div class="transaction-info">
                             <div class="transaction-type">${transaction.type}</div>
                             <div class="transaction-date">${new Date(transaction.date).toLocaleString()}</div>
+                            ${transaction.recipient ? `<div class="transaction-detail">Кому: ${transaction.recipient}</div>` : ''}
+                            ${transaction.message ? `<div class="transaction-detail">Сообщение: ${transaction.message}</div>` : ''}
+                            ${transaction.from ? `<div class="transaction-detail">${transaction.from} → ${transaction.to}</div>` : ''}
                         </div>
                         <div class="transaction-amount ${transaction.amount > 0 ? 'positive' : 'negative'}">
                             ${transaction.amount > 0 ? '+' : ''}${transaction.amount.toLocaleString()}
@@ -466,15 +1152,36 @@
         }
 
         // Добавляем транзакцию
-        function addTransaction(type, amount) {
+        function addTransaction(type, amount, details = {}) {
             const transaction = {
                 type: type,
                 amount: amount,
-                date: new Date().toISOString()
+                date: new Date().toISOString(),
+                description: details.description || '',
+                recipient: details.recipient || '',
+                message: details.message || '',
+                from: details.from || '',
+                to: details.to || '',
+                rate: details.rate || 1
             };
             
             walletData.transactions.push(transaction);
-            walletData.balance += amount;
+            
+            // Обновляем баланс
+            if (type === 'Пополнение' || type === 'Обмен') {
+                walletData.balance += amount;
+            } else if (type === 'Вывод' || type === 'Перевод') {
+                walletData.balance += amount; // amount уже отрицательный
+            }
+            
+            // Обновляем статистику
+            if (amount > 0) {
+                walletData.statistics.totalIncome += amount;
+            } else {
+                walletData.statistics.totalExpense += Math.abs(amount);
+            }
+            walletData.statistics.totalTransactions++;
+            walletData.statistics.avgTransaction = (walletData.statistics.totalIncome + walletData.statistics.totalExpense) / walletData.statistics.totalTransactions;
             
             saveWalletData();
             updateWalletDisplay();
@@ -598,6 +1305,255 @@
             }
         });
 
+        // Новые функции для расширенного функционала
+        
+        // Обновление сетки карт
+        function updateWalletsGrid() {
+            const walletsGrid = document.getElementById('walletsGrid');
+            
+            if (walletData.cards.length === 0) {
+                walletsGrid.innerHTML = '<div class="empty-history">Нет добавленных карт</div>';
+                return;
+            }
+            
+            walletsGrid.innerHTML = walletData.cards.map((card, index) => `
+                <div class="wallet-card" onclick="showCardDetails(${index})">
+                    <div class="wallet-card-header">
+                        <div class="wallet-type">${card.type}</div>
+                        <div class="wallet-balance">${card.balance.toLocaleString()}</div>
+                    </div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.7);">${card.name}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Обновление статистики
+        function updateStatistics() {
+            document.getElementById('totalIncome').textContent = walletData.statistics.totalIncome.toLocaleString();
+            document.getElementById('totalExpense').textContent = walletData.statistics.totalExpense.toLocaleString();
+            document.getElementById('totalTransactions').textContent = walletData.statistics.totalTransactions;
+            document.getElementById('avgTransaction').textContent = walletData.statistics.avgTransaction.toLocaleString();
+        }
+        
+        // Показ модального окна перевода
+        function showTransferModal() {
+            document.getElementById('transferModal').style.display = 'block';
+            document.getElementById('transferRecipient').focus();
+        }
+        
+        // Показ модального окна обмена
+        function showExchangeModal() {
+            document.getElementById('exchangeModal').style.display = 'block';
+            document.getElementById('exchangeFromAmount').focus();
+            updateExchangeRate();
+        }
+        
+        // Показ модального окна добавления карты
+        function showAddCardModal() {
+            document.getElementById('addCardModal').style.display = 'block';
+            document.getElementById('cardName').focus();
+        }
+        
+        // Перевод средств
+        function transfer() {
+            const recipient = document.getElementById('transferRecipient').value.trim();
+            const amount = parseInt(document.getElementById('transferAmount').value);
+            const message = document.getElementById('transferMessage').value.trim();
+            
+            if (!recipient || !amount || amount <= 0) {
+                alert('❌ Заполните все обязательные поля!');
+                return;
+            }
+            
+            if (amount > walletData.balance) {
+                alert('❌ Недостаточно средств!');
+                return;
+            }
+            
+            // Симуляция перевода
+            addTransaction('Перевод', -amount, {
+                recipient: recipient,
+                message: message
+            });
+            
+            closeModal('transferModal');
+            clearTransferForm();
+            
+            if (navigator.vibrate) navigator.vibrate(100);
+            alert(`✅ Переведено ${amount.toLocaleString()} монет пользователю ${recipient}!`);
+        }
+        
+        // Обмен валют
+        function exchange() {
+            const fromAmount = parseFloat(document.getElementById('exchangeFromAmount').value);
+            const fromCurrency = document.getElementById('exchangeFromCurrency').value;
+            const toCurrency = document.getElementById('exchangeToCurrency').value;
+            
+            if (!fromAmount || fromAmount <= 0) {
+                alert('❌ Введите корректную сумму!');
+                return;
+            }
+            
+            // Проверяем баланс
+            let currentBalance = 0;
+            if (fromCurrency === 'coins') currentBalance = walletData.balance;
+            else if (fromCurrency === 'energy') currentBalance = walletData.energy;
+            
+            if (fromAmount > currentBalance) {
+                alert('❌ Недостаточно средств для обмена!');
+                return;
+            }
+            
+            // Выполняем обмен
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = walletData.exchangeRates[rateKey] || 1;
+            const toAmount = fromAmount * rate;
+            
+            // Обновляем балансы
+            if (fromCurrency === 'coins') walletData.balance -= fromAmount;
+            else if (fromCurrency === 'energy') walletData.energy -= fromAmount;
+            
+            if (toCurrency === 'coins') walletData.balance += toAmount;
+            else if (toCurrency === 'energy') walletData.energy += toAmount;
+            
+            addTransaction('Обмен', toAmount, {
+                from: `${fromAmount} ${fromCurrency}`,
+                to: `${toAmount} ${toCurrency}`,
+                rate: rate
+            });
+            
+            closeModal('exchangeModal');
+            clearExchangeForm();
+            
+            if (navigator.vibrate) navigator.vibrate(100);
+            alert(`✅ Обменено ${fromAmount} ${fromCurrency} на ${toAmount.toFixed(2)} ${toCurrency}!`);
+        }
+        
+        // Добавление карты
+        function addCard() {
+            const name = document.getElementById('cardName').value.trim();
+            const number = document.getElementById('cardNumber').value.trim();
+            const expiry = document.getElementById('cardExpiry').value.trim();
+            const cvv = document.getElementById('cardCvv').value.trim();
+            const holder = document.getElementById('cardHolder').value.trim();
+            
+            if (!name || !number || !expiry || !cvv || !holder) {
+                alert('❌ Заполните все поля!');
+                return;
+            }
+            
+            // Простая валидация номера карты
+            if (number.length < 13 || number.length > 19) {
+                alert('❌ Неверный номер карты!');
+                return;
+            }
+            
+            const card = {
+                id: Date.now(),
+                name: name,
+                number: number.replace(/\s/g, ''),
+                expiry: expiry,
+                cvv: cvv,
+                holder: holder,
+                type: 'Банковская карта',
+                balance: 0
+            };
+            
+            walletData.cards.push(card);
+            saveWalletData();
+            updateWalletDisplay();
+            
+            closeModal('addCardModal');
+            clearCardForm();
+            
+            if (navigator.vibrate) navigator.vibrate(100);
+            alert('✅ Карта успешно добавлена!');
+        }
+        
+        // Обновление курса обмена
+        function updateExchangeRate() {
+            const fromCurrency = document.getElementById('exchangeFromCurrency').value;
+            const toCurrency = document.getElementById('exchangeToCurrency').value;
+            const fromAmount = parseFloat(document.getElementById('exchangeFromAmount').value) || 0;
+            
+            const rateKey = `${fromCurrency}-${toCurrency}`;
+            const rate = walletData.exchangeRates[rateKey] || 1;
+            const toAmount = fromAmount * rate;
+            
+            document.getElementById('exchangeToAmount').value = toAmount.toFixed(2);
+            document.getElementById('exchangeRate').textContent = `Курс: 1 ${fromCurrency} = ${rate} ${toCurrency}`;
+        }
+        
+        // Фильтрация транзакций
+        function filterTransactions() {
+            const filterType = document.getElementById('transactionType').value;
+            updateTransactionHistory(filterType);
+        }
+        
+        // Экспорт транзакций
+        function exportTransactions() {
+            const csv = [
+                ['Дата', 'Тип', 'Сумма', 'Описание'],
+                ...walletData.transactions.map(t => [
+                    new Date(t.date).toLocaleString(),
+                    t.type,
+                    t.amount,
+                    t.description || ''
+                ])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            if (navigator.vibrate) navigator.vibrate(100);
+            alert('✅ Транзакции экспортированы!');
+        }
+        
+        // Очистка форм
+        function clearTransferForm() {
+            document.getElementById('transferRecipient').value = '';
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('transferMessage').value = '';
+        }
+        
+        function clearExchangeForm() {
+            document.getElementById('exchangeFromAmount').value = '';
+            document.getElementById('exchangeToAmount').value = '';
+        }
+        
+        function clearCardForm() {
+            document.getElementById('cardName').value = '';
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('cardExpiry').value = '';
+            document.getElementById('cardCvv').value = '';
+            document.getElementById('cardHolder').value = '';
+        }
+        
+        // Обработчики событий для обмена
+        document.addEventListener('DOMContentLoaded', () => {
+            const fromAmount = document.getElementById('exchangeFromAmount');
+            const fromCurrency = document.getElementById('exchangeFromCurrency');
+            const toCurrency = document.getElementById('exchangeToCurrency');
+            
+            if (fromAmount) fromAmount.addEventListener('input', updateExchangeRate);
+            if (fromCurrency) fromCurrency.addEventListener('change', updateExchangeRate);
+            if (toCurrency) toCurrency.addEventListener('change', updateExchangeRate);
+            
+            // Обработчики для селекторов периода
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    updateStatistics();
+                });
+            });
+        });
+        
         // Загружаем данные при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
             loadWalletData();
