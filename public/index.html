@@ -91,23 +91,38 @@
         }
         
         .upgrade-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: 600;
+            width: fit-content;
+            display: flex;
+            padding: 0.8em 1rem;
             cursor: pointer;
+            gap: 0.4rem;
+            font-weight: bold;
+            border-radius: 30px;
+            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
+            background: linear-gradient(15deg, #880088, #aa2068, #cc3f47, #de6f3d, #f09f33, #de6f3d, #cc3f47, #aa2068, #880088) no-repeat;
+            background-size: 300%;
+            color: #fff;
+            border: none;
+            background-position: left center;
+            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
+            transition: background .3s ease;
             margin-top: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
         }
-        
+
         .upgrade-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            background-size: 320%;
+            background-position: right center;
+        }
+
+        .upgrade-btn:hover svg {
+            fill: #fff;
+        }
+
+        .upgrade-btn svg {
+            width: 16px;
+            fill: #f09f33;
+            transition: .3s ease;
         }
 
         .top-panel {
@@ -953,7 +968,12 @@
                 <span class="balance-label">Баланс</span>
                 <div class="balance-amount" id="coins">0</div>
                 <div class="balance-subtitle">Magnum Coins</div>
-                <button class="upgrade-btn" id="upgradeBtn">Улучшения</button>
+                <button class="upgrade-btn" id="upgradeBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
+                        <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                    </svg>
+                    Улучшения
+                </button>
             </div>
             
             <div class="stats">

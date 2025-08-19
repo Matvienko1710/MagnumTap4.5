@@ -6,7 +6,6 @@
     <meta name="format-detection" content="telephone=no">
     <title>Магазин - Magnum Coins</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * {
             margin: 0;
@@ -21,14 +20,6 @@
             min-height: 100vh;
             color: white;
             padding: 20px;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            25% { background-position: 100% 50%; }
-            50% { background-position: 100% 100%; }
-            75% { background-position: 0% 100%; }
-            100% { background-position: 0% 50%; }
         }
 
         .container {
@@ -69,403 +60,100 @@
             box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
         }
 
-        .shop-content {
+        .content {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 30px;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
         }
 
-        .shop-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 15px;
-        }
-
-        .shop-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .player-coins {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ffcb13;
-        }
-
-        .shop-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: -webkit-linear-gradient(90deg,#29482a,#4e8950,#9fb97f);
-            background: linear-gradient(90deg,#29482a,#4e8950,#9fb97f);
-            border-radius: 15px;
-            padding: 25px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .card.purchased {
-            opacity: 0.7;
-            background: -webkit-linear-gradient(90deg,#1a2e1a,#2d4d2d,#5a7a5a);
-            background: linear-gradient(90deg,#1a2e1a,#2d4d2d,#5a7a5a);
-        }
-
-        .card-border-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #4CAF50, #45a049, #2E7D32);
-        }
-
-        .img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .content h2 {
             font-size: 24px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            color: #667eea;
         }
 
-        .card span {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .job {
-            font-size: 1rem;
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
             color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 15px;
-            line-height: 1.4;
+            margin-bottom: 20px;
         }
 
-        .card button {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            padding: 12px 25px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-            width: 100%;
-            backdrop-filter: blur(10px);
+        .placeholder {
+            font-size: 48px;
+            margin: 40px 0;
+            opacity: 0.5;
         }
 
-        .card button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
+        .info-box {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
         }
 
-        .card button:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.1);
-            cursor: not-allowed;
-            transform: none;
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
         }
 
-        .item-info {
-            flex: 1;
-        }
-
-        .item-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .item-description {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: 8px;
-        }
-
-        .item-price {
-            font-size: 1rem;
-            color: #ffcb13;
-            font-weight: bold;
-        }
-
-        .buy-btn {
-            background: linear-gradient(45deg, #ffcb13, #ff8605);
-            border: none;
-            border-radius: 12px;
-            padding: 12px 25px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-            min-width: 100px;
-        }
-
-        .buy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 203, 19, 0.4);
-        }
-
-        .buy-btn:disabled {
-            background: rgba(255, 255, 255, 0.2);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .title {
-                font-size: 1.5rem;
-            }
-            
-            .shop-content {
-                padding: 20px;
-            }
-            
-            .shop-item {
-                padding: 20px;
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .buy-btn {
-                width: 100%;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
+        .info-box p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
+    <button class="back-btn" onclick="goBack()">← Назад</button>
+    
     <div class="container">
-        <div class="header" style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
-            <button
-                class="bg-white text-center w-36 rounded-xl h-12 relative text-black text-lg font-semibold group"
-                type="button"
-                id="backBtn"
-            >
-                <div class="bg-green-400 rounded-lg h-10 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[132px] z-10 duration-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" height="20" width="20">
-                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="#000"></path>
-                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="#000"></path>
-                    </svg>
-                </div>
-                <p class="translate-x-2">Назад</p>
-            </button>
-            <div class="title" style="flex:1;text-align:center;">🛒 Магазин улучшений</div>
+        <div class="header">
+            <h1 class="title">🛒 Магазин</h1>
         </div>
         
-        <div class="shop-content">
-            <div class="shop-header">
-                <div class="shop-title">Доступные улучшения</div>
-                <div class="player-coins">Ваши монеты: <span id="shopCoins">0</span></div>
-            </div>
+        <div class="content">
+            <div class="placeholder">🛒</div>
+            <h2>Магазин временно закрыт</h2>
+            <p>Весь функционал магазина был перенесен в раздел "Улучшения" для лучшего пользовательского опыта!</p>
             
-            <div class="shop-items">
-                <div class="card" id="upgrade1">
-                    <div class="card-border-top"></div>
-                    <div class="img">⚡</div>
-                    <span>Ускорение клика</span>
-                    <p class="job">Увеличивает скорость кликов<br>Цена: 100 монет</p>
-                    <button id="buyUpgrade1">Купить</button>
-                </div>
-                
-                <div class="card" id="upgrade2">
-                    <div class="card-border-top"></div>
-                    <div class="img">💰</div>
-                    <span>Множитель монет</span>
-                    <p class="job">Удваивает доход за клик<br>Цена: 500 монет</p>
-                    <button id="buyUpgrade2">Купить</button>
-                </div>
-                
-                <div class="card" id="upgrade3">
-                    <div class="card-border-top"></div>
-                    <div class="img">🎯</div>
-                    <span>Автокликер</span>
-                    <p class="job">Автоматически кликает каждые 5 сек<br>Цена: 1000 монет</p>
-                    <button id="buyUpgrade3">Купить</button>
-                </div>
+            <div class="info-box">
+                <h3>ℹ️ Информация</h3>
+                <p>Теперь все товары и улучшения доступны в разделе "Улучшения" на главной странице. Там вы найдете все необходимые функции для развития вашего персонажа.</p>
             </div>
         </div>
     </div>
 
     <script>
         // Инициализация Telegram WebApp
-        let tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-
-        // Игровые данные
-        let gameData = {
-            coins: 0,
-            clicks: 0,
-            coinsPerClick: 1
-        };
-
-        // Данные улучшений
-        let upgrades = {
-            speedUpgrade: { purchased: false, price: 100, effect: 'Ускоряет анимацию клика' },
-            coinMultiplier: { purchased: false, price: 500, effect: 'Удваивает доход за клик' },
-            autoClicker: { purchased: false, price: 1000, effect: 'Автоматически кликает каждые 5 сек' }
-        };
-
-        // Настройки игры
-        let gameSettings = {
-            sound: true,
-            vibration: true,
-            animations: true,
-            animationSpeed: 5,
-            coinsPerClick: 1
-        };
-
-        // Загружаем данные
-        function loadData() {
-            const saved = localStorage.getItem('magnumCoinsData');
-            if (saved) {
-                gameData = JSON.parse(saved);
-            }
-            
-            const savedSettings = localStorage.getItem('magnumSettings');
-            if (savedSettings) {
-                gameSettings = JSON.parse(savedSettings);
-            }
-            
-            const savedUpgrades = localStorage.getItem('magnumUpgrades');
-            if (savedUpgrades) {
-                upgrades = JSON.parse(savedUpgrades);
-            }
-            
-            updateShopDisplay();
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
         }
 
-        // Сохраняем данные
-        function saveData() {
-            localStorage.setItem('magnumCoinsData', JSON.stringify(gameData));
-            localStorage.setItem('magnumSettings', JSON.stringify(gameSettings));
-            localStorage.setItem('magnumUpgrades', JSON.stringify(upgrades));
-        }
-
-        // Обновляем отображение магазина
-        function updateShopDisplay() {
-            document.getElementById('shopCoins').textContent = gameData.coins.toLocaleString();
-            
-            // Обновляем состояние кнопок покупки
-            const upgrade1 = document.getElementById('upgrade1');
-            const upgrade2 = document.getElementById('upgrade2');
-            const upgrade3 = document.getElementById('upgrade3');
-            
-            if (upgrades.speedUpgrade.purchased) {
-                upgrade1.classList.add('purchased');
-                document.getElementById('buyUpgrade1').textContent = 'Куплено';
-                document.getElementById('buyUpgrade1').disabled = true;
+        // Функция возврата назад
+        function goBack() {
+            // Вибрация (если поддерживается)
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
             }
             
-            if (upgrades.coinMultiplier.purchased) {
-                upgrade2.classList.add('purchased');
-                document.getElementById('buyUpgrade2').textContent = 'Куплено';
-                document.getElementById('buyUpgrade2').disabled = true;
-            }
-            
-            if (upgrades.autoClicker.purchased) {
-                upgrade3.classList.add('purchased');
-                document.getElementById('buyUpgrade3').textContent = 'Куплено';
-                document.getElementById('buyUpgrade3').disabled = true;
-            }
-        }
-
-        // Покупка улучшения
-        function buyUpgrade(upgradeType) {
-            const upgrade = upgrades[upgradeType];
-            
-            if (gameData.coins >= upgrade.price && !upgrade.purchased) {
-                gameData.coins -= upgrade.price;
-                upgrade.purchased = true;
-                
-                // Применяем эффект улучшения
-                applyUpgrade(upgradeType);
-                
-                // Обновляем отображение
-                updateShopDisplay();
-                saveData();
-                
-                // Вибрация (без alert)
-                if (gameSettings.vibration && navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
-                }
-            } else if (upgrade.purchased) {
-                // Тихое уведомление
-                if (navigator.vibrate) navigator.vibrate(20);
-            } else {
-                // Недостаточно монет — тихо
-                if (navigator.vibrate) navigator.vibrate(30);
-            }
-        }
-
-        // Применение улучшения
-        function applyUpgrade(upgradeType) {
-            switch(upgradeType) {
-                case 'speedUpgrade':
-                    // Ускоряем анимацию
-                    break;
-                case 'coinMultiplier':
-                    // Удваиваем доход
-                    gameSettings.coinsPerClick *= 2;
-                    break;
-                case 'autoClicker':
-                    // Автокликер будет запущен при возврате в игру
-                    break;
-            }
-        }
-
-        // Возврат в главное меню
-        function backToMain() {
             // Устанавливаем флаг возврата
             sessionStorage.setItem('returningFromPage', 'true');
-            window.location.href = '/';
+            
+            // Возвращаемся на главную страницу
+            window.location.href = '/index.html';
         }
 
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', () => {
-            // Загружаем данные
-            loadData();
-            
-            // Обработчики
-            document.getElementById('backBtn').addEventListener('click', backToMain);
-            document.getElementById('buyUpgrade1').addEventListener('click', () => buyUpgrade('speedUpgrade'));
-            document.getElementById('buyUpgrade2').addEventListener('click', () => buyUpgrade('coinMultiplier'));
-            document.getElementById('buyUpgrade3').addEventListener('click', () => buyUpgrade('autoClicker'));
+        // Обработка нажатия клавиши Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            }
         });
     </script>
 </body>
