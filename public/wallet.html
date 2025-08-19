@@ -6,6 +6,7 @@
     <meta name="format-detection" content="telephone=no">
     <title>Кошелек - Magnum Coins Farm</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -704,6 +705,106 @@
 
         textarea::placeholder {
             color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Coming Soon Modal */
+        .coming-soon-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .coming-soon-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            animation: fadeIn 1000ms ease;
+            -webkit-animation: fadeIn 1000ms ease;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from {top: 20%; opacity: 0;}
+            to {top: 100; opacity: 1;}
+        }
+
+        @-webkit-keyframes fadeIn {
+            from {top: 20%; opacity: 0;}
+            to {top: 100; opacity: 1;}
+        }
+
+        .coming-soon-wrapper h1 {
+            font-size: 50px;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 0;
+            line-height: 1;
+            font-weight: 700;
+            text-align: center;
+            color: #fff;
+        }
+
+        .coming-soon-wrapper .dot {
+            color: #4FEBFE;
+        }
+
+        .coming-soon-wrapper p {
+            text-align: center;
+            margin: 18px;
+            font-family: 'Muli', sans-serif;
+            font-weight: normal;
+            color: #fff;
+        }
+
+        .coming-soon-wrapper .icons {
+            text-align: center;
+        }
+
+        .coming-soon-wrapper .icons i {
+            color: #00091B;
+            background: #fff;
+            height: 15px;
+            width: 15px;
+            padding: 13px;
+            margin: 0 10px;
+            border-radius: 50px;
+            border: 2px solid #fff;
+            transition: all 200ms ease;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .coming-soon-wrapper .icons i:hover, 
+        .coming-soon-wrapper .icons i:active {
+            color: #fff;
+            background: none;
+            cursor: pointer !important;
+            transform: scale(1.2);
+            -webkit-transform: scale(1.2);
+            text-decoration: none;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10001;
         }
     </style>
 </head>
@@ -1510,7 +1611,60 @@
         // Загружаем данные при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
             loadWalletData();
+            checkAdminAndShowComingSoon();
         });
+
+        // Проверка админа и показ Coming Soon
+        function checkAdminAndShowComingSoon() {
+            try {
+                const userId = tg.initDataUnsafe.user.id;
+                const admin_ids = [123456789, 987654321]; // Замените на реальные ID админов
+                
+                if (admin_ids.includes(userId)) {
+                    // Админ - показываем полный функционал
+                    return true;
+                } else {
+                    // Обычный пользователь - показываем Coming Soon
+                    showComingSoonModal();
+                    return false;
+                }
+            } catch (error) {
+                console.error('Ошибка при проверке админа:', error);
+                showComingSoonModal();
+                return false;
+            }
+        }
+
+        // Показать модальное окно Coming Soon
+        function showComingSoonModal() {
+            const modal = document.getElementById('comingSoonModal');
+            modal.style.display = 'flex';
+        }
+
+        // Закрыть модальное окно
+        function closeComingSoonModal() {
+            const modal = document.getElementById('comingSoonModal');
+            modal.style.display = 'none';
+        }
+
+        // Переход в основной бот
+        function goToMainBot() {
+            window.open('https://t.me/magnumtap_bot', '_blank');
+        }
     </script>
+
+    <!-- Coming Soon Modal -->
+    <div class="coming-soon-modal" id="comingSoonModal">
+        <button class="close-modal" onclick="closeComingSoonModal()">✕</button>
+        <div class="coming-soon-wrapper">
+            <h1>coming soon<span class="dot">.</span></h1>
+            <p>Кошелек находится в разработке. Скоро будет доступен!</p>
+            <div class="icons">
+                <a href="#" onclick="goToMainBot()">
+                    <i class="fa fa-paper-plane"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
