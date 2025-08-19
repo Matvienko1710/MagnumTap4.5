@@ -217,6 +217,30 @@
         }
 
         /* Анимированные часы */
+
+        #h1, #h1-adstera {
+            animation: rotate 60s linear infinite;
+        }
+
+        #h2, #h2-adstera {
+            width: 45%;
+            left: 5%;
+            top: 45%;
+            background-color: #636363;
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(90deg);
+            }
+
+            to {
+                transform: rotate(450deg);
+            }
+        }
+
+        /* Исправление позиционирования для миниатюрных часов */
         .cloader {
             width: 2em;
             height: 2em;
@@ -228,6 +252,7 @@
             display: inline-block;
             vertical-align: middle;
             margin-right: 10px;
+            overflow: visible;
         }
 
         .clface {
@@ -311,7 +336,7 @@
             transform: translate(-50%, -50%);
         }
 
-        #sub {
+        #sub, #sub-adstera {
             width: 10%;
             height: 10%;
             border-radius: 50%;
@@ -320,28 +345,6 @@
             top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-        }
-
-        #h1 {
-            animation: rotate 60s linear infinite;
-        }
-
-        #h2 {
-            width: 45%;
-            left: 5%;
-            top: 45%;
-            background-color: #636363;
-            animation: rotate 1s linear infinite;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(90deg);
-            }
-
-            to {
-                transform: rotate(450deg);
-            }
         }
 
         .cooldown-container {
@@ -560,9 +563,25 @@
         function loadGameData() {
             const saved = localStorage.getItem('magnumCoinsData');
             if (saved) {
-                gameData = JSON.parse(saved);
-                updateDisplay();
+                try {
+                    const loadedData = JSON.parse(saved);
+                    // Объединяем с дефолтными значениями для новых полей
+                    gameData = {
+                        coins: loadedData.coins || 0,
+                        clicks: loadedData.clicks || 0,
+                        coinsPerClick: loadedData.coinsPerClick || 1,
+                        tasksCompleted: loadedData.tasksCompleted || 0,
+                        adsWatched: loadedData.adsWatched || 0,
+                        lastAdWatch: loadedData.lastAdWatch || 0,
+                        adsteraAdsWatched: loadedData.adsteraAdsWatched || 0,
+                        lastAdsteraWatch: loadedData.lastAdsteraWatch || 0
+                    };
+                } catch (error) {
+                    console.error('Ошибка при загрузке данных:', error);
+                    // Используем дефолтные значения при ошибке
+                }
             }
+            updateDisplay();
         }
 
         // Сохраняем данные
@@ -690,18 +709,18 @@
             const cooldownText = button.querySelector('.cooldown-text');
             
             if (h1 && cooldownText) {
-                // Вычисляем прогресс анимации (от 0 до 1)
-                const totalSeconds = 60; // 60 секунд = полный оборот
-                const progress = Math.max(0, Math.min(1, remainingSeconds / totalSeconds));
-                
-                // Устанавливаем анимацию в зависимости от оставшегося времени
-                const animationDuration = remainingSeconds;
-                h1.style.animationDuration = `${animationDuration}s`;
-                
                 // Обновляем текст
                 const minutes = Math.floor(remainingSeconds / 60);
                 const seconds = remainingSeconds % 60;
                 cooldownText.textContent = `Подождите ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Сбрасываем и перезапускаем анимацию
+                h1.style.animation = 'none';
+                h1.offsetHeight; // Принудительный reflow
+                
+                // Устанавливаем новую анимацию
+                const animationDuration = Math.max(1, remainingSeconds);
+                h1.style.animation = `rotate ${animationDuration}s linear infinite`;
             }
         }
 
