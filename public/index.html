@@ -159,25 +159,40 @@
             gap: 10px;
             margin-top: 15px;
         }
+
+        .buttons-grid button {
+            width: 100%;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .buttons-grid button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .buttons-grid button svg {
+            width: 18px;
+            height: 18px;
+            transition: .3s ease;
+        }
         
         .upgrade-btn {
-            width: fit-content;
-            display: flex;
-            padding: 0.8em 1rem;
-            cursor: pointer;
-            gap: 0.4rem;
-            font-weight: bold;
-            border-radius: 30px;
-            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
             background: linear-gradient(15deg, #880088, #aa2068, #cc3f47, #de6f3d, #f09f33, #de6f3d, #cc3f47, #aa2068, #880088) no-repeat;
             background-size: 300%;
             color: #fff;
-            border: none;
             background-position: left center;
-            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
-            transition: background .3s ease;
-            margin-top: 8px;
-            font-size: 12px;
         }
 
         .upgrade-btn:hover {
@@ -185,34 +200,19 @@
             background-position: right center;
         }
 
+        .upgrade-btn svg {
+            fill: #f09f33;
+        }
+
         .upgrade-btn:hover svg {
             fill: #fff;
         }
-
-        .upgrade-btn svg {
-            width: 16px;
-            fill: #f09f33;
-            transition: .3s ease;
-        }
         
         .tasks-btn {
-            width: fit-content;
-            display: flex;
-            padding: 0.8em 1rem;
-            cursor: pointer;
-            gap: 0.4rem;
-            font-weight: bold;
-            border-radius: 30px;
-            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
             background: linear-gradient(15deg, #4CAF50, #45a049, #2E7D32, #1B5E20, #0D4F14, #1B5E20, #2E7D32, #45a049, #4CAF50) no-repeat;
             background-size: 300%;
             color: #fff;
-            border: none;
             background-position: left center;
-            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
-            transition: background .3s ease;
-            margin-top: 8px;
-            font-size: 12px;
         }
 
         .tasks-btn:hover {
@@ -220,34 +220,19 @@
             background-position: right center;
         }
 
+        .tasks-btn svg {
+            fill: #90EE90;
+        }
+
         .tasks-btn:hover svg {
             fill: #fff;
         }
-
-        .tasks-btn svg {
-            width: 16px;
-            fill: #90EE90;
-            transition: .3s ease;
-        }
         
         .achievements-btn {
-            width: fit-content;
-            display: flex;
-            padding: 0.8em 1rem;
-            cursor: pointer;
-            gap: 0.4rem;
-            font-weight: bold;
-            border-radius: 30px;
-            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
             background: linear-gradient(15deg, #FF6B6B, #ee5a24, #ff8c42, #ffa726, #ffcc02, #ffa726, #ff8c42, #ee5a24, #FF6B6B) no-repeat;
             background-size: 300%;
             color: #fff;
-            border: none;
             background-position: left center;
-            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
-            transition: background .3s ease;
-            margin-top: 8px;
-            font-size: 12px;
         }
 
         .achievements-btn:hover {
@@ -255,34 +240,19 @@
             background-position: right center;
         }
 
+        .achievements-btn svg {
+            fill: #ffcc02;
+        }
+
         .achievements-btn:hover svg {
             fill: #fff;
         }
-
-        .achievements-btn svg {
-            width: 16px;
-            fill: #ffcc02;
-            transition: .3s ease;
-        }
         
         .leaderboard-btn {
-            width: fit-content;
-            display: flex;
-            padding: 0.8em 1rem;
-            cursor: pointer;
-            gap: 0.4rem;
-            font-weight: bold;
-            border-radius: 30px;
-            text-shadow: 2px 2px 3px rgb(136 0 136 / 50%);
             background: linear-gradient(15deg, #9C27B0, #673AB7, #3F51B5, #2196F3, #00BCD4, #2196F3, #3F51B5, #673AB7, #9C27B0) no-repeat;
             background-size: 300%;
             color: #fff;
-            border: none;
             background-position: left center;
-            box-shadow: 0 30px 10px -20px rgba(0,0,0,.2);
-            transition: background .3s ease;
-            margin-top: 8px;
-            font-size: 12px;
         }
 
         .leaderboard-btn:hover {
@@ -290,14 +260,12 @@
             background-position: right center;
         }
 
-        .leaderboard-btn:hover svg {
-            fill: #fff;
+        .leaderboard-btn svg {
+            fill: #00BCD4;
         }
 
-        .leaderboard-btn svg {
-            width: 16px;
-            fill: #00BCD4;
-            transition: .3s ease;
+        .leaderboard-btn:hover svg {
+            fill: #fff;
         }
 
         .top-panel {
@@ -1158,26 +1126,26 @@
                 <!-- Сетка кнопок 2x2 -->
                 <div class="buttons-grid">
                     <button class="upgrade-btn" id="upgradeBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
-                            <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
                         </svg>
                         Улучшения
                     </button>
                     <button class="achievements-btn" id="achievementsBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
-                            <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                         </svg>
                         Достижения
                     </button>
                     <button class="tasks-btn" id="tasksBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
-                            <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                         </svg>
                         Задания
                     </button>
                     <button class="leaderboard-btn" id="leaderboardBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
-                            <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7.5 21H2V9h5.5v12zm7.25-18h-3.5v18h3.5V3zM22 11h-5.5v10H22V11z"/>
                         </svg>
                         Лидеры
                     </button>
