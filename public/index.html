@@ -133,8 +133,9 @@
             height: 100%;
             background: linear-gradient(90deg, #FFD700, #FFA500, #FF6B35);
             border-radius: 4px;
-            transition: width 0.3s ease;
+            transition: width 0.5s ease-out;
             position: relative;
+            will-change: width;
         }
 
         .energy-fill::after {
@@ -1403,6 +1404,32 @@
             }
         }
 
+        // Оптимизированное обновление только энергии (без мерцания)
+        function updateEnergyDisplay() {
+            try {
+                const energyTextElement = document.getElementById('energyText');
+                const energyFillElement = document.getElementById('energyFill');
+                
+                if (energyTextElement && energyFillElement) {
+                    const energyPercent = (gameData.energy / gameData.maxEnergy) * 100;
+                    
+                    // Обновляем текст только если он изменился
+                    const newText = `${gameData.energy.toLocaleString()}/${gameData.maxEnergy.toLocaleString()}`;
+                    if (energyTextElement.textContent !== newText) {
+                        energyTextElement.textContent = newText;
+                    }
+                    
+                    // Обновляем ширину только если она изменилась
+                    const newWidth = `${energyPercent}%`;
+                    if (energyFillElement.style.width !== newWidth) {
+                        energyFillElement.style.width = newWidth;
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка при обновлении энергии:', error);
+            }
+        }
+
 
 
         // Обработчик клика
@@ -1420,11 +1447,9 @@
                 gameData.clicks++;
                 gameData.energy--; // Тратим 1 энергию за клик
                 
-
-                
                 // Анимация монеты уже встроена в CSS
                 
-                updateDisplay();
+                updateDisplay(); // Обновляем все (монеты и энергию)
                 checkAchievements();
                 saveGameData();
                 
@@ -1894,7 +1919,7 @@
             try {
                 if (gameData && gameData.energy < gameData.maxEnergy) {
                     gameData.energy++;
-                    updateDisplay();
+                    updateEnergyDisplay(); // Используем оптимизированную функцию
                 }
             } catch (error) {
                 console.error('Ошибка при восстановлении энергии:', error);
