@@ -215,6 +215,147 @@
                 font-size: 0.9rem;
             }
         }
+
+        /* Анимированные часы */
+        .cloader {
+            width: 2em;
+            height: 2em;
+            border: 2px solid white;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            padding: 0.5rem;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .clface {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform: translateY(-1px);
+        }
+
+        .top {
+            height: 4px;
+            width: 2px;
+            content: '';
+            background-color: white;
+            border-radius: 5em;
+            margin-top: -12px;
+            margin-left: 17px;
+        }
+
+        .bottom {
+            height: 4px;
+            width: 2px;
+            content: '';
+            background-color: white;
+            border-radius: 5em;
+            margin-top: 54px;
+            margin-left: 17px;
+        }
+
+        .left {
+            height: 2px;
+            width: 4px;
+            content: '';
+            background-color: white;
+            border-radius: 5em;
+            margin-top: -33px;
+            margin-left: 45px;
+        }
+
+        .right {
+            height: 2px;
+            width: 4px;
+            content: '';
+            background-color: white;
+            border-radius: 5em;
+            margin-top: -2px;
+            margin-left: -14px;
+        }
+
+        .clsface {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin-left: 10px;
+            margin-top: 6px;
+            border-radius: 6em;
+            border: 1px solid #636363;
+        }
+
+        .hand {
+            width: 65%;
+            height: 2px;
+            background-color: white;
+            border-radius: 3em;
+            border: none;
+            position: absolute;
+            top: 85%;
+            left: -15%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+        }
+
+        .pin {
+            width: 25%;
+            height: 25%;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+            top: 86%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #sub {
+            width: 10%;
+            height: 10%;
+            border-radius: 50%;
+            background: #636363;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #h1 {
+            animation: rotate 60s linear infinite;
+        }
+
+        #h2 {
+            width: 45%;
+            left: 5%;
+            top: 45%;
+            background-color: #636363;
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(90deg);
+            }
+
+            to {
+                transform: rotate(450deg);
+            }
+        }
+
+        .cooldown-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .cooldown-text {
+            color: #ff6b6b;
+            font-size: 14px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -286,7 +427,26 @@
                 Посмотрите рекламу Monetag и получите 50 монет! Реклама поможет вам быстро накопить монеты для покупки улучшений.
             </div>
             <div class="task-reward">💰 Награда: 50 монет</div>
-            <button class="task-button" id="watchAdBtn">Смотреть рекламу</button>
+            <button class="task-button" id="watchAdBtn">
+                <span class="button-text">Смотреть рекламу</span>
+                <div class="cooldown-container" style="display: none;">
+                    <div class="cloader">
+                        <div class="clface">
+                            <div class="clsface">
+                                <div id="h2" class="hand"></div>
+                            </div>
+                            <div class="top"></div>
+                            <div class="bottom"></div>
+                            <div class="left"></div>
+                            <div class="right"></div>
+                            <div id="sub" class="pin"></div>
+                            <div id="h1" class="hand"></div>
+                            <div id="main" class="pin"></div>
+                        </div>
+                    </div>
+                    <span class="cooldown-text">Подождите</span>
+                </div>
+            </button>
         </div>
 
         <div class="task-item">
@@ -298,7 +458,26 @@
                 Посмотрите рекламу Adstera и получите 75 монет! Дополнительная возможность заработка с повышенной наградой.
             </div>
             <div class="task-reward">💰 Награда: 75 монет</div>
-            <button class="task-button" id="watchAdsteraBtn">Смотреть рекламу Adstera</button>
+            <button class="task-button" id="watchAdsteraBtn">
+                <span class="button-text">Смотреть рекламу Adstera</span>
+                <div class="cooldown-container" style="display: none;">
+                    <div class="cloader">
+                        <div class="clface">
+                            <div class="clsface">
+                                <div id="h2-adstera" class="hand"></div>
+                            </div>
+                            <div class="top"></div>
+                            <div class="bottom"></div>
+                            <div class="left"></div>
+                            <div class="right"></div>
+                            <div id="sub-adstera" class="pin"></div>
+                            <div id="h1-adstera" class="hand"></div>
+                            <div id="main-adstera" class="pin"></div>
+                        </div>
+                    </div>
+                    <span class="cooldown-text">Подождите</span>
+                </div>
+            </button>
         </div>
 
         <div class="task-item">
@@ -364,7 +543,7 @@
         const AD_CONFIG = {
             zoneId: '9731351',
             rewardAmount: 50,
-            cooldownMinutes: 5,
+            cooldownMinutes: 1, // 60 секунд = 1 минута
             adDuration: 30
         };
 
@@ -373,7 +552,7 @@
             zoneId: '18dc4b75af6a5d63d9b595f478a96efe',
             containerId: 'container-18dc4b75af6a5d63d9b595f478a96efe',
             rewardAmount: 75,
-            cooldownMinutes: 7,
+            cooldownMinutes: 1, // 60 секунд = 1 минута
             adDuration: 25
         };
 
@@ -423,47 +602,61 @@
         function checkCooldown() {
             const cooldownInfo = document.getElementById('cooldownInfo');
             const watchAdBtn = document.getElementById('watchAdBtn');
+            const buttonText = watchAdBtn.querySelector('.button-text');
+            const cooldownContainer = watchAdBtn.querySelector('.cooldown-container');
             
             if (!canWatchAd()) {
                 const now = Date.now();
                 const cooldownMs = AD_CONFIG.cooldownMinutes * 60 * 1000;
-                let remainingTime = 0;
+                let remainingSeconds = 0;
                 
                 if (gameData.lastAdWatch && typeof gameData.lastAdWatch === 'number') {
-                    remainingTime = Math.ceil((cooldownMs - (now - gameData.lastAdWatch)) / 1000 / 60);
-                    remainingTime = Math.max(0, remainingTime);
+                    remainingSeconds = Math.ceil((cooldownMs - (now - gameData.lastAdWatch)) / 1000);
+                    remainingSeconds = Math.max(0, remainingSeconds);
                 }
                 
                 cooldownInfo.style.display = 'block';
-                document.getElementById('cooldownText').textContent = `Подождите еще ${remainingTime} минут перед следующим просмотром рекламы Monetag`;
+                document.getElementById('cooldownText').textContent = `Подождите еще ${Math.ceil(remainingSeconds / 60)} минут перед следующим просмотром рекламы Monetag`;
                 watchAdBtn.disabled = true;
-                watchAdBtn.textContent = 'Подождите...';
+                buttonText.style.display = 'none';
+                cooldownContainer.style.display = 'flex';
+                
+                // Обновляем анимацию часов
+                updateClockAnimation(watchAdBtn, remainingSeconds);
             } else {
                 cooldownInfo.style.display = 'none';
                 watchAdBtn.disabled = false;
-                watchAdBtn.textContent = 'Смотреть рекламу';
+                buttonText.style.display = 'block';
+                cooldownContainer.style.display = 'none';
             }
         }
 
         // Проверяем кулдаун рекламы Adstera
         function checkAdsteraCooldown() {
             const watchAdsteraBtn = document.getElementById('watchAdsteraBtn');
+            const buttonText = watchAdsteraBtn.querySelector('.button-text');
+            const cooldownContainer = watchAdsteraBtn.querySelector('.cooldown-container');
             
             if (!canWatchAdstera()) {
                 const now = Date.now();
                 const cooldownMs = ADSTERA_CONFIG.cooldownMinutes * 60 * 1000;
-                let remainingTime = 0;
+                let remainingSeconds = 0;
                 
                 if (gameData.lastAdsteraWatch && typeof gameData.lastAdsteraWatch === 'number') {
-                    remainingTime = Math.ceil((cooldownMs - (now - gameData.lastAdsteraWatch)) / 1000 / 60);
-                    remainingTime = Math.max(0, remainingTime);
+                    remainingSeconds = Math.ceil((cooldownMs - (now - gameData.lastAdsteraWatch)) / 1000);
+                    remainingSeconds = Math.max(0, remainingSeconds);
                 }
                 
                 watchAdsteraBtn.disabled = true;
-                watchAdsteraBtn.textContent = `Подождите ${remainingTime} мин...`;
+                buttonText.style.display = 'none';
+                cooldownContainer.style.display = 'flex';
+                
+                // Обновляем анимацию часов
+                updateClockAnimation(watchAdsteraBtn, remainingSeconds);
             } else {
                 watchAdsteraBtn.disabled = false;
-                watchAdsteraBtn.textContent = 'Смотреть рекламу Adstera';
+                buttonText.style.display = 'block';
+                cooldownContainer.style.display = 'none';
             }
         }
 
@@ -489,6 +682,27 @@
             }
             
             return (now - gameData.lastAdsteraWatch) >= cooldownMs;
+        }
+
+        // Обновление анимации часов
+        function updateClockAnimation(button, remainingSeconds) {
+            const h1 = button.querySelector('#h1, #h1-adstera');
+            const cooldownText = button.querySelector('.cooldown-text');
+            
+            if (h1 && cooldownText) {
+                // Вычисляем прогресс анимации (от 0 до 1)
+                const totalSeconds = 60; // 60 секунд = полный оборот
+                const progress = Math.max(0, Math.min(1, remainingSeconds / totalSeconds));
+                
+                // Устанавливаем анимацию в зависимости от оставшегося времени
+                const animationDuration = remainingSeconds;
+                h1.style.animationDuration = `${animationDuration}s`;
+                
+                // Обновляем текст
+                const minutes = Math.floor(remainingSeconds / 60);
+                const seconds = remainingSeconds % 60;
+                cooldownText.textContent = `Подождите ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
         }
 
         // Обработчик просмотра рекламы Monetag
@@ -696,6 +910,12 @@
             document.getElementById('playGameBtn').addEventListener('click', handlePlayGame);
             document.getElementById('installAppBtn').addEventListener('click', handleInstallApp);
             document.getElementById('resetCooldownBtn').addEventListener('click', resetAdCooldown);
+            
+            // Обновляем кулдаун каждую секунду для анимированных часов
+            setInterval(() => {
+                checkCooldown();
+                checkAdsteraCooldown();
+            }, 1000);
             
             // Проверяем SDK через 2 секунды
             setTimeout(() => {
