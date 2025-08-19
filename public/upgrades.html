@@ -99,9 +99,10 @@
 
         .shop-items {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
             margin-top: 20px;
+            justify-items: center;
         }
 
         .shop-item {
@@ -197,83 +198,104 @@
         }
 
         .card {
-            position: relative;
+            width: 190px;
+            height: 254px;
+            border-radius: 20px;
+            padding: 5px;
+            box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+            background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: rgba(151, 65, 252, 0.4) 0 20px 40px -10px;
+        }
+
+        .card__content {
+            background: rgb(5, 6, 45);
+            border-radius: 17px;
             width: 100%;
-            height: 200px;
-            background: linear-gradient(90deg,#29482a,#4e8950,#9fb97f);
-            border-radius: 15px;
-            overflow: hidden;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
             box-sizing: border-box;
+            position: relative;
         }
 
-        .card-border-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ff6b6b, #ee5a24, #ffcb13);
-        }
-
-        .img {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 15px;
+            backdrop-filter: blur(10px);
         }
 
-        .card span {
+        .card-title {
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: white;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            text-align: center;
         }
 
-        .card .job {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+        .card-description {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .card-price {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #00DDEB;
             margin-bottom: 15px;
+            text-align: center;
         }
 
-        .card button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        .card-button {
+            background: linear-gradient(45deg, #AF40FF, #5B42F3);
             border: none;
-            border-radius: 20px;
-            padding: 8px 20px;
+            border-radius: 15px;
+            padding: 8px 16px;
             color: white;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            min-width: 80px;
         }
 
-        .card button:hover {
+        .card-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 5px 15px rgba(175, 64, 255, 0.4);
         }
 
-        .card button:disabled {
+        .card-button:disabled {
             background: #666;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
-        .card button.purchased {
+        .card-button.purchased {
             background: linear-gradient(45deg, #4CAF50, #45a049);
         }
 
-        .card button.purchased:hover {
+        .card-button.purchased:hover {
             box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
         }
 
@@ -532,18 +554,20 @@
                 const itemElement = document.createElement('div');
                 itemElement.className = 'card';
                 itemElement.innerHTML = `
-                    <div class="card-border-top"></div>
-                    <div class="img">${item.icon}</div>
-                    <span>${item.name}</span>
-                    <p class="job">${item.description}</p>
-                    <div style="margin-bottom: 15px; font-weight: bold; color: #ffcb13;">${item.price.toLocaleString()} 💰</div>
-                    <button 
-                        onclick="buyItem('${item.id}')" 
-                        ${isPurchased ? 'class="purchased" disabled' : ''}
-                        ${!canAfford && !isPurchased ? 'disabled' : ''}
-                    >
-                        ${isPurchased ? '✅ Куплено' : 'Купить'}
-                    </button>
+                    <div class="card__content">
+                        <div class="card-icon">${item.icon}</div>
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-description">${item.description}</div>
+                        <div class="card-price">${item.price.toLocaleString()} 💰</div>
+                        <button 
+                            class="card-button ${isPurchased ? 'purchased' : ''}"
+                            onclick="buyItem('${item.id}')" 
+                            ${isPurchased ? 'disabled' : ''}
+                            ${!canAfford && !isPurchased ? 'disabled' : ''}
+                        >
+                            ${isPurchased ? '✅ Куплено' : 'Купить'}
+                        </button>
+                    </div>
                 `;
 
                 shopContainer.appendChild(itemElement);
