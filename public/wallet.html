@@ -309,9 +309,6 @@
 
         /* Новые стили для расширенного функционала */
         .balance-overview {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
             margin-bottom: 25px;
         }
 
@@ -367,20 +364,6 @@
             font-size: 12px;
             font-weight: 600;
             color: #4CAF50;
-        }
-
-        .energy-bar {
-            width: 60px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .energy-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #45a049);
-            transition: width 0.3s ease;
         }
 
         .quick-actions {
@@ -733,7 +716,7 @@
         </div>
         
         <div class="wallet-content">
-            <!-- Верхняя панель с основными балансами -->
+            <!-- Верхняя панель с основным балансом -->
             <div class="balance-overview">
                 <div class="balance-card main">
                     <div class="balance-icon">💰</div>
@@ -743,18 +726,6 @@
                         <div class="balance-currency">Magnum Coins</div>
                     </div>
                     <div class="balance-change" id="balanceChange">+0%</div>
-                </div>
-                
-                <div class="balance-card secondary">
-                    <div class="balance-icon">⚡</div>
-                    <div class="balance-info">
-                        <div class="balance-label">Энергия</div>
-                        <div class="balance-amount" id="energyBalance">1000</div>
-                        <div class="balance-currency">/ 1000</div>
-                    </div>
-                    <div class="energy-bar">
-                        <div class="energy-fill" id="energyFill"></div>
-                    </div>
                 </div>
             </div>
 
@@ -926,7 +897,6 @@
                         <input type="number" id="exchangeFromAmount" placeholder="0" min="0">
                         <select id="exchangeFromCurrency">
                             <option value="coins">Magnum Coins</option>
-                            <option value="energy">Энергия</option>
                             <option value="usd">USD</option>
                             <option value="eur">EUR</option>
                         </select>
@@ -938,9 +908,8 @@
                     <div class="exchange-input-group">
                         <input type="number" id="exchangeToAmount" placeholder="0" readonly>
                         <select id="exchangeToCurrency">
-                            <option value="energy">Энергия</option>
-                            <option value="coins">Magnum Coins</option>
                             <option value="usd">USD</option>
+                            <option value="coins">Magnum Coins</option>
                             <option value="eur">EUR</option>
                         </select>
                     </div>
@@ -1019,8 +988,6 @@
         // Расширенные данные кошелька
         let walletData = {
             balance: 0,
-            energy: 1000,
-            maxEnergy: 1000,
             telegramConnected: false,
             transactions: [],
             cards: [],
@@ -1036,8 +1003,6 @@
                 }
             },
             exchangeRates: {
-                'coins-energy': 1,
-                'energy-coins': 1,
                 'coins-usd': 0.01,
                 'usd-coins': 100,
                 'coins-eur': 0.008,
@@ -1077,11 +1042,6 @@
         function updateWalletDisplay() {
             // Обновляем основной баланс
             document.getElementById('mainBalance').textContent = walletData.balance.toLocaleString();
-            
-            // Обновляем энергию
-            document.getElementById('energyBalance').textContent = walletData.energy;
-            const energyPercent = (walletData.energy / walletData.maxEnergy) * 100;
-            document.getElementById('energyFill').style.width = energyPercent + '%';
             
             // Обновляем статус Telegram кошелька
             const statusIndicator = document.getElementById('telegramStatus');
@@ -1394,13 +1354,9 @@
                 return;
             }
             
-            // Проверяем баланс
-            let currentBalance = 0;
-            if (fromCurrency === 'coins') currentBalance = walletData.balance;
-            else if (fromCurrency === 'energy') currentBalance = walletData.energy;
-            
-            if (fromAmount > currentBalance) {
-                alert('❌ Недостаточно средств для обмена!');
+            // Проверяем баланс (только для Magnum Coins)
+            if (fromCurrency === 'coins' && fromAmount > walletData.balance) {
+                alert('❌ Недостаточно Magnum Coins для обмена!');
                 return;
             }
             
@@ -1409,12 +1365,9 @@
             const rate = walletData.exchangeRates[rateKey] || 1;
             const toAmount = fromAmount * rate;
             
-            // Обновляем балансы
+            // Обновляем баланс (только для Magnum Coins)
             if (fromCurrency === 'coins') walletData.balance -= fromAmount;
-            else if (fromCurrency === 'energy') walletData.energy -= fromAmount;
-            
             if (toCurrency === 'coins') walletData.balance += toAmount;
-            else if (toCurrency === 'energy') walletData.energy += toAmount;
             
             addTransaction('Обмен', toAmount, {
                 from: `${fromAmount} ${fromCurrency}`,
